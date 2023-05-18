@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function Commercial() {
-  return (
-    <div>Commercial</div>
-  )
+  return <div>Commercial Properties</div>;
 }
 
-export default Commercial
+export default Commercial;
