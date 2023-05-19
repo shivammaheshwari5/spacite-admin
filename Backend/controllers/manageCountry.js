@@ -16,11 +16,10 @@ const getCountries = asyncHandler(async (req, res) => {
     });
 });
 const postCountry = asyncHandler(async (req, res) => {
-  const { name, image, dial_code, iso_code, description } = req.body;
+  const { name, dial_code, iso_code, description } = req.body;
 
   const country = await Country.create({
     name,
-    image,
     dial_code,
     iso_code,
     description,
@@ -29,10 +28,9 @@ const postCountry = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: country._id,
       name: country.name,
-      image: country.image,
+      dial_code: country.dial_code,
       iso_code: country.iso_code,
       description: country.description,
-      dial_code: country.dial_code,
     });
   } else {
     res.status(400);

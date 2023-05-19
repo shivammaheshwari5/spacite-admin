@@ -14,6 +14,7 @@ const postState = asyncHandler(async (req, res) => {
     res.status(201).json({
       _id: state._id,
       name: state.name,
+      country: state.country,
       description: state.description,
     });
   } else {
