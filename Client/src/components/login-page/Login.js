@@ -54,6 +54,7 @@ function Login(props) {
     try {
       const config = {
         headers: {
+          authorization: "Bearer",
           "Content-type": "application/json",
         },
       };

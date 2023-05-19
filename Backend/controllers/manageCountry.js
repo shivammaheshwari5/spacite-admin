@@ -1,0 +1,82 @@
+const asyncHandler = require("express-async-handler");
+const Country = require("../models/countryModel");
+// const generateToken = require("../config/jwtToken");
+
+const getCountries = asyncHandler(async (req, res) => {
+  Country.find()
+    .then((result) => {
+      res.status(200).json({
+        country: result,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
+const postCountry = asyncHandler(async (req, res) => {
+  const { name, image, dial_code, iso_code, description } = req.body;
+
+  const country = await Country.create({
+    name,
+    image,
+    dial_code,
+    iso_code,
+    description,
+  });
+  if (country) {
+    res.status(201).json({
+      _id: country._id,
+      name: country.name,
+      image: country.image,
+      iso_code: country.iso_code,
+      description: country.description,
+      dial_code: country.dial_code,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Failed to create the country!");
+  }
+});
+
+const addOrEditCountry = asyncHandler(async (req, res) => {
+  const { name, dial_code, iso_code } = req.body;
+  const { countryId } = req.params;
+
+  Country.findByIdAndUpdate(countryId, {
+    name,
+    dial_code,
+    iso_code,
+  })
+    .then(() => res.send("updated successfully"))
+    .catch((err) => {
+      console.log(err);
+      res.send({
+        error: err,
+      });
+    });
+});
+const getCountryById = asyncHandler(() => {});
+const toggleCountryStatus = asyncHandler(() => {});
+const deleteCountry = asyncHandler(async (req, res) => {
+  const { countryId } = req.params;
+  Country.findByIdAndDelete(countryId)
+    .then(() => {
+      res.send("delete successfully");
+    })
+    .catch((err) => {
+      res.send({
+        error: err,
+      });
+    });
+});
+
+module.exports = {
+  getCountries,
+  postCountry,
+  addOrEditCountry,
+  getCountryById,
+  toggleCountryStatus,
+  deleteCountry,
+};
