@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import "./Mainpanelnav.css";
 
@@ -19,6 +19,11 @@ function Mainpanelnav() {
     }
   };
 
+  // const logoutHandler = () => {
+  //   localStorage.setItem('isLoggedin', false)
+  //   loginApp.setIsLogin(false);
+  // }
+
   return (
     <div>
       <div className="mainpanel-nav d-flex justify-content-between">
@@ -27,7 +32,7 @@ function Mainpanelnav() {
         </p>
         <FaUserCircle className="mainpanel-icon" onClick={showLogoutButton} />
       </div>
-          <div className="logoutbtn" style={showLogoutBtn ? {visibility: "visible"} : {visibility: "hidden"}}>
+          <div className="logoutbtn" style={showLogoutBtn ? {visibility: "visible"} : {visibility: "hidden"}} >
             Logout
           </div>
     </div>

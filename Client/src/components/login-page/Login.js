@@ -70,8 +70,10 @@ function Login(props) {
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      
       setLoading(false);
       props.onLogin(true);
+      // localStorage.setItem('isLoggedin', true);
       navigate("/commercial", { replace: true });
     } catch (error) {
       toast({
