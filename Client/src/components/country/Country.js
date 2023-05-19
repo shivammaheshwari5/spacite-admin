@@ -14,9 +14,14 @@ function Country() {
       <div>
       <Modal show={myModal.showModal} onHide={myModal.handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Add New Country</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+          <input type='text' placeholder='Name' />
+          <input type='text' placeholder='Description' />
+          <input type='text' placeholder='Dial Code' />
+          <input type='text' placeholder='Iso Code' />
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={myModal.handleClose}>
             Close
