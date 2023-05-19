@@ -2,7 +2,9 @@ const express = require("express");
 const userRoute = require("./routes/userRoutes");
 const connectDB = require("./config/db");
 const { notFound, errorHandle } = require("./middleware/errorMiddleware");
-const messageRoutes = require("./routes/messageRoutes");
+const messageRoute = require("./routes/messageRoutes");
+const countryRoute = require("./routes/countryRoutes");
+const stateRoute = require("./routes/stateRoutes");
 const dotenv = require("dotenv");
 dotenv.config();
 connectDB();
@@ -15,7 +17,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/user", userRoute);
-app.use("/api/message", messageRoutes);
+app.use("/api/message", messageRoute);
+app.use("/api/allCountry", countryRoute);
+app.use("/api/state", stateRoute);
 // app.use("/api/property", propertyRoutes);
 
 app.use(notFound);

@@ -16,6 +16,8 @@ import { useState } from "react";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
+  console.log(isLogin);
+
   localStorage.setItem("isLogin", isLogin);
   return (
     <div>
@@ -25,20 +27,30 @@ function App() {
             <Route
               path="/commercial"
               element={
-                isLogin ? [<Sidebar />, <Commercial />] : <Navigate to="/" />
+                isLogin ? (
+                  [<Sidebar key={1} />, <Commercial key={2} />]
+                ) : (
+                  <Navigate to="/" />
+                )
               }
             />
             <Route
               path="/residential-properties"
+              key="2"
               element={
-                isLogin ? [<Sidebar />, <Residential />] : <Navigate to="/" />
+                isLogin ? (
+                  [<Sidebar key={3} />, <Residential key={4} />]
+                ) : (
+                  <Navigate to="/" />
+                )
               }
             />
             <Route
               path="/residential-property-type"
+              key="3"
               element={
                 isLogin ? (
-                  [<Sidebar />, <ResPropertyType />]
+                  [<Sidebar key={5} />, <ResPropertyType key={6} />]
                 ) : (
                   <Navigate to="/" />
                 )
@@ -46,44 +58,89 @@ function App() {
             />
             <Route
               path="/media"
-              element={isLogin ? [<Sidebar />, <Media />] : <Navigate to="/" />}
+              key="4"
+              element={
+                isLogin ? (
+                  [<Sidebar key={7} />, <Media key={8} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
             <Route
               path="/"
+              key="5"
               element={
-                <Login onLogin={(loginStatus) => setIsLogin(loginStatus)} />
+                <Login
+                  key={9}
+                  onLogin={(loginStatus) => setIsLogin(loginStatus)}
+                />
               }
             />
             <Route
               path="/country"
+              key="6"
               element={
-                isLogin ? [<Sidebar />, <Country />] : <Navigate to="/" />
+                isLogin ? (
+                  [<Sidebar key={10} />, <Country key={11} />]
+                ) : (
+                  <Navigate to="/" />
+                )
               }
             />
             <Route
               path="/state"
-              element={isLogin ? [<Sidebar />, <State />] : <Navigate to="/" />}
+              key="7"
+              element={
+                isLogin ? (
+                  [<Sidebar key={12} />, <State key={13} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
             <Route
               path="/city"
-              element={isLogin ? [<Sidebar />, <City />] : <Navigate to="/" />}
+              key="8"
+              element={
+                isLogin ? (
+                  [<Sidebar key={14} />, <City key={15} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
             />
             <Route
               path="/microlocation"
+              key="9"
               element={
-                isLogin ? [<Sidebar />, <Microlocation />] : <Navigate to="/" />
+                isLogin ? (
+                  [<Sidebar key={16} />, <Microlocation key={17} />]
+                ) : (
+                  <Navigate to="/" />
+                )
               }
             />
             <Route
               path="/amenities"
+              key="10"
               element={
-                isLogin ? [<Sidebar />, <Amenities />] : <Navigate to="/" />
+                isLogin ? (
+                  [<Sidebar key={18} />, <Amenities key={19} />]
+                ) : (
+                  <Navigate to="/" />
+                )
               }
             />
             <Route
               path="/builders"
+              key="11"
               element={
-                isLogin ? [<Sidebar />, <Builders />] : <Navigate to="/" />
+                isLogin ? (
+                  [<Sidebar key={20} />, <Builders key={21} />]
+                ) : (
+                  <Navigate to="/" />
+                )
               }
             />
           </Routes>
