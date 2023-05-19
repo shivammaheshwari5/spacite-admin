@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import "./Mainpanelnav.css";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,11 @@ function Mainpanelnav() {
       setShowLogoutBtn(false);
     }
   };
+
+  // const logoutHandler = () => {
+  //   localStorage.setItem('isLoggedin', false)
+  //   loginApp.setIsLogin(false);
+  // }
 
   return (
     <div>

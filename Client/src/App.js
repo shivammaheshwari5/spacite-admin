@@ -12,7 +12,10 @@ import Microlocation from "./components/microlocation/Microlocation";
 import Amenities from "./components/amenities/Amenities";
 import Builders from "./components/builders/Builders";
 import Login from "./components/login-page/Login";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import Addpropertybtn from "./components/add-new-btn/Addpropertybtn";
+import Addcommercial from "./components/commercial-properties/Addcommercial";
+// import { AppContext } from "./context/context";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -66,6 +69,10 @@ function App() {
                   <Navigate to="/" />
                 )
               }
+            />
+            <Route
+              path="/commercial/add-commercial-property"
+              element={isLogin ? [<Sidebar />, <Addcommercial />] : <Navigate to="/" />}
             />
             <Route
               path="/"
