@@ -23,7 +23,7 @@ function Sidebar() {
         <div className="nav-menu-wrapper">
           <ul className="nav">
             <li className="nav-item">
-              <NavLink to="/commercial">
+              <NavLink to="/commercial-properties">
                 <HiOutlineBuildingOffice2 className="icon" />
                 Commercial Properties
               </NavLink>
@@ -35,9 +35,9 @@ function Sidebar() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/residential-property-type">
+              <NavLink to="/property-type">
                 <HiOutlineBuildingOffice className="icon" />
-                Residential Property Type
+                Property Type
               </NavLink>
             </li>
             <li className="nav-item">

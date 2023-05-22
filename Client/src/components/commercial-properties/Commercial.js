@@ -12,7 +12,7 @@ function Commercial() {
   return (
     <div className='mx-5 mt-3'>
       <Mainpanelnav />
-      <Link to="/commercial/add-commercial-property">
+      <Link to="/commercial-properties/add-commercial-property">
       <Addpropertybtn />
       </Link>
     </div>
