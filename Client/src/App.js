@@ -12,11 +12,13 @@ import Microlocation from "./components/microlocation/Microlocation";
 import Amenities from "./components/amenities/Amenities";
 import Builders from "./components/builders/Builders";
 import Login from "./components/login-page/Login";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AppContext } from "./context/context";
 
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
-  console.log(isLogin);
+  const myModal = useContext(AppContext);
+
+  const { isLogin } = myModal;
 
   localStorage.setItem("isLogin", isLogin);
   return (
@@ -67,16 +69,7 @@ function App() {
                 )
               }
             />
-            <Route
-              path="/"
-              key="5"
-              element={
-                <Login
-                  key={9}
-                  onLogin={(loginStatus) => setIsLogin(loginStatus)}
-                />
-              }
-            />
+            <Route path="/" key="5" element={<Login key={9} />} />
             <Route
               path="/country"
               key="6"
