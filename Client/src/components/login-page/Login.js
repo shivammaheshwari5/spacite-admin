@@ -74,7 +74,7 @@ function Login(props) {
       setLoading(false);
       props.onLogin(true);
       // localStorage.setItem('isLoggedin', true);
-      navigate("/commercial", { replace: true });
+      navigate("/commercial-properties", { replace: true });
     } catch (error) {
       toast({
         title: "Error Occured!",

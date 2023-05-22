@@ -15,6 +15,7 @@ import Login from "./components/login-page/Login";
 import { useContext, useState } from "react";
 import Addpropertybtn from "./components/add-new-btn/Addpropertybtn";
 import Addcommercial from "./components/commercial-properties/Addcommercial";
+import Addresidential from "./components/residential-properties/Addresidential";
 // import { AppContext } from "./context/context";
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
         <div className={isLogin ? "mainpanel" : ""}>
           <Routes>
             <Route
-              path="/commercial"
+              path="/commercial-properties"
               element={
                 isLogin ? (
                   [<Sidebar key={1} />, <Commercial key={2} />]
@@ -49,7 +50,7 @@ function App() {
               }
             />
             <Route
-              path="/residential-property-type"
+              path="/property-type"
               key="3"
               element={
                 isLogin ? (
@@ -71,8 +72,12 @@ function App() {
               }
             />
             <Route
-              path="/commercial/add-commercial-property"
+              path="/commercial-properties/add-commercial-property"
               element={isLogin ? [<Sidebar />, <Addcommercial />] : <Navigate to="/" />}
+            />
+            <Route
+              path="/residential-properties/add-residential-property"
+              element={isLogin ? [<Sidebar />, <Addresidential />] : <Navigate to="/" />}
             />
             <Route
               path="/"

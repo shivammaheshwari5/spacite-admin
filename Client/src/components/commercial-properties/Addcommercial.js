@@ -1,18 +1,15 @@
-import React from 'react'
-import Mainpanelnav from '../mainpanel-header/Mainpanelnav'
+import React, { useState } from "react";
+import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
+import Addpropertyform from "../add-property/Addpropertyform";
 
 function Addcommercial() {
+
   return (
-    <div className='mx-5 mt-3'>
-    <Mainpanelnav />
-    <div className='container form-box'>
-        <form>
-            <input className='property-input' type="text" placeholder="Builder" />
-            <input className='property-input' type="text" placeholder="Name" />
-        </form>
+    <div className="mx-5 mt-3">
+      <Mainpanelnav />
+      <Addpropertyform />
     </div>
-    </div>
-  )
+  );
 }
 
-export default Addcommercial
+export default Addcommercial;
