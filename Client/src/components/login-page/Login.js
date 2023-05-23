@@ -5,7 +5,7 @@ import logo from "../Gupta-Promoters-Logo-1.svg";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../../context/context";
+import { GpState } from "../../context/context";
 import {
   Button,
   FormControl,
@@ -23,7 +23,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
-  const myModal = useContext(AppContext);
+  const { user } = GpState();
 
   const handleClick = () => {
     setShow(!show);
@@ -72,7 +72,7 @@ function Login() {
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
-      localStorage.setItem("token", myModal.user.token);
+      localStorage.setItem("token", user.token);
       setLoading(false);
       // props.onLogin(true);
       navigate("/commercial", { replace: true });

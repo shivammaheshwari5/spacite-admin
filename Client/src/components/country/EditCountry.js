@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -12,6 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { GpState } from "../../context/context";
 
 const EditCountry = ({ countries, setUpdateTable }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -20,27 +21,35 @@ const EditCountry = ({ countries, setUpdateTable }) => {
   const [dialCode, setDialCode] = useState(countries.dial_code);
   const [countryId, setCountryId] = useState(countries._id);
   const [description, setDiscription] = useState(countries.description);
+  const { country, setCountry, user } = GpState();
   const toast = useToast();
 
   const handleEditCountry = async () => {
     try {
-      axios
-        .put(`/api/allCountry/country/${countryId}`, {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.put(
+        `/api/allCountry/country/${countryId}`,
+        {
           countryId: countryId,
           name: name,
           dial_code: dialCode,
-        })
-        .then((res) => {
-          setUpdateTable((prev) => !prev);
-          onClose();
-          toast({
-            title: "Update Successfully!",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom",
-          });
-        });
+        },
+        config
+      );
+      setCountry(data.country);
+      setUpdateTable((prev) => !prev);
+      onClose();
+      toast({
+        title: "Update Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     } catch (error) {
       console.log(error);
     }

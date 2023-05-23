@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
-import { AppContext } from "../../context/context";
+import { GpState } from "../../context/context";
 import { useToast } from "@chakra-ui/react";
 import { BsBookmarkPlus } from "react-icons/bs";
 import axios from "axios";
@@ -30,14 +30,13 @@ import "./Country.css";
 import EditCountry from "./EditCountry";
 
 function Country() {
-  const myModal = useContext(AppContext);
+  const { country, setCountry, user } = GpState();
   const [countryfield, setCountryfield] = useState({
     name: "",
     description: "",
     dialCode: "",
     isoCode: "",
   });
-  const [country, setCountry] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -66,7 +65,7 @@ function Country() {
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${myModal.user.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.post(
@@ -111,7 +110,7 @@ function Country() {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${myModal.user.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const { data } = await axios.get("/api/allCountry/countries", config);

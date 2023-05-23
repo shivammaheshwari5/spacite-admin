@@ -2,12 +2,12 @@ import React, { useState, useContext } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import "./Mainpanelnav.css";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "../../context/context";
+import { GpState } from "../../context/context";
 
 function Mainpanelnav() {
   const [showLogoutBtn, setShowLogoutBtn] = useState(false);
   const navigate = useNavigate();
-  const myModal = useContext(AppContext);
+  const { isLogin } = GpState();
   let url = window.location.href;
   let splitUrl = url.split("/");
   let title = splitUrl[splitUrl.length - 1];
@@ -16,7 +16,7 @@ function Mainpanelnav() {
   }
   const logoutHandle = () => {
     localStorage.removeItem("token");
-    myModal.isLogin = false;
+    isLogin = false;
     navigate("/", { replace: true });
   };
   const showLogoutButton = () => {

@@ -13,7 +13,7 @@ const router = express.Router();
 router
   .get("/countries", protect, getCountries)
   .post("/country", protect, postCountry)
-  .put("/country/:countryId", addOrEditCountry)
+  .put("/country/:countryId", protect, addOrEditCountry)
   .get("/country/:id", getCountryById)
   .get("/country/changeStatus/:countryId", toggleCountryStatus)
   .delete("/delete/:countryId", deleteCountry);

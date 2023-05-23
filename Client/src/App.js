@@ -13,12 +13,9 @@ import Amenities from "./components/amenities/Amenities";
 import Builders from "./components/builders/Builders";
 import Login from "./components/login-page/Login";
 import { useState, useContext } from "react";
-import { AppContext } from "./context/context";
-
+import { GpState } from "./context/context";
 function App() {
-  const myModal = useContext(AppContext);
-
-  const { isLogin } = myModal;
+  const { isLogin } = GpState();
 
   localStorage.setItem("isLogin", isLogin);
   return (

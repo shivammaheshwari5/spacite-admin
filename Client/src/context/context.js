@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import { useNavigate } from "react-router-dom";
-const AppContext = React.createContext();
+const AppContext = createContext();
 
 const AppProvider = ({ children }) => {
   const [showModal, setShow] = useState(false);
   const [user, setUser] = useState();
+  const [country, setCountry] = useState([]);
   const navigate = useNavigate();
   const isLogin = localStorage.getItem("token") ? true : false;
   useEffect(() => {
@@ -20,11 +21,24 @@ const AppProvider = ({ children }) => {
 
   return (
     <AppContext.Provider
-      value={{ handleClose, handleShow, showModal, user, setUser, isLogin }}
+      value={{
+        handleClose,
+        handleShow,
+        showModal,
+        user,
+        setUser,
+        isLogin,
+        country,
+        setCountry,
+      }}
     >
       {children}
     </AppContext.Provider>
   );
 };
 
-export { AppContext, AppProvider };
+export const GpState = () => {
+  return useContext(AppContext);
+};
+
+export default AppProvider;
