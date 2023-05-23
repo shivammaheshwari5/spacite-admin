@@ -14,6 +14,7 @@ import Builders from "./components/builders/Builders";
 import Login from "./components/login-page/Login";
 import { useState, useContext } from "react";
 import { GpState } from "./context/context";
+import Addcommercial from "./components/commercial-properties/Addcommercial";
 function App() {
   const { isLogin } = GpState();
 
@@ -24,7 +25,7 @@ function App() {
         <div className={isLogin ? "mainpanel" : ""}>
           <Routes>
             <Route
-              path="/commercial"
+              path="/commercial-properties"
               element={
                 isLogin ? (
                   [<Sidebar key={1} />, <Commercial key={2} />]
@@ -45,7 +46,7 @@ function App() {
               }
             />
             <Route
-              path="/residential-property-type"
+              path="/property-type"
               key="3"
               element={
                 isLogin ? (
@@ -128,6 +129,26 @@ function App() {
               element={
                 isLogin ? (
                   [<Sidebar key={20} />, <Builders key={21} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/commercial-properties/add-commercial-property"
+              element={
+                isLogin ? (
+                  [<Sidebar key={22} />, <Addcommercial key={23} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/residential-properties/add-residential-property"
+              element={
+                isLogin ? (
+                  [<Sidebar key={24} />, <Addcommercial key={25} />]
                 ) : (
                   <Navigate to="/" />
                 )

@@ -75,7 +75,7 @@ function Login() {
       localStorage.setItem("token", user.token);
       setLoading(false);
       // props.onLogin(true);
-      navigate("/commercial", { replace: true });
+      navigate("/commercial-properties", { replace: true });
     } catch (error) {
       toast({
         title: "Error Occured!",

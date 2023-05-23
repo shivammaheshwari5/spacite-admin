@@ -27,6 +27,11 @@ function Mainpanelnav() {
     }
   };
 
+  // const logoutHandler = () => {
+  //   localStorage.setItem('isLoggedin', false)
+  //   loginApp.setIsLogin(false);
+  // }
+
   return (
     <div>
       <div className="mainpanel-nav d-flex justify-content-between">
