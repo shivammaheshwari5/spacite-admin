@@ -7,7 +7,7 @@ function Addpropertyform() {
   const [plans, setPlans] = useState([]);
   const onchangeHandler = (e) => {
     setPropertyType(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   const handleChange = (e) => {

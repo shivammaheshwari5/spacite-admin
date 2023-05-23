@@ -10,15 +10,17 @@ import {
   Button,
   useDisclosure,
 } from "@chakra-ui/react";
+import { AiFillDelete } from "react-icons/ai";
 
 const Delete = ({ handleFunction }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
   return (
     <>
-      <Button colorScheme="red" onClick={onOpen}>
+      {/* <Button colorScheme="red" onClick={onOpen}>
         Delete
-      </Button>
+      </Button> */}
+      <AiFillDelete onClick={onOpen} style={{fontSize: "22px", cursor:"pointer", color:"red"}} />
 
       <AlertDialog
         isOpen={isOpen}
