@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { GpState } from "../../context/context";
+import { AiFillEdit } from 'react-icons/ai';
 
 const EditCountry = ({ countries, setUpdateTable }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,7 +57,7 @@ const EditCountry = ({ countries, setUpdateTable }) => {
   };
   return (
     <>
-      <Button onClick={onOpen}>EDIT</Button>
+      <AiFillEdit onClick={onOpen} style={{fontSize: "22px", cursor:"pointer"}}/>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -70,6 +71,7 @@ const EditCountry = ({ countries, setUpdateTable }) => {
               onChange={(e) => setName(e.target.value)}
               placeholder="Name"
               name="name"
+              className="property-input"
             />
             <input
               type="text"
@@ -77,6 +79,7 @@ const EditCountry = ({ countries, setUpdateTable }) => {
               onChange={(e) => setDiscription(e.target.value)}
               placeholder="Description"
               name="description"
+              className="property-input"
             />
             <input
               type="text"
@@ -84,6 +87,7 @@ const EditCountry = ({ countries, setUpdateTable }) => {
               onChange={(e) => setDialCode(e.target.value)}
               placeholder="Dial Code"
               name="dialCode"
+              className="property-input"
             />
             <input
               type="text"
@@ -91,6 +95,7 @@ const EditCountry = ({ countries, setUpdateTable }) => {
               onChange={(e) => setIsoCode(e.target.value)}
               placeholder="Iso Code"
               name="isoCode"
+              className="property-input"
             />
           </ModalBody>
 
