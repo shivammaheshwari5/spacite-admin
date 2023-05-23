@@ -12,15 +12,11 @@ import Microlocation from "./components/microlocation/Microlocation";
 import Amenities from "./components/amenities/Amenities";
 import Builders from "./components/builders/Builders";
 import Login from "./components/login-page/Login";
-import { useContext, useState } from "react";
-import Addpropertybtn from "./components/add-new-btn/Addpropertybtn";
+import { useState, useContext } from "react";
+import { GpState } from "./context/context";
 import Addcommercial from "./components/commercial-properties/Addcommercial";
-import Addresidential from "./components/residential-properties/Addresidential";
-// import { AppContext } from "./context/context";
-
 function App() {
-  const [isLogin, setIsLogin] = useState(false);
-  console.log(isLogin);
+  const { isLogin } = GpState();
 
   localStorage.setItem("isLogin", isLogin);
   return (
@@ -71,24 +67,7 @@ function App() {
                 )
               }
             />
-            <Route
-              path="/commercial-properties/add-commercial-property"
-              element={isLogin ? [<Sidebar />, <Addcommercial />] : <Navigate to="/" />}
-            />
-            <Route
-              path="/residential-properties/add-residential-property"
-              element={isLogin ? [<Sidebar />, <Addresidential />] : <Navigate to="/" />}
-            />
-            <Route
-              path="/"
-              key="5"
-              element={
-                <Login
-                  key={9}
-                  onLogin={(loginStatus) => setIsLogin(loginStatus)}
-                />
-              }
-            />
+            <Route path="/" key="5" element={<Login key={9} />} />
             <Route
               path="/country"
               key="6"
@@ -150,6 +129,26 @@ function App() {
               element={
                 isLogin ? (
                   [<Sidebar key={20} />, <Builders key={21} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/commercial-properties/add-commercial-property"
+              element={
+                isLogin ? (
+                  [<Sidebar key={22} />, <Addcommercial key={23} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/residential-properties/add-residential-property"
+              element={
+                isLogin ? (
+                  [<Sidebar key={24} />, <Addcommercial key={25} />]
                 ) : (
                   <Navigate to="/" />
                 )

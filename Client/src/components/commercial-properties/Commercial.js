@@ -1,22 +1,23 @@
-// import React, { useContext } from 'react';
-import './Commercial.css';
-import Mainpanelnav from '../mainpanel-header/Mainpanelnav';
-// import { AppContext } from '../../context/context';
-import Addpropertybtn from '../add-new-btn/Addpropertybtn';
-import { Link } from 'react-router-dom';
+import React, { useContext } from "react";
+import "./Commercial.css";
+import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
+import Addnewbtn from "../add-new-btn/Addnewbtn";
+import { GpState } from "../../context/context";
+import { Modal, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import Addpropertybtn from "../add-new-btn/Addpropertybtn";
 
 function Commercial() {
-  // const myModal = useContext(AppContext);
-  // console.log(myModal)
+  const { handleClose, showModal } = GpState();
 
   return (
-    <div className='mx-5 mt-3'>
+    <div className="mx-5 mt-3">
       <Mainpanelnav />
       <Link to="/commercial-properties/add-commercial-property">
-      <Addpropertybtn />
+        <Addpropertybtn />
       </Link>
     </div>
-  )
+  );
 }
 
-export default Commercial
+export default Commercial;

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import loginbg from "../login-bg.jpg";
 import "./Login.css";
 import logo from "../Gupta-Promoters-Logo-1.svg";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { GpState } from "../../context/context";
 import {
   Button,
   FormControl,
@@ -15,13 +16,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-function Login(props) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
+  const { user } = GpState();
 
   const handleClick = () => {
     setShow(!show);
@@ -70,10 +72,9 @@ function Login(props) {
         position: "bottom",
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
-      
+      localStorage.setItem("token", user.token);
       setLoading(false);
-      props.onLogin(true);
-      // localStorage.setItem('isLoggedin', true);
+      // props.onLogin(true);
       navigate("/commercial-properties", { replace: true });
     } catch (error) {
       toast({

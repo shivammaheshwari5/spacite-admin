@@ -1,17 +1,44 @@
-import React, { useState } from "react";
-const AppContext = React.createContext();
+import React, { useState, useEffect, useContext, createContext } from "react";
+import { useNavigate } from "react-router-dom";
+const AppContext = createContext();
 
-const AppProvider = ({children}) => {
+const AppProvider = ({ children }) => {
   const [showModal, setShow] = useState(false);
-  let isLoggedin = localStorage.getItem('isLoggedin');
-  const [isLogin, setIsLogin] = useState(isLoggedin);
+  const [user, setUser] = useState();
+  const [country, setCountry] = useState([]);
+  const navigate = useNavigate();
+  const isLogin = localStorage.getItem("token") ? true : false;
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    setUser(userInfo);
+    if (!userInfo) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-    return <AppContext.Provider value={{handleClose, handleShow, showModal, isLogin, setIsLogin}}>
-        {children}
+  return (
+    <AppContext.Provider
+      value={{
+        handleClose,
+        handleShow,
+        showModal,
+        user,
+        setUser,
+        isLogin,
+        country,
+        setCountry,
+      }}
+    >
+      {children}
     </AppContext.Provider>
-}
+  );
+};
 
-export {AppContext, AppProvider}
+export const GpState = () => {
+  return useContext(AppContext);
+};
+
+export default AppProvider;

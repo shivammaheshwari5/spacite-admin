@@ -1,34 +1,46 @@
 import React, { useContext, useEffect, useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
-import Addnewbtn from "../add-new-btn/Addnewbtn";
-import { AppContext } from "../../context/context";
-import { Modal, Button } from "react-bootstrap";
+import { GpState } from "../../context/context";
 import { useToast } from "@chakra-ui/react";
+import { BsBookmarkPlus } from "react-icons/bs";
 import axios from "axios";
 import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-import { AiTwotoneDelete } from "react-icons/ai";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  useDisclosure,
+  Spinner,
+} from "@chakra-ui/react";
+import Delete from "../delete/Delete";
+import "./Country.css";
+import EditCountry from "./EditCountry";
 
 function Country() {
-  const myModal = useContext(AppContext);
+  const { country, setCountry, user } = GpState();
   const [countryfield, setCountryfield] = useState({
     name: "",
     description: "",
     dialCode: "",
     isoCode: "",
   });
-  const [country, setCountry] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,15 +62,37 @@ function Country() {
     }
 
     try {
-      const { data } = await axios.post("/api/allCountry/country", {
-        name: countryfield.name,
-        description: countryfield.description,
-        dial_code: countryfield.dialCode,
-        iso_code: countryfield.isoCode,
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        "/api/allCountry/country",
+        {
+          name: countryfield.name,
+          description: countryfield.description,
+          dial_code: countryfield.dialCode,
+          iso_code: countryfield.isoCode,
+        },
+        config
+      );
+      setCountryfield({
+        name: "",
+        description: "",
+        dialCode: "",
+        isoCode: "",
       });
-      setCountryfield("");
       setUpdateTable((prev) => !prev);
-      console.log(data);
+      onClose();
+      toast({
+        title: "Saved Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -73,8 +107,14 @@ function Country() {
 
   const getCountry = async () => {
     try {
-      const { data } = await axios.get("/api/allCountry/countries");
-      console.log(data.country);
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.get("/api/allCountry/countries", config);
+      setLoading(false);
       setCountry(data.country);
     } catch (error) {
       console.log(error);
@@ -86,21 +126,17 @@ function Country() {
       axios.delete(`/api/allCountry/delete/${id}`).then((res) => {
         console.log(res);
         setUpdateTable((prev) => !prev);
+        toast({
+          title: "Deleted Successfully!",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
       });
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const handleEditCountry = async (id) => {
-    try {
-      const { data } = await axios.put(`/api/allCountry/country/${id}`, {
-        name: countryfield.name,
-        countryId: id,
-      });
-      setCountry(data);
-      setUpdateTable((prev) => !prev);
-    } catch (error) {}
   };
 
   useEffect(() => {
@@ -110,54 +146,59 @@ function Country() {
     <>
       <div className="mx-5 mt-3">
         <Mainpanelnav />
-        <Addnewbtn />
+        <Button className="addnew-btn" onClick={onOpen}>
+          <BsBookmarkPlus />
+          ADD NEW
+        </Button>
         <div>
-          <Modal show={myModal.showModal} onHide={myModal.handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Add New Country</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <input
-                type="text"
-                value={countryfield.name}
-                onChange={handleInputChange}
-                placeholder="Name"
-                name="name"
-              />
-              <input
-                type="text"
-                value={countryfield.description}
-                onChange={handleInputChange}
-                placeholder="Description"
-                name="description"
-              />
-              <input
-                type="text"
-                value={countryfield.dialCode}
-                onChange={handleInputChange}
-                placeholder="Dial Code"
-                name="dialCode"
-              />
-              <input
-                type="text"
-                value={countryfield.isoCode}
-                onChange={handleInputChange}
-                placeholder="Iso Code"
-                name="isoCode"
-              />
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={myModal.handleClose}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleSaveCountry}>
-                Save Changes
-              </Button>
-            </Modal.Footer>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Add New Country</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <input
+                  type="text"
+                  value={countryfield.name}
+                  onChange={handleInputChange}
+                  placeholder="Name"
+                  name="name"
+                />
+                <input
+                  type="text"
+                  value={countryfield.description}
+                  onChange={handleInputChange}
+                  placeholder="Description"
+                  name="description"
+                />
+                <input
+                  type="text"
+                  value={countryfield.dialCode}
+                  onChange={handleInputChange}
+                  placeholder="Dial Code"
+                  name="dialCode"
+                />
+                <input
+                  type="text"
+                  value={countryfield.isoCode}
+                  onChange={handleInputChange}
+                  placeholder="Iso Code"
+                  name="isoCode"
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                  Close
+                </Button>
+                <Button variant="ghost" onClick={handleSaveCountry}>
+                  Save Changes
+                </Button>
+              </ModalFooter>
+            </ModalContent>
           </Modal>
         </div>
       </div>
-      <TableContainer variant="striped" colorScheme="teal">
+      <TableContainer marginTop="150px" variant="striped" color="teal">
         <Table variant="simple">
           <Thead>
             <Tr>
@@ -168,16 +209,40 @@ function Country() {
             </Tr>
           </Thead>
           <Tbody>
-            {country.map((countries) => (
-              <Tr key={countries._id} id={countries._id}>
-                <Td>{countries.name}</Td>
-                <Td>{countries.dial_code}</Td>
-                <Td>Edit</Td>
-                <Td onClick={() => handleDeleteCountry(countries._id)}>
-                  <AiTwotoneDelete />
+            {loading ? (
+              <Tr>
+                <Td>
+                  <Spinner
+                    size="xl"
+                    w={20}
+                    h={20}
+                    marginLeft="180px"
+                    alignSelf="center"
+                    margin="auto"
+                  />
                 </Td>
               </Tr>
-            ))}
+            ) : (
+              country?.map((countries) => (
+                <Tr key={countries._id} id={countries._id}>
+                  <Td>{countries.name}</Td>
+                  <Td>{countries.dial_code}</Td>
+                  <Td>
+                    <EditCountry
+                      id={countries._id}
+                      countries={countries}
+                      setUpdateTable={setUpdateTable}
+                      // handleFunction={() => handleEditCountry(countries._id)}
+                    />
+                  </Td>
+                  <Td>
+                    <Delete
+                      handleFunction={() => handleDeleteCountry(countries._id)}
+                    />
+                  </Td>
+                </Tr>
+              ))
+            )}
           </Tbody>
         </Table>
       </TableContainer>
