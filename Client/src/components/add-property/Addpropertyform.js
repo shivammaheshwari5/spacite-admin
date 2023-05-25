@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { AiFillDelete } from "react-icons/ai";
+import { useToast } from "@chakra-ui/react";
+import axios from "axios";
 
 function Addpropertyform() {
   const [propertyType, setPropertyType] = useState("Select property type");
   const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [pic, setPic] = useState();
+  const toast = useToast();
   const onchangeHandler = (e) => {
     setPropertyType(e.target.value);
     // console.log(e.target.value);
@@ -23,6 +28,52 @@ function Addpropertyform() {
     const deletePlan = [...plans];
     deletePlan.splice(id, 1);
     setPlans(deletePlan);
+  };
+
+  const fileUpload = async (pics) => {
+    setLoading(true);
+    if (pics === undefined) {
+      toast({
+        title: "Please select an image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      // data.append("upload_preset", "chat-anyone");
+      // data.append("cloud_name", "dnkzjdhja");
+      // fetch("https://api.cloudinary.com/v1_1/dnkzjdhja/image/upload", {
+      //   method: "post",
+      //   body: data,
+      // })
+      axios
+        .post("/upload", { body: data })
+        .then((res) => {
+          setPic(res.Location);
+          console.log(res.Location);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      toast({
+        title: "Please select an image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
   };
 
   return (
@@ -252,7 +303,13 @@ function Addpropertyform() {
             </div>
           </div>
           <h4>Images</h4>
-          <div className="row"></div>
+          <div className="row">
+            <input
+              type="file"
+              onChange={(e) => fileUpload(e.target.files[0])}
+              accept="image/*"
+            />
+          </div>
           <div className="d-flex w-50 justify-content-between align-items-center">
             {propertyType === "Commercial" ? (
               <h4>Commercial Plans</h4>
