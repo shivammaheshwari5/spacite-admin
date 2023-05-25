@@ -285,7 +285,10 @@ function Country() {
           </Table>
         </TableContainer>
         <nav className="mt-5">
-          <div className="d-flex align-items-center justify-content-between" style={{width: "51%"}}>
+          <div
+            className="d-flex align-items-center justify-content-between"
+            style={{ width: "51%" }}
+          >
             <p className="mb-0">Items per page: </p>
             <div style={{ borderBottom: "1px solid gray" }}>
               <select
@@ -302,7 +305,9 @@ function Country() {
                 <option value="100">100</option>
               </select>
             </div>
-            <div style={{width: "110px"}}>{firstIndex} - {records?.length} of {country?.length}</div>
+            <div style={{ width: "110px" }}>
+              {firstIndex} - {records?.length} of {country?.length}
+            </div>
 
             <div className="page-item">
               <BiSkipPrevious onClick={getFirstPage} />
