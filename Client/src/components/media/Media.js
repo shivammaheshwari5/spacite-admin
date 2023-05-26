@@ -165,7 +165,6 @@ function Media() {
   useEffect(() => {
     getImages();
   }, [updateTable]);
-  // console.log(imagedata);
 
   if(firstIndex > 0){
     var prePage = () => {

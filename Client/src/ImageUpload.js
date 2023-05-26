@@ -11,9 +11,6 @@ const ImageUpload = ({
   setProgress,
   uploadFile,
 }) => {
-  //   const [progress, setProgress] = useState(0);
-  //   const [images, setImages] = useState([]);
-  console.log(uploadFile);
   const preventDefaults = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -25,10 +22,6 @@ const ImageUpload = ({
     allimages.splice(index, 1);
     setImages(allimages);
   };
-  //   const previewFile = (data) => {
-  //     const allimages = images;
-  //     setImages(allimages.concat(data));
-  //   };
   const handleDrop = (e) => {
     e.preventDefault();
     const files = e.dataTransfer.files;

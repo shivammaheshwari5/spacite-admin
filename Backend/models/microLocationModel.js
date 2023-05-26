@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const cityModel = mongoose.Schema(
+const microLocationModel = mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
     description: String,
@@ -12,6 +12,10 @@ const cityModel = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "State",
     },
+    city: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "City",
+    },
     active: {
       type: Boolean,
       default: true,
@@ -22,5 +26,5 @@ const cityModel = mongoose.Schema(
   }
 );
 
-const City = mongoose.model("City", cityModel);
-module.exports = City;
+const MicroLocation = mongoose.model("MicroLocation", microLocationModel);
+module.exports = MicroLocation;
