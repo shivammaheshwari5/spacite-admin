@@ -40,6 +40,11 @@ select {
   border: none !important;
   color: gray;
 }
+.select-box {
+  border-bottom: 1px solid gray;
+  margin: 20px 0;
+ width: 31%;
+}
 .saveproperty-btn {
   background-color: #a55bea;
   color: white;
