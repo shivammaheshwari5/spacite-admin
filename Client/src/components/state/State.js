@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import { BsBookmarkPlus } from "react-icons/bs";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import {
   Table,
   Thead,
@@ -39,6 +41,17 @@ function State() {
   });
   const [countryId, setCountryId] = useState(null);
   const { user, country, setCountry } = GpState();
+
+  const [selectItemNum, setSelectItemNum] = useState(10);
+  const itemsPerPageHandler = (e) => {
+    setSelectItemNum(e.target.value);
+  };
+  const [curPage, setCurPage] = useState(1);
+  const recordsPerPage = selectItemNum;
+  const lastIndex = curPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = states?.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(states?.length / recordsPerPage);
   const toast = useToast();
 
   const handleInputChange = (e) => {
@@ -166,6 +179,30 @@ function State() {
     setCountryId(option);
   };
 
+  if(firstIndex > 0){
+    var prePage = () => {
+      if (curPage !== firstIndex) {
+        setCurPage(curPage - 1);
+      }
+    };
+  }
+  
+ if(records?.length === selectItemNum){
+  var nextPage = () => {
+    if (curPage !== lastIndex) {
+      setCurPage(curPage + 1);
+    }
+  };
+ }
+
+ const getFirstPage = () => {
+  setCurPage(1);
+};
+
+const getLastPage = () => {
+  setCurPage(nPage);
+};
+
   return (
     <>
       <div className="mx-5 mt-3">
@@ -181,7 +218,9 @@ function State() {
               <ModalHeader>Add New State</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <select
+                <div className="d-flex justify-content-between">
+                  <div className="select-box">
+                  <select
                   name="country"
                   value={statefield.country}
                   onChange={onChangeHandler}
@@ -197,12 +236,15 @@ function State() {
                     </option>
                   ))}
                 </select>
+                  </div>
+                </div>
                 <input
                   name="name"
                   value={statefield.name}
                   onChange={handleInputChange}
                   type="text"
                   placeholder="Name"
+                  className="property-input"
                 />
                 <input
                   name="description"
@@ -210,21 +252,24 @@ function State() {
                   onChange={handleInputChange}
                   type="text"
                   placeholder="Description"
+                  className="property-input"
                 />
               </ModalBody>
               <ModalFooter>
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
+                  Cancel
                 </Button>
                 <Button variant="ghost" onClick={handleSaveStates}>
-                  Save Changes
+                  Save
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </div>
       </div>
-      <TableContainer marginTop="150px" variant="striped" color="teal">
+      <div className="table-box">
+      <div className="table-top-box">State Table</div>
+      <TableContainer marginTop="60px" variant="striped" color="teal">
         <Table variant="simple">
           <Thead>
             <Tr>
@@ -248,7 +293,7 @@ function State() {
                 </Td>
               </Tr>
             ) : (
-              states?.map((state) => (
+              records?.map((state) => (
                 <Tr key={state._id} id={state._id}>
                   <Td>{state.name}</Td>
                   <Td>{state.country?.name}</Td>
@@ -263,6 +308,46 @@ function State() {
           </Tbody>
         </Table>
       </TableContainer>
+      <nav className="mt-5">
+          <div
+            className="d-flex align-items-center justify-content-between"
+            style={{ width: "51%" }}
+          >
+            <p className="mb-0">Items per page: </p>
+            <div style={{ borderBottom: "1px solid gray" }}>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                required
+                value={selectItemNum}
+                onChange={itemsPerPageHandler}
+                style={{ paddingLeft: "0" }}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            <div style={{ width: "110px" }}>
+              {firstIndex + 1} - {records?.length + firstIndex} of {states?.length}
+            </div>
+
+            <div className="page-item">
+              <BiSkipPrevious onClick={getFirstPage} />
+            </div>
+            <div className="page-item">
+              <GrFormPrevious onClick={prePage} />
+            </div>
+            <div className="page-item">
+              <GrFormNext onClick={nextPage} />
+            </div>
+            <div className="page-item">
+              <BiSkipNext onClick={getLastPage} />
+            </div>
+          </div>
+        </nav>
+      </div>
     </>
   );
 }
