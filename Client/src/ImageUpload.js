@@ -77,22 +77,24 @@ const ImageUpload = ({
             />
           </div>
         </div>
-        <p className="mx-auto">
-          <strong>Uploading Progress</strong>
-        </p>
-        <div className="progress mx-auto">
-          <div
-            id="progress-bar"
-            className="progress-bar progress-bar-striped bg-info"
-            role="progressbar"
-            aria-valuenow="40"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            style={{ width: `${progress}%` }}
-          >
-            {progress}%
+        {progress && (
+          <div className="progress mx-auto">
+            <p className="mx-auto">
+              <strong>Uploading Progress</strong>
+            </p>
+            <div
+              id="progress-bar"
+              className="progress-bar progress-bar-striped bg-info"
+              role="progressbar"
+              aria-valuenow="40"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              style={{ width: `${progress}%` }}
+            >
+              {progress}%
+            </div>
           </div>
-        </div>
+        )}
 
         <div id="preview" className="mx-auto">
           {images?.map((img, index) => (
