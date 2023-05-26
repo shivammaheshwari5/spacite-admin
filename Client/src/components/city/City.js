@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import { BsBookmarkPlus } from "react-icons/bs";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import {
   Table,
   Thead,
@@ -42,6 +44,18 @@ function City() {
   const [countryId, setCountryId] = useState(null);
   const [stateId, setStateId] = useState(null);
   const { user, country, setCountry } = GpState();
+
+  const [selectItemNum, setSelectItemNum] = useState(10);
+  const itemsPerPageHandler = (e) => {
+    setSelectItemNum(e.target.value);
+  };
+  const [curPage, setCurPage] = useState(1);
+  const recordsPerPage = selectItemNum;
+  const lastIndex = curPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = cities?.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(cities?.length / recordsPerPage);
+
   const toast = useToast();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -194,6 +208,31 @@ function City() {
     });
     setStateId(option);
   };
+
+  if(firstIndex > 0){
+    var prePage = () => {
+      if (curPage !== firstIndex) {
+        setCurPage(curPage - 1);
+      }
+    };
+  }
+  
+ if(records?.length === selectItemNum){
+  var nextPage = () => {
+    if (curPage !== lastIndex) {
+      setCurPage(curPage + 1);
+    }
+  };
+ }
+
+  const getFirstPage = () => {
+    setCurPage(1);
+  };
+
+  const getLastPage = () => {
+    setCurPage(nPage);
+  };
+
   return (
     <>
       <div className="mx-5 mt-3">
@@ -209,44 +248,51 @@ function City() {
               <ModalHeader>Add New City</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <select
-                  name="country"
-                  value={cityfield.country}
-                  onChange={onChangeHandler}
-                >
-                  <option>Select Country</option>
-                  {country?.map((countryElem) => (
-                    <option
-                      id={countryElem._id}
-                      key={countryElem._id}
-                      value={countryElem.name}
+                <div className="d-flex justify-content-between">
+                  <div className="select-box">
+                    <select
+                      name="country"
+                      value={cityfield.country}
+                      onChange={onChangeHandler}
                     >
-                      {countryElem.name}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  name="state"
-                  value={cityfield.state}
-                  onChange={onChangeHandlerState}
-                >
-                  <option>Select State</option>
-                  {states?.map((stateElem) => (
-                    <option
-                      id={stateElem._id}
-                      key={stateElem._id}
-                      value={stateElem.name}
+                      <option>Select Country</option>
+                      {country?.map((countryElem) => (
+                        <option
+                          id={countryElem._id}
+                          key={countryElem._id}
+                          value={countryElem.name}
+                        >
+                          {countryElem.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="select-box">
+                    <select
+                      name="state"
+                      value={cityfield.state}
+                      onChange={onChangeHandlerState}
                     >
-                      {stateElem.name}
-                    </option>
-                  ))}
-                </select>
+                      <option>Select State</option>
+                      {states?.map((stateElem) => (
+                        <option
+                          id={stateElem._id}
+                          key={stateElem._id}
+                          value={stateElem.name}
+                        >
+                          {stateElem.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
                 <input
                   name="name"
                   value={cityfield.name}
                   onChange={handleInputChange}
                   type="text"
                   placeholder="Name"
+                  className="property-input"
                 />
                 <input
                   name="description"
@@ -254,59 +300,104 @@ function City() {
                   onChange={handleInputChange}
                   type="text"
                   placeholder="Description"
+                  className="property-input"
                 />
               </ModalBody>
               <ModalFooter>
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
+                  Cancel
                 </Button>
                 <Button variant="ghost" onClick={handleSaveCity}>
-                  Save Changes
+                  Save
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </div>
       </div>
-      <TableContainer marginTop="150px" variant="striped" color="teal">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Country</Th>
-              <Th>State</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {loading ? (
+      <div className="table-box">
+        <div className="table-top-box">City Table</div>
+        <TableContainer marginTop="60px" variant="striped" color="teal">
+          <Table variant="simple">
+            <Thead>
               <Tr>
-                <Td>
-                  <Spinner
-                    size="xl"
-                    w={20}
-                    h={20}
-                    marginLeft="180px"
-                    alignSelf="center"
-                    margin="auto"
-                  />
-                </Td>
+                <Th>Name</Th>
+                <Th>Country</Th>
+                <Th>State</Th>
+                <Th>Delete</Th>
               </Tr>
-            ) : (
-              cities?.map((city) => (
-                <Tr key={city._id} id={city._id}>
-                  <Td>{city.name}</Td>
-                  <Td>{city.country?.name}</Td>
-                  <Td>{city.state?.name}</Td>
+            </Thead>
+            <Tbody>
+              {loading ? (
+                <Tr>
                   <Td>
-                    <Delete handleFunction={() => handleDeleteCity(city._id)} />
+                    <Spinner
+                      size="xl"
+                      w={20}
+                      h={20}
+                      marginLeft="180px"
+                      alignSelf="center"
+                      margin="auto"
+                    />
                   </Td>
                 </Tr>
-              ))
-            )}
-          </Tbody>
-        </Table>
-      </TableContainer>
+              ) : (
+                records?.map((city) => (
+                  <Tr key={city._id} id={city._id}>
+                    <Td>{city.name}</Td>
+                    <Td>{city.country?.name}</Td>
+                    <Td>{city.state?.name}</Td>
+                    <Td>
+                      <Delete
+                        handleFunction={() => handleDeleteCity(city._id)}
+                      />
+                    </Td>
+                  </Tr>
+                ))
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <nav className="mt-5">
+          <div
+            className="d-flex align-items-center justify-content-between"
+            style={{ width: "51%" }}
+          >
+            <p className="mb-0">Items per page: </p>
+            <div style={{ borderBottom: "1px solid gray" }}>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                required
+                value={selectItemNum}
+                onChange={itemsPerPageHandler}
+                style={{ paddingLeft: "0" }}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            <div style={{ width: "110px" }}>
+              {firstIndex + 1} - {records?.length + firstIndex} of {cities?.length}
+            </div>
+
+            <div className="page-item">
+              <BiSkipPrevious onClick={getFirstPage} />
+            </div>
+            <div className="page-item">
+              <GrFormPrevious onClick={prePage} />
+            </div>
+            <div className="page-item">
+              <GrFormNext onClick={nextPage} />
+            </div>
+            <div className="page-item">
+              <BiSkipNext onClick={getLastPage} />
+            </div>
+          </div>
+        </nav>
+      </div>
     </>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import { AiFillDelete } from "react-icons/ai";
 
 const ImageUpload = ({
   images,
@@ -55,14 +56,14 @@ const ImageUpload = ({
       input.click();
     });
   }, []);
-  console.log(images);
+  // console.log(images);
 
   return (
     <div className="App">
       <div className="container">
         <div
           id="drop-region-container"
-          className="drop-region-container mx-auto"
+          className="drop-region-container mx-auto img-drop-box"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
@@ -74,38 +75,39 @@ const ImageUpload = ({
               type="file"
               multiple
               onChange={handleInputByClick}
+              required
             />
           </div>
         </div>
-        {progress && (
-          <div className="progress mx-auto">
+
+        {progress ? (
+          <div>
             <p className="mx-auto">
               <strong>Uploading Progress</strong>
             </p>
-            <div
-              id="progress-bar"
-              className="progress-bar progress-bar-striped bg-info"
-              role="progressbar"
-              aria-valuenow="40"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              style={{ width: `${progress}%` }}
-            >
-              {progress}%
+            <div className="progress mx-auto">
+              <div
+                id="progress-bar"
+                className="progress-bar progress-bar-striped bg-info"
+                role="progressbar"
+                aria-valuenow="40"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                style={{ width: `${progress}%` }}
+              >
+                {progress}%
+              </div>
             </div>
           </div>
-        )}
+        ) : ""}
 
-        <div id="preview" className="mx-auto">
+        <div id="preview" className="mt-3 d-flex align-items-center">
           {images?.map((img, index) => (
             <Fragment key={index}>
-              <img src={img} alt="" />
-              <button
-                className="btn btn-danger btn-block mx-auto"
-                onClick={removePreviewImage}
-              >
-                Delete
-              </button>
+              <img src={img} alt="media" width="50%" />
+              <div className="w-50 text-center">
+              <AiFillDelete onClick={removePreviewImage} className="icon" style={{color: "red"}} />
+              </div>
             </Fragment>
           ))}
         </div>

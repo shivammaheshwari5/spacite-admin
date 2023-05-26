@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import { BsBookmarkPlus } from "react-icons/bs";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import {
   Table,
   Thead,
@@ -45,6 +47,18 @@ function City() {
   const [cityId, setCityId] = useState(null);
   const [microlocations, setMicrolocations] = useState([]);
   const { user, country, setCountry } = GpState();
+
+  const [selectItemNum, setSelectItemNum] = useState(10);
+  const itemsPerPageHandler = (e) => {
+    setSelectItemNum(e.target.value);
+  };
+  const [curPage, setCurPage] = useState(1);
+  const recordsPerPage = selectItemNum;
+  const lastIndex = curPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = microlocations?.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(microlocations?.length / recordsPerPage);
+
   const toast = useToast();
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -232,6 +246,31 @@ function City() {
     });
     setCityId(option);
   };
+
+  if(firstIndex > 0){
+    var prePage = () => {
+      if (curPage !== firstIndex) {
+        setCurPage(curPage - 1);
+      }
+    };
+  }
+  
+ if(records?.length === selectItemNum){
+  var nextPage = () => {
+    if (curPage !== lastIndex) {
+      setCurPage(curPage + 1);
+    }
+  };
+ }
+
+ const getFirstPage = () => {
+  setCurPage(1);
+};
+
+const getLastPage = () => {
+  setCurPage(nPage);
+};
+
   return (
     <>
       <div className="mx-5 mt-3">
@@ -244,63 +283,72 @@ function City() {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Add New City</ModalHeader>
+              <ModalHeader>Add New Microlocation</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <select
-                  name="country"
-                  value={microlocationfield.country}
-                  onChange={onChangeHandler}
-                >
-                  <option>Select Country</option>
-                  {country?.map((countryElem) => (
-                    <option
-                      id={countryElem._id}
-                      key={countryElem._id}
-                      value={countryElem.name}
+                <div className="d-flex justify-content-between">
+                  <div className="select-box">
+                    <select
+                      name="country"
+                      value={microlocationfield.country}
+                      onChange={onChangeHandler}
                     >
-                      {countryElem.name}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  name="state"
-                  value={microlocationfield.state}
-                  onChange={onChangeHandlerState}
-                >
-                  <option>Select State</option>
-                  {states?.map((stateElem) => (
-                    <option
-                      id={stateElem._id}
-                      key={stateElem._id}
-                      value={stateElem.name}
+                      <option>Select Country</option>
+                      {country?.map((countryElem) => (
+                        <option
+                          id={countryElem._id}
+                          key={countryElem._id}
+                          value={countryElem.name}
+                        >
+                          {countryElem.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="select-box">
+                    <select
+                      name="state"
+                      value={microlocationfield.state}
+                      onChange={onChangeHandlerState}
                     >
-                      {stateElem.name}
-                    </option>
-                  ))}
-                </select>
-                <select
-                  name="city"
-                  value={microlocationfield.state}
-                  onChange={onChangeHandlerCity}
-                >
-                  <option>Select City</option>
-                  {cities?.map((cityElem) => (
-                    <option
-                      id={cityElem._id}
-                      key={cityElem._id}
-                      value={cityElem.name}
+                      <option>Select State</option>
+                      {states?.map((stateElem) => (
+                        <option
+                          id={stateElem._id}
+                          key={stateElem._id}
+                          value={stateElem.name}
+                        >
+                          {stateElem.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="select-box">
+                    <select
+                      name="city"
+                      value={microlocationfield.state}
+                      onChange={onChangeHandlerCity}
                     >
-                      {cityElem.name}
-                    </option>
-                  ))}
-                </select>
+                      <option>Select City</option>
+                      {cities?.map((cityElem) => (
+                        <option
+                          id={cityElem._id}
+                          key={cityElem._id}
+                          value={cityElem.name}
+                        >
+                          {cityElem.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
                 <input
                   name="name"
                   value={microlocationfield.name}
                   onChange={handleInputChange}
                   type="text"
                   placeholder="Name"
+                  className="property-input"
                 />
                 <input
                   name="description"
@@ -308,65 +356,108 @@ function City() {
                   onChange={handleInputChange}
                   type="text"
                   placeholder="Description"
+                  className="property-input"
                 />
               </ModalBody>
               <ModalFooter>
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
+                  Cancel
                 </Button>
                 <Button variant="ghost" onClick={handleSaveMicrolocations}>
-                  Save Changes
+                  Save
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </div>
       </div>
-      <TableContainer marginTop="150px" variant="striped" color="teal">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Country</Th>
-              <Th>State</Th>
-              <Th>City</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {loading ? (
+      <div className="table-box">
+        <div className="table-top-box">Microlocation Table</div>
+        <TableContainer marginTop="60px" variant="striped" color="teal">
+          <Table variant="simple">
+            <Thead>
               <Tr>
-                <Td>
-                  <Spinner
-                    size="xl"
-                    w={20}
-                    h={20}
-                    marginLeft="180px"
-                    alignSelf="center"
-                    margin="auto"
-                  />
-                </Td>
+                <Th>Name</Th>
+                <Th>Country</Th>
+                <Th>State</Th>
+                <Th>City</Th>
+                <Th>Delete</Th>
               </Tr>
-            ) : (
-              microlocations?.map((micro) => (
-                <Tr key={micro._id} id={micro._id}>
-                  <Td>{micro.name}</Td>
-                  <Td>{micro.country?.name}</Td>
-                  <Td>{micro.state?.name}</Td>
-                  <Td>{micro.city?.name}</Td>
+            </Thead>
+            <Tbody>
+              {loading ? (
+                <Tr>
                   <Td>
-                    <Delete
-                      handleFunction={() =>
-                        handleDeleteMicrolocations(micro._id)
-                      }
+                    <Spinner
+                      size="xl"
+                      w={20}
+                      h={20}
+                      marginLeft="180px"
+                      alignSelf="center"
+                      margin="auto"
                     />
                   </Td>
                 </Tr>
-              ))
-            )}
-          </Tbody>
-        </Table>
-      </TableContainer>
+              ) : (
+                records?.map((micro) => (
+                  <Tr key={micro._id} id={micro._id}>
+                    <Td>{micro.name}</Td>
+                    <Td>{micro.country?.name}</Td>
+                    <Td>{micro.state?.name}</Td>
+                    <Td>{micro.city?.name}</Td>
+                    <Td>
+                      <Delete
+                        handleFunction={() =>
+                          handleDeleteMicrolocations(micro._id)
+                        }
+                      />
+                    </Td>
+                  </Tr>
+                ))
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <nav className="mt-5">
+          <div
+            className="d-flex align-items-center justify-content-between"
+            style={{ width: "51%" }}
+          >
+            <p className="mb-0">Items per page: </p>
+            <div style={{ borderBottom: "1px solid gray" }}>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                required
+                value={selectItemNum}
+                onChange={itemsPerPageHandler}
+                style={{ paddingLeft: "0" }}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            <div style={{ width: "110px" }}>
+              {firstIndex + 1} - {records?.length + firstIndex} of {microlocations?.length}
+            </div>
+
+            <div className="page-item">
+              <BiSkipPrevious onClick={getFirstPage} />
+            </div>
+            <div className="page-item">
+              <GrFormPrevious onClick={prePage} />
+            </div>
+            <div className="page-item">
+              <GrFormNext onClick={nextPage} />
+            </div>
+            <div className="page-item">
+              <BiSkipNext onClick={getLastPage} />
+            </div>
+          </div>
+        </nav>
+      </div>
     </>
   );
 }

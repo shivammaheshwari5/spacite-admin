@@ -51,7 +51,7 @@ function Sidebar() {
                 <IoEarthOutline className="icon" />
                 Country
               </NavLink>
-            </li>
+            </li><br />
             <li className="nav-item">
               <NavLink to="/state">
                 <BiMapPin className="icon" />
