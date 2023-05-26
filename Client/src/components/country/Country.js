@@ -44,7 +44,7 @@ function Country() {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectItemNum, setSelectItemNum] = useState("10");
+  const [selectItemNum, setSelectItemNum] = useState(10);
   const itemsPerPageHandler = (e) => {
     setSelectItemNum(e.target.value);
   };
@@ -54,6 +54,7 @@ function Country() {
   const firstIndex = lastIndex - recordsPerPage;
   const records = country?.slice(firstIndex, lastIndex);
   const nPage = Math.ceil(country?.length / recordsPerPage);
+  // console.log(records);
   // const numbers = [...Array(nPage + 1).keys()].slice(1);
 
   const handleInputChange = (e) => {
@@ -170,17 +171,21 @@ function Country() {
     getCountry();
   }, [updateTable]);
 
-  const prePage = () => {
-    if (curPage !== firstIndex) {
-      setCurPage(curPage - 1);
-    }
-  };
-
-  const nextPage = () => {
+  if(firstIndex > 0){
+    var prePage = () => {
+      if (curPage !== firstIndex) {
+        setCurPage(curPage - 1);
+      }
+    };
+  }
+  
+ if(records?.length === selectItemNum){
+  var nextPage = () => {
     if (curPage !== lastIndex) {
       setCurPage(curPage + 1);
     }
   };
+ }
 
   const getFirstPage = () => {
     setCurPage(1);
@@ -209,8 +214,9 @@ function Country() {
                   type="text"
                   value={countryfield.name}
                   onChange={handleInputChange}
-                  placeholder="Name"
+                  placeholder="Name*"
                   name="name"
+                  className="property-input"
                 />
                 <input
                   type="text"
@@ -218,13 +224,15 @@ function Country() {
                   onChange={handleInputChange}
                   placeholder="Description"
                   name="description"
+                  className="property-input"
                 />
                 <input
                   type="text"
                   value={countryfield.dialCode}
                   onChange={handleInputChange}
-                  placeholder="Dial Code"
+                  placeholder="Dial Code*"
                   name="dialCode"
+                  className="property-input"
                 />
                 <input
                   type="text"
@@ -232,21 +240,22 @@ function Country() {
                   onChange={handleInputChange}
                   placeholder="Iso Code"
                   name="isoCode"
+                  className="property-input"
                 />
               </ModalBody>
               <ModalFooter>
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
+                  Cancel
                 </Button>
                 <Button variant="ghost" onClick={handleSaveCountry}>
-                  Save Changes
+                  Save
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </div>
       </div>
-      <div className="country-table-box">
+      <div className="table-box">
         <div className="table-top-box">Country Table</div>
         <TableContainer marginTop="60px" variant="striped" color="teal">
           <Table variant="simple">
@@ -319,7 +328,7 @@ function Country() {
               </select>
             </div>
             <div style={{ width: "110px" }}>
-              {firstIndex} - {records?.length} of {country?.length}
+              {firstIndex + 1} - {records?.length + firstIndex} of {country?.length}
             </div>
 
             <div className="page-item">

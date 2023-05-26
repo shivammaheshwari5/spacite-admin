@@ -17,9 +17,6 @@ const Delete = ({ handleFunction }) => {
   const cancelRef = React.useRef();
   return (
     <>
-      {/* <Button colorScheme="red" onClick={onOpen}>
-        Delete
-      </Button> */}
       <AiFillDelete onClick={onOpen} style={{fontSize: "22px", cursor:"pointer", color:"red"}} />
 
       <AlertDialog
