@@ -2,6 +2,8 @@ import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import React, { useContext, useEffect, useState } from "react";
 import { useToast } from "@chakra-ui/react";
 import { BsBookmarkPlus } from "react-icons/bs";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import axios from "axios";
 import {
   Table,
@@ -30,12 +32,24 @@ import Delete from "../delete/Delete";
 
 function Media() {
   const [updateTable, setUpdateTable] = useState(false);
+  const [selectItemNum, setSelectItemNum] = useState(10);
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   // const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
   const [images, setImages] = useState([]);
   const [imagedata, setImagedata] = useState([]);
+
+  const itemsPerPageHandler = (e) => {
+    setSelectItemNum(e.target.value);
+  };
+  const [curPage, setCurPage] = useState(1);
+  const recordsPerPage = selectItemNum;
+  const lastIndex = curPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = imagedata?.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(imagedata?.length / recordsPerPage);
+
   const toast = useToast();
   const { user } = GpState();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -65,9 +79,9 @@ function Media() {
       })
       .then((res) => {
         previewFile(res.data);
-        setTimeout(() => {
-          setProgress(0);
-        }, 3000);
+        // setTimeout(() => {
+        //   setProgress(0);
+        // }, 3000);
       })
       .catch((err) => {
         console.log(err);
@@ -92,6 +106,8 @@ function Media() {
         real_name: name,
       });
       setName("");
+      setImages([]);
+      setProgress(0);
       setUpdateTable((prev) => !prev);
       onClose();
       toast({
@@ -149,7 +165,38 @@ function Media() {
   useEffect(() => {
     getImages();
   }, [updateTable]);
-  console.log(imagedata);
+  // console.log(imagedata);
+
+  if(firstIndex > 0){
+    var prePage = () => {
+      if (curPage !== firstIndex) {
+        setCurPage(curPage - 1);
+      }
+    };
+  }
+  
+ if(records?.length === selectItemNum){
+  var nextPage = () => {
+    if (curPage !== lastIndex) {
+      setCurPage(curPage + 1);
+    }
+  };
+ }
+
+  const getFirstPage = () => {
+    setCurPage(1);
+  };
+
+  const getLastPage = () => {
+    setCurPage(nPage);
+  };
+
+  const uploadCancel = () => {
+    setImages([]);
+    setProgress(0);
+    onClose();
+  }
+
   return (
     <>
       <div className="mx-5 mt-3">
@@ -162,15 +209,17 @@ function Media() {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Add New Country</ModalHeader>
+              <ModalHeader>Upload New Image</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Name"
+                  placeholder="Name*"
                   name="name"
+                  className="property-input"
+                  required
                 />
                 <ImageUpload
                   images={images}
@@ -181,53 +230,95 @@ function Media() {
                 />
               </ModalBody>
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
+                <Button colorScheme="blue" mr={3} onClick={uploadCancel}>
+                  Cancel
                 </Button>
-                <Button variant="ghost" onClick={handleSaveImage}>
-                  Save Changes
+                <Button type="submit" variant="ghost" onClick={handleSaveImage}>
+                  Upload
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </div>
       </div>
-      <TableContainer marginTop="60px" variant="striped" color="teal">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Dial Code</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {loading ? (
+      <div className="table-box">
+        <div className="table-top-box">Media Table</div>
+        <TableContainer marginTop="60px" variant="striped" color="teal">
+          <Table variant="simple">
+            <Thead>
               <Tr>
-                <Td align="center" style={{ width: "50px" }}>
-                  <Spinner
-                    size="xl"
-                    w={20}
-                    h={20}
-                    alignSelf="center"
-                    style={{ position: "absolute", left: "482px" }}
-                  />
-                </Td>
+                <Th>Name</Th>
+                <Th>Image Link</Th>
+                <Th>Delete</Th>
               </Tr>
-            ) : (
-              imagedata?.map((image) => (
-                <Tr key={image._id} id={image._id}>
-                  <Td>{image.real_name}</Td>
-                  <Td>{image.name}</Td>
-                  <Td>
-                    <Delete handleFunction={() => deleteImages(image._id)} />
+            </Thead>
+            <Tbody>
+              {loading ? (
+                <Tr>
+                  <Td align="center" style={{ width: "50px" }}>
+                    <Spinner
+                      size="xl"
+                      w={20}
+                      h={20}
+                      alignSelf="center"
+                      style={{ position: "absolute", left: "482px" }}
+                    />
                   </Td>
                 </Tr>
-              ))
-            )}
-          </Tbody>
-        </Table>
-      </TableContainer>
+              ) : (
+                records?.map((image) => (
+                  <Tr key={image._id} id={image._id}>
+                    <Td>{image.real_name}</Td>
+                    <Td>{image.name}</Td>
+                    <Td>
+                      <Delete handleFunction={() => deleteImages(image._id)} />
+                    </Td>
+                  </Tr>
+                ))
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <nav className="mt-5">
+          <div
+            className="d-flex align-items-center justify-content-between"
+            style={{ width: "51%" }}
+          >
+            <p className="mb-0">Items per page: </p>
+            <div style={{ borderBottom: "1px solid gray" }}>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                required
+                value={selectItemNum}
+                onChange={itemsPerPageHandler}
+                style={{ paddingLeft: "0" }}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            <div style={{ width: "110px" }}>
+              {firstIndex + 1} - {records?.length + firstIndex} of {imagedata?.length}
+            </div>
+
+            <div className="page-item">
+              <BiSkipPrevious onClick={getFirstPage} />
+            </div>
+            <div className="page-item">
+              <GrFormPrevious onClick={prePage} />
+            </div>
+            <div className="page-item">
+              <GrFormNext onClick={nextPage} />
+            </div>
+            <div className="page-item">
+              <BiSkipNext onClick={getLastPage} />
+            </div>
+          </div>
+        </nav>
+      </div>
     </>
   );
 }
