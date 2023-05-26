@@ -137,19 +137,32 @@ function Country() {
 
   const handleDeleteCountry = async (id) => {
     try {
-      axios.delete(`/api/allCountry/delete/${id}`).then((res) => {
-        console.log(res);
-        setUpdateTable((prev) => !prev);
-        toast({
-          title: "Deleted Successfully!",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.delete(
+        `/api/allCountry/delete/${id}`,
+        config
+      );
+      setUpdateTable((prev) => !prev);
+      toast({
+        title: "Deleted Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
       });
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
     }
   };
 

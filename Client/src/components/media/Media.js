@@ -149,7 +149,6 @@ function Media() {
   useEffect(() => {
     getImages();
   }, [updateTable]);
-  console.log(imagedata);
   return (
     <>
       <div className="mx-5 mt-3">

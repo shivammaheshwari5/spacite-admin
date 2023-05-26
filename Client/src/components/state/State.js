@@ -37,6 +37,7 @@ function State() {
     country: "",
     description: "",
   });
+  const [countryId, setCountryId] = useState(null);
   const { user, country, setCountry } = GpState();
   const toast = useToast();
 
@@ -61,7 +62,7 @@ function State() {
         {
           name: statefield.name,
           description: statefield.description,
-          // country: statefield.country._id,
+          country: countryId,
         },
         config
       );
@@ -123,19 +124,29 @@ function State() {
   };
   const handleDeleteStates = async (id) => {
     try {
-      axios.delete(`/api/state/delete/${id}`).then((res) => {
-        console.log(res);
-        setUpdateTable((prev) => !prev);
-        toast({
-          title: "Deleted Successfully!",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.delete(`/api/state/delete/${id}`, config);
+      setUpdateTable((prev) => !prev);
+      toast({
+        title: "Deleted Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
       });
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
     }
   };
   useEffect(() => {
@@ -143,7 +154,18 @@ function State() {
     getCountry();
   }, [updateTable]);
 
-  console.log(states);
+  const onChangeHandler = (e) => {
+    const index = e.target.selectedIndex;
+    const el = e.target.childNodes[index];
+    const option = el.getAttribute("id");
+    const { name, value } = e.target;
+    setStatefield({
+      ...statefield,
+      [name]: value,
+    });
+    setCountryId(option);
+  };
+
   return (
     <>
       <div className="mx-5 mt-3">
@@ -162,13 +184,17 @@ function State() {
                 <select
                   name="country"
                   value={statefield.country}
-                  onChange={handleInputChange}
+                  onChange={onChangeHandler}
                 >
-                  <option disabled selected hidden>
-                    Select Country
-                  </option>
-                  {country?.map((country) => (
-                    <option key={country._id}>{country.name}</option>
+                  <option>Select Country</option>
+                  {country?.map((countryElem) => (
+                    <option
+                      id={countryElem._id}
+                      key={countryElem._id}
+                      value={countryElem.name}
+                    >
+                      {countryElem.name}
+                    </option>
                   ))}
                 </select>
                 <input
@@ -203,8 +229,7 @@ function State() {
           <Thead>
             <Tr>
               <Th>Name</Th>
-              <Th>Dial Code</Th>
-              <Th>Edit</Th>
+              <Th>Country</Th>
               <Th>Delete</Th>
             </Tr>
           </Thead>
@@ -226,16 +251,7 @@ function State() {
               states?.map((state) => (
                 <Tr key={state._id} id={state._id}>
                   <Td>{state.name}</Td>
-                  <Td>{state.country[0]?.name}</Td>
-                  <Td>
-                    Edit
-                    {/* <EditCountry
-                      id={countries._id}
-                      countries={countries}
-                      setUpdateTable={setUpdateTable}
-                      // handleFunction={() => handleEditCountry(countries._id)}
-                    /> */}
-                  </Td>
+                  <Td>{state.country?.name}</Td>
                   <Td>
                     <Delete
                       handleFunction={() => handleDeleteStates(state._id)}

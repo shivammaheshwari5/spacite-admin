@@ -7,6 +7,7 @@ const {
   getCountryById,
   toggleCountryStatus,
   deleteCountry,
+  s,
 } = require("../controllers/manageCountry");
 const router = express.Router();
 
@@ -16,6 +17,6 @@ router
   .put("/country/:countryId", protect, addOrEditCountry)
   .get("/country/:id", getCountryById)
   .get("/country/changeStatus/:countryId", toggleCountryStatus)
-  .delete("/delete/:countryId", deleteCountry);
+  .delete("/delete/:countryId", protect, deleteCountry);
 
 module.exports = router;
