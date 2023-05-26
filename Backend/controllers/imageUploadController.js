@@ -40,6 +40,10 @@ const multipleUploadImage = asyncHandler(async (req, res, next) => {
     req.body;
 
   try {
+    if (!name || !real_name) {
+      res.status(400);
+      throw new Error("Please enter all the fields!");
+    }
     const images = await Image.create({
       name,
       real_name,

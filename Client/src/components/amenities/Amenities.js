@@ -1,33 +1,209 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
-import Addnewbtn from "../add-new-btn/Addnewbtn";
+import { BsBookmarkPlus } from "react-icons/bs";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  useToast,
+} from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  useDisclosure,
+  Spinner,
+} from "@chakra-ui/react";
+import axios from "axios";
 import { GpState } from "../../context/context";
-import { Modal, Button } from "react-bootstrap";
+import Delete from "../delete/Delete";
 
 function Amenities() {
-  const { handleClose, showModal } = GpState();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [name, setName] = useState("");
+  const [icon, setIcon] = useState("");
+  const [updateTable, setUpdateTable] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [amenities, setAmenities] = useState([]);
+  const { user } = GpState();
+  const toast = useToast();
+
+  const handleSaveAmenities = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        "/api/amenity/amenities",
+        {
+          name: name,
+          icon: icon,
+        },
+        config
+      );
+      setName("");
+      setIcon("");
+      setUpdateTable((prev) => !prev);
+      onClose();
+      toast({
+        title: "Saved Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the Search Results",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+
+  const getAmenities = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.get("/api/amenity/amenities", config);
+      setLoading(false);
+      setAmenities(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleDeleteAmenities = async (id) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.delete(`/api/amenity/delete/${id}`, config);
+      setUpdateTable((prev) => !prev);
+      toast({
+        title: "Deleted Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+  useEffect(() => {
+    getAmenities();
+  }, [updateTable]);
 
   return (
-    <div className="mx-5 mt-3">
-      <Mainpanelnav />
-      <Addnewbtn />
-      <div>
-        <Modal show={showModal} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleClose}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
+    <>
+      <div className="mx-5 mt-3">
+        <Mainpanelnav />
+        <Button className="addnew-btn" onClick={onOpen}>
+          <BsBookmarkPlus />
+          ADD NEW
+        </Button>
+        <div>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Add New State</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <input
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  placeholder="Name"
+                />
+                <input
+                  name="description"
+                  value={icon}
+                  onChange={(e) => setIcon(e.target.value)}
+                  type="text"
+                  placeholder="Description"
+                />
+              </ModalBody>
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                  Close
+                </Button>
+                <Button variant="ghost" onClick={handleSaveAmenities}>
+                  Save Changes
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </div>
       </div>
-    </div>
+      <TableContainer marginTop="150px" variant="striped" color="teal">
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>Name</Th>
+              <Th>Country</Th>
+              <Th>Delete</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {loading ? (
+              <Tr>
+                <Td>
+                  <Spinner
+                    size="xl"
+                    w={20}
+                    h={20}
+                    marginLeft="180px"
+                    alignSelf="center"
+                    margin="auto"
+                  />
+                </Td>
+              </Tr>
+            ) : (
+              amenities?.map((amenity) => (
+                <Tr key={amenity._id} id={amenity._id}>
+                  <Td>{amenity.name}</Td>
+                  <Td>{amenity.icon}</Td>
+                  <Td>
+                    <Delete
+                      handleFunction={() => handleDeleteAmenities(amenity._id)}
+                    />
+                  </Td>
+                </Tr>
+              ))
+            )}
+          </Tbody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
 

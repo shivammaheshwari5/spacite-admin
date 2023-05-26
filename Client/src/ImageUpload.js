@@ -79,6 +79,7 @@ const ImageUpload = ({
             />
           </div>
         </div>
+
         {progress ? (
           <div>
             <p className="mx-auto">
