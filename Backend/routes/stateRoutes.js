@@ -1,5 +1,5 @@
 const express = require("express");
-// const { protect } = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 const {
   getState,
   postState,
@@ -9,9 +9,9 @@ const {
 const router = express.Router();
 
 router
-  .get("/states", getState)
-  .post("/states", postState)
+  .get("/states", protect, getState)
+  .post("/states", protect, postState)
   .put("/states/:stateId", addOrEditState)
-  .delete("/delete/:stateId", deleteState);
+  .delete("/delete/:stateId", protect, deleteState);
 
 module.exports = router;

@@ -18,23 +18,29 @@ const getCountries = asyncHandler(async (req, res) => {
 const postCountry = asyncHandler(async (req, res) => {
   const { name, dial_code, iso_code, description } = req.body;
 
-  const country = await Country.create({
-    name,
-    dial_code,
-    iso_code,
-    description,
-  });
-  if (country) {
-    res.status(201).json({
-      _id: country._id,
-      name: country.name,
-      dial_code: country.dial_code,
-      iso_code: country.iso_code,
-      description: country.description,
+  try {
+    const country = await Country.create({
+      name,
+      dial_code,
+      iso_code,
+      description,
     });
-  } else {
-    res.status(400);
-    throw new Error("Failed to create the country!");
+    if (country) {
+      res.status(201).json({
+        _id: country._id,
+        name: country.name,
+        dial_code: country.dial_code,
+        iso_code: country.iso_code,
+        description: country.description,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Failed to create the country!");
+    }
+  } catch (error) {
+    res.send({
+      error: error,
+    });
   }
 });
 

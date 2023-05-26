@@ -2,12 +2,11 @@ const mongoose = require("mongoose");
 
 const stateModel = mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
     description: String,
     country: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Country",
-      required: true,
     },
     active: {
       type: Boolean,
