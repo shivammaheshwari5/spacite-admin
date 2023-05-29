@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import loginbg from "../login-bg.jpg";
+import loginbg from "./login-bg.jpg";
 import "./Login.css";
-import logo from "../Gupta-Promoters-Logo-1.svg";
+import logo from "./spacite-logo.png";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -75,7 +75,7 @@ function Login() {
       localStorage.setItem("token", user.token);
       setLoading(false);
       // props.onLogin(true);
-      navigate("/commercial-properties", { replace: true });
+      navigate("/listing-space", { replace: true });
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -95,7 +95,12 @@ function Login() {
           <div className="row ml-0 mr-0">
             <div className="col-md-6 px-0 d-flex align-items-center justify-content-center">
               <div style={{ width: "50%" }}>
-                <img className="img-fluid" src={logo} alt="logo" />
+                <img
+                  className=""
+                  style={{ width: "130px", margin: "auto" }}
+                  src={logo}
+                  alt="logo"
+                />
                 <VStack spacing="-10px">
                   <FormControl id="emaillogin" isRequired>
                     <Input

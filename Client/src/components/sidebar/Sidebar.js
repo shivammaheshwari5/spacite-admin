@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
-import logo from "../login-page/Gupta-Promoters-Logo.svg";
+import logo from "../login-page/spacite-logo.png";
 import {
   HiOutlineBuildingOffice2,
   HiOutlineBuildingOffice,
@@ -18,26 +18,31 @@ function Sidebar() {
     <div className="sidebar">
       <div className="sidenav">
         <div className="logo-sidebar">
-          <img className="img-fluid" src={logo} alt="logo" />
+          <img
+            className=""
+            style={{ width: "130px", margin: "auto" }}
+            src={logo}
+            alt="logo"
+          />
         </div>
         <div className="nav-menu-wrapper">
           <ul className="nav">
             <li className="nav-item">
-              <NavLink to="/commercial-properties">
+              <NavLink to="/listing-space">
                 <HiOutlineBuildingOffice2 className="icon" />
-                Commercial Properties
+                Listing Space
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/residential-properties">
+              <NavLink to="/coworking-space">
                 <HiOutlineBuildingOffice className="icon" />
-                Residential Properties
+                Coworking Space
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/property-type">
+              <NavLink to="/coworking-plan">
                 <HiOutlineBuildingOffice className="icon" />
-                Property Type
+                Coworking Plans
               </NavLink>
             </li>
             <li className="nav-item">
@@ -51,7 +56,8 @@ function Sidebar() {
                 <IoEarthOutline className="icon" />
                 Country
               </NavLink>
-            </li><br />
+            </li>
+            <br />
             <li className="nav-item">
               <NavLink to="/state">
                 <BiMapPin className="icon" />
@@ -79,7 +85,13 @@ function Sidebar() {
             <li className="nav-item">
               <NavLink to="/builders">
                 <MdOutlineRealEstateAgent className="icon" />
-                Builders
+                SEO
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink to="/brands">
+                <MdOutlineRealEstateAgent className="icon" />
+                Brand
               </NavLink>
             </li>
           </ul>

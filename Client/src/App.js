@@ -1,9 +1,8 @@
 import { Route, Routes, Navigate } from "react-router";
 import "./App.css";
 import Sidebar from "./components/sidebar/Sidebar";
-import Commercial from "./components/commercial-properties/Commercial";
-import Residential from "./components/residential-properties/Residential";
-import ResPropertyType from "./components/residential-property-type/ResPropertyType";
+import ListingSpace from "./components/listing-space/ListingSpace";
+import CoworkingPlan from "./components/coworking-plans/CoworkingPlan";
 import Media from "./components/media/Media";
 import Country from "./components/country/Country";
 import State from "./components/state/State";
@@ -14,7 +13,9 @@ import Builders from "./components/builders/Builders";
 import Login from "./components/login-page/Login";
 import { useState, useContext } from "react";
 import { GpState } from "./context/context";
-import Addcommercial from "./components/commercial-properties/Addcommercial";
+import AddListingSpace from "./components/listing-space/AddListingSpace";
+import CoworkingSpace from "./components/coworking-space/CoworkingSpace";
+import Brands from "./components/brands/Brands";
 function App() {
   const { isLogin } = GpState();
 
@@ -25,32 +26,32 @@ function App() {
         <div className={isLogin ? "mainpanel" : ""}>
           <Routes>
             <Route
-              path="/commercial-properties"
+              path="/listing-space"
               element={
                 isLogin ? (
-                  [<Sidebar key={1} />, <Commercial key={2} />]
+                  [<Sidebar key={1} />, <ListingSpace key={2} />]
                 ) : (
                   <Navigate to="/" />
                 )
               }
             />
             <Route
-              path="/residential-properties"
+              path="/coworking-space"
               key="2"
               element={
                 isLogin ? (
-                  [<Sidebar key={3} />, <Residential key={4} />]
+                  [<Sidebar key={3} />, <CoworkingSpace key={4} />]
                 ) : (
                   <Navigate to="/" />
                 )
               }
             />
             <Route
-              path="/property-type"
+              path="/coworking-plan"
               key="3"
               element={
                 isLogin ? (
-                  [<Sidebar key={5} />, <ResPropertyType key={6} />]
+                  [<Sidebar key={5} />, <CoworkingPlan key={6} />]
                 ) : (
                   <Navigate to="/" />
                 )
@@ -135,20 +136,20 @@ function App() {
               }
             />
             <Route
-              path="/commercial-properties/add-commercial-property"
+              path="/coworking-space/add-coworking-space"
               element={
                 isLogin ? (
-                  [<Sidebar key={22} />, <Addcommercial key={23} />]
+                  [<Sidebar key={22} />, <AddListingSpace key={23} />]
                 ) : (
                   <Navigate to="/" />
                 )
               }
             />
             <Route
-              path="/residential-properties/add-residential-property"
+              path="/brands"
               element={
                 isLogin ? (
-                  [<Sidebar key={24} />, <Addcommercial key={25} />]
+                  [<Sidebar key={24} />, <Brands key={25} />]
                 ) : (
                   <Navigate to="/" />
                 )

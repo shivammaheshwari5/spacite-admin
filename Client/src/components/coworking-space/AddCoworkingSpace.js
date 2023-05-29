@@ -2,7 +2,7 @@ import React from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import Addpropertyform from "../add-property/Addpropertyform";
 
-function Addresidential() {
+function AddCoworkingSpace() {
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
@@ -11,4 +11,4 @@ function Addresidential() {
   );
 }
 
-export default Addresidential;
+export default AddCoworkingSpace;

@@ -99,14 +99,20 @@ const ImageUpload = ({
               </div>
             </div>
           </div>
-        ) : ""}
+        ) : (
+          ""
+        )}
 
         <div id="preview" className="mt-3 d-flex align-items-center">
           {images?.map((img, index) => (
             <Fragment key={index}>
               <img src={img} alt="media" width="50%" />
               <div className="w-50 text-center">
-              <AiFillDelete onClick={removePreviewImage} className="icon" style={{color: "red"}} />
+                <AiFillDelete
+                  onClick={removePreviewImage}
+                  className="icon"
+                  style={{ color: "red" }}
+                />
               </div>
             </Fragment>
           ))}

@@ -77,4 +77,4 @@ app.use("/api/propertytype", propertytypeRouter);
 app.use(notFound);
 app.use(errorHandle);
 
-app.listen(process.env.PORT, console.log("server started on 5000"));
+app.listen(process.env.PORT, console.log("server started on 4000"));
