@@ -134,7 +134,7 @@ function Amenities() {
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Add New State</ModalHeader>
+              <ModalHeader>Add New Amenity</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
                 <input
@@ -143,6 +143,7 @@ function Amenities() {
                   onChange={(e) => setName(e.target.value)}
                   type="text"
                   placeholder="Name"
+                  className="property-input"
                 />
                 <input
                   name="description"
@@ -150,59 +151,65 @@ function Amenities() {
                   onChange={(e) => setIcon(e.target.value)}
                   type="text"
                   placeholder="Description"
+                  className="property-input"
                 />
               </ModalBody>
               <ModalFooter>
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
+                  Cancel
                 </Button>
                 <Button variant="ghost" onClick={handleSaveAmenities}>
-                  Save Changes
+                  Save
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </div>
       </div>
-      <TableContainer marginTop="150px" variant="striped" color="teal">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Country</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {loading ? (
+      <div className="table-box">
+        <div className="table-top-box">Amenities Table</div>
+        <TableContainer marginTop="60px" variant="striped" color="teal">
+          <Table variant="simple">
+            <Thead>
               <Tr>
-                <Td>
-                  <Spinner
-                    size="xl"
-                    w={20}
-                    h={20}
-                    marginLeft="180px"
-                    alignSelf="center"
-                    margin="auto"
-                  />
-                </Td>
+                <Th>Name</Th>
+                <Th>Icon</Th>
+                <Th>Delete</Th>
               </Tr>
-            ) : (
-              amenities?.map((amenity) => (
-                <Tr key={amenity._id} id={amenity._id}>
-                  <Td>{amenity.name}</Td>
-                  <Td>{amenity.icon}</Td>
+            </Thead>
+            <Tbody>
+              {loading ? (
+                <Tr>
                   <Td>
-                    <Delete
-                      handleFunction={() => handleDeleteAmenities(amenity._id)}
+                    <Spinner
+                      size="xl"
+                      w={20}
+                      h={20}
+                      marginLeft="180px"
+                      alignSelf="center"
+                      margin="auto"
                     />
                   </Td>
                 </Tr>
-              ))
-            )}
-          </Tbody>
-        </Table>
-      </TableContainer>
+              ) : (
+                amenities?.map((amenity) => (
+                  <Tr key={amenity._id} id={amenity._id}>
+                    <Td>{amenity.name}</Td>
+                    <Td>{amenity.icon}</Td>
+                    <Td>
+                      <Delete
+                        handleFunction={() =>
+                          handleDeleteAmenities(amenity._id)
+                        }
+                      />
+                    </Td>
+                  </Tr>
+                ))
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </div>
     </>
   );
 }

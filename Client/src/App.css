@@ -32,7 +32,7 @@
     rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 .property-input {
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid rgb(180, 178, 178);
   outline: none;
   /* width: 450px; */
 }

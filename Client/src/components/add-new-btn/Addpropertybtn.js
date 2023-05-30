@@ -7,7 +7,7 @@ function Addpropertybtn() {
   return (
     <>
         <div style={{float: "right"}}>
-        <Button variant="primary" className="addnew-btn">
+        <Button variant="primary" className='addProperty-btn'>
           <BsBookmarkPlus />
           ADD NEW
         </Button>

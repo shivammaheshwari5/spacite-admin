@@ -150,55 +150,58 @@ function ResPropertyType() {
               </ModalBody>
               <ModalFooter>
                 <Button colorScheme="blue" mr={3} onClick={onClose}>
-                  Close
+                  Cancel
                 </Button>
                 <Button variant="ghost" onClick={handleSavePropertyTypes}>
-                  Save Changes
+                  Save
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </div>
       </div>
-      <TableContainer marginTop="150px" variant="striped" color="teal">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {loading ? (
+      <div className="table-box">
+        <div className="table-top-box">City Table</div>
+        <TableContainer marginTop="60px" variant="striped" color="teal">
+          <Table variant="simple">
+            <Thead>
               <Tr>
-                <Td>
-                  <Spinner
-                    size="xl"
-                    w={20}
-                    h={20}
-                    marginLeft="180px"
-                    alignSelf="center"
-                    margin="auto"
-                  />
-                </Td>
+                <Th>Name</Th>
+                <Th>Delete</Th>
               </Tr>
-            ) : (
-              propertyTypes?.map((types) => (
-                <Tr key={types._id} id={types._id}>
-                  <Td>{types.name}</Td>
+            </Thead>
+            <Tbody>
+              {loading ? (
+                <Tr>
                   <Td>
-                    <Delete
-                      handleFunction={() =>
-                        handleDeletePropertyTypes(types._id)
-                      }
+                    <Spinner
+                      size="xl"
+                      w={20}
+                      h={20}
+                      marginLeft="180px"
+                      alignSelf="center"
+                      margin="auto"
                     />
                   </Td>
                 </Tr>
-              ))
-            )}
-          </Tbody>
-        </Table>
-      </TableContainer>
+              ) : (
+                propertyTypes?.map((types) => (
+                  <Tr key={types._id} id={types._id}>
+                    <Td>{types.name}</Td>
+                    <Td>
+                      <Delete
+                        handleFunction={() =>
+                          handleDeletePropertyTypes(types._id)
+                        }
+                      />
+                    </Td>
+                  </Tr>
+                ))
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </div>
     </>
   );
 }

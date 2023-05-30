@@ -83,7 +83,7 @@ function Sidebar() {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/builders">
+              <NavLink to="/seo">
                 <MdOutlineRealEstateAgent className="icon" />
                 SEO
               </NavLink>

@@ -9,13 +9,14 @@ import State from "./components/state/State";
 import City from "./components/city/City";
 import Microlocation from "./components/microlocation/Microlocation";
 import Amenities from "./components/amenities/Amenities";
-import Builders from "./components/builders/Builders";
 import Login from "./components/login-page/Login";
 import { useState, useContext } from "react";
 import { GpState } from "./context/context";
 import AddListingSpace from "./components/listing-space/AddListingSpace";
 import CoworkingSpace from "./components/coworking-space/CoworkingSpace";
 import Brands from "./components/brands/Brands";
+import Seo from "./components/SEO/Seo";
+import AddSeoForm from "./components/SEO/AddSeoForm";
 function App() {
   const { isLogin } = GpState();
 
@@ -125,11 +126,11 @@ function App() {
               }
             />
             <Route
-              path="/builders"
+              path="/seo"
               key="11"
               element={
                 isLogin ? (
-                  [<Sidebar key={20} />, <Builders key={21} />]
+                  [<Sidebar key={20} />, <Seo key={21} />]
                 ) : (
                   <Navigate to="/" />
                 )
@@ -146,10 +147,20 @@ function App() {
               }
             />
             <Route
+              path="/seo/add-seo"
+              element={
+                isLogin ? (
+                  [<Sidebar key={24} />, <AddSeoForm key={25} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
               path="/brands"
               element={
                 isLogin ? (
-                  [<Sidebar key={24} />, <Brands key={25} />]
+                  [<Sidebar key={26} />, <Brands key={27} />]
                 ) : (
                   <Navigate to="/" />
                 )
