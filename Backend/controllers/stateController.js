@@ -32,4 +32,18 @@ const deleteState = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { getState, postState, addOrEditState, deleteState };
+const getStateByCountry = asyncHandler(async (req, res) => {
+  State.find({ country: req.body.country_id })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => console.log(err));
+});
+
+module.exports = {
+  getState,
+  postState,
+  addOrEditState,
+  deleteState,
+  getStateByCountry,
+};

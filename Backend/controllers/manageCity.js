@@ -38,4 +38,11 @@ const deleteCity = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { postCity, getCity, deleteCity };
+const getCityByState = asyncHandler(async (req, res) => {
+  City.find({ state: req.body.state_id })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => console.log(err));
+});
+module.exports = { postCity, getCity, deleteCity, getCityByState };
