@@ -5,11 +5,13 @@ const {
   postState,
   addOrEditState,
   deleteState,
+  getStateByCountry,
 } = require("../controllers/stateController");
 const router = express.Router();
 
 router
   .get("/states", protect, getState)
+  .post("/statesbycountry", protect, getStateByCountry)
   .post("/states", protect, postState)
   .put("/states/:stateId", addOrEditState)
   .delete("/delete/:stateId", protect, deleteState);

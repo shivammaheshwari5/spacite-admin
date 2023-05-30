@@ -124,7 +124,7 @@ function City() {
       console.log(error);
     }
   };
-  const getState = async () => {
+  const getStateByCountry = async () => {
     try {
       setLoading(true);
       const config = {
@@ -132,9 +132,14 @@ function City() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get("/api/state/states", config);
+      await axios
+        .post("/api/state/statesbycountry", { country_id: countryId }, config)
+        .then((result) => {
+          console.log(result.data);
+          setStates(result.data);
+        });
       setLoading(false);
-      setStates(data);
+      // setStates(data);
     } catch (error) {
       console.log(error);
     }
@@ -182,7 +187,6 @@ function City() {
     }
   };
   useEffect(() => {
-    getState();
     getCountry();
     getCity();
   }, [updateTable]);
@@ -209,21 +213,21 @@ function City() {
     setStateId(option);
   };
 
-  if(firstIndex > 0){
+  if (firstIndex > 0) {
     var prePage = () => {
       if (curPage !== firstIndex) {
         setCurPage(curPage - 1);
       }
     };
   }
-  
- if(records?.length === selectItemNum){
-  var nextPage = () => {
-    if (curPage !== lastIndex) {
-      setCurPage(curPage + 1);
-    }
-  };
- }
+
+  if (records?.length === selectItemNum) {
+    var nextPage = () => {
+      if (curPage !== lastIndex) {
+        setCurPage(curPage + 1);
+      }
+    };
+  }
 
   const getFirstPage = () => {
     setCurPage(1);
@@ -232,6 +236,8 @@ function City() {
   const getLastPage = () => {
     setCurPage(nPage);
   };
+  console.log(countryId);
+  // console.log(states);
 
   return (
     <>
@@ -254,6 +260,7 @@ function City() {
                       name="country"
                       value={cityfield.country}
                       onChange={onChangeHandler}
+                      onClick={getStateByCountry}
                     >
                       <option>Select Country</option>
                       {country?.map((countryElem) => (
@@ -380,7 +387,8 @@ function City() {
               </select>
             </div>
             <div style={{ width: "110px" }}>
-              {firstIndex + 1} - {records?.length + firstIndex} of {cities?.length}
+              {firstIndex + 1} - {records?.length + firstIndex} of{" "}
+              {cities?.length}
             </div>
 
             <div className="page-item">
