@@ -3,12 +3,52 @@ import { IoIosAddCircle } from "react-icons/io";
 import { AiFillDelete } from "react-icons/ai";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
+import EditorConvertToHTML from "../SEO/EditorConvertToHTML";
+import Multiselect from "multiselect-react-dropdown";
+import AddDays from "./AddDays";
 
 function Addpropertyform() {
   const [propertyType, setPropertyType] = useState("Select property type");
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pic, setPic] = useState();
+  const [showDiffrentDays, setShowDiffrentDays] = useState(false);
+  const [satOpen, setSatOpen] = useState(false);
+  const [options, setOptions] = useState([
+    { name: "01:00 AM" },
+    { name: "01:15 AM" },
+    { name: "01:30 AM" },
+    { name: "01:45 AM" },
+    { name: "02:00 AM" },
+    { name: "02:15 AM" },
+    { name: "02:30 AM" },
+    { name: "02:45 AM" },
+    { name: "03:00 AM" },
+    { name: "03:15 AM" },
+    { name: "03:30 AM" },
+  ]);
+
+  const diffrentDaysHandler = () => {
+    if (showDiffrentDays === true) {
+      setShowDiffrentDays(false);
+    } else {
+      setShowDiffrentDays(true);
+    }
+  };
+
+  // if(showDiffrentDays === false){
+  const satOpenHandler = (e) => {
+    // if (showDiffrentDays === false) {
+    //   if (satOpen === false) {
+    //     setSatOpen(true);
+    //   } else {
+    //     setSatOpen(false);
+    //   }
+    // }
+    console.log(e.target.checked);
+  };
+  // }
+
   const toast = useToast();
   const onchangeHandler = (e) => {
     setPropertyType(e.target.value);
@@ -87,7 +127,7 @@ function Addpropertyform() {
                   className="form-select"
                   aria-label="Default select example"
                 >
-                  <option>Select a builder</option>
+                  <option>Select a brand</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
                   <option value="3">Three</option>
@@ -104,27 +144,8 @@ function Addpropertyform() {
             </div>
           </div>
           <div className="row">
-            <div className="col-md-6">
-              <input
-                className="property-input"
-                type="text"
-                placeholder="Website url"
-              />
-            </div>
-            <div className="col-md-6">
-              <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  required
-                  value={propertyType}
-                  onChange={onchangeHandler}
-                >
-                  <option>Select property type</option>
-                  <option value="Residential">Residential</option>
-                  <option value="Commercial">Commercial</option>
-                </select>
-              </div>
+            <div className="col-md-12">
+              <EditorConvertToHTML />
             </div>
           </div>
           <h4>Slug Update</h4>
@@ -183,6 +204,38 @@ function Addpropertyform() {
                   <option value="inactive">Inactive</option>
                 </select>
               </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3">
+              <input
+                type="text"
+                placeholder="Twitter title"
+                className="property-input"
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                placeholder="Twitter description"
+                className="property-input"
+              />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-3">
+              <input
+                type="text"
+                placeholder="Open graph title"
+                className="property-input"
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                placeholder="Open graph description"
+                className="property-input"
+              />
             </div>
           </div>
           <h4>Location</h4>
@@ -310,6 +363,189 @@ function Addpropertyform() {
               accept="image/*"
             />
           </div>
+          <div className="row">
+            <div className="col-md-3">
+              <input
+                type="text"
+                placeholder="No. of seats*"
+                className="property-input"
+                required
+              />
+            </div>
+          </div>
+          <h4>Hours of operation</h4>
+          <div className="row">
+            <div className="col-md-3">
+              <div class="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                  onClick={diffrentDaysHandler}
+                />
+                <label className="form-check-label" htmlFor="flexCheckDefault">
+                  Diffrent(6 days)
+                </label>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div class="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value={satOpen}
+                  id="flexCheckDefault"
+                  onChange={satOpenHandler}
+                />
+                <label className="form-check-label" htmlFor="flexCheckDefault">
+                  Saturday Open
+                </label>
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div class="form-check">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value=""
+                  id="flexCheckDefault"
+                />
+                <label className="form-check-label" htmlFor="flexCheckDefault">
+                  Sunday Open
+                </label>
+              </div>
+            </div>
+          </div>
+          {showDiffrentDays ? (
+            <AddDays />
+          ) : (
+            <div className="row">
+              <div className="col-md-3">Monday-Friday</div>
+              <div className="col-md-2">
+                <div style={{ borderBottom: "1px solid gray" }}>
+                  <Multiselect
+                    options={options} // Options to display in the dropdown
+                    // selectedValues={selectedValue}
+                    // onSelect={onSelect}
+                    // onRemove={onRemove}
+                    displayValue="name"
+                    singleSelect
+                    placeholder="From*"
+                  />
+                </div>
+              </div>
+              <div className="col-md-2">
+                <div style={{ borderBottom: "1px solid gray" }}>
+                  <Multiselect
+                    options={options} // Options to display in the dropdown
+                    // selectedValues={selectedValue}
+                    // onSelect={onSelect}
+                    // onRemove={onRemove}
+                    displayValue="name"
+                    singleSelect
+                    placeholder="To*"
+                  />
+                </div>
+              </div>
+              <div className="col-md-3" style={{ paddingTop: "29px" }}>
+                <div class="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Open 24 Hours
+                  </label>
+                </div>
+              </div>
+              <div className="col-md-2" style={{ paddingTop: "29px" }}>
+                <div class="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Close
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+          {satOpen && (showDiffrentDays === false) && (
+            <div className="row">
+              <div className="col-md-3">Saturday</div>
+              <div className="col-md-2">
+                <div style={{ borderBottom: "1px solid gray" }}>
+                  <Multiselect
+                    options={options} // Options to display in the dropdown
+                    // selectedValues={selectedValue}
+                    // onSelect={onSelect}
+                    // onRemove={onRemove}
+                    displayValue="name"
+                    singleSelect
+                    placeholder="From*"
+                  />
+                </div>
+              </div>
+              <div className="col-md-2">
+                <div style={{ borderBottom: "1px solid gray" }}>
+                  <Multiselect
+                    options={options} // Options to display in the dropdown
+                    // selectedValues={selectedValue}
+                    // onSelect={onSelect}
+                    // onRemove={onRemove}
+                    displayValue="name"
+                    singleSelect
+                    placeholder="To*"
+                  />
+                </div>
+              </div>
+              <div className="col-md-3" style={{ paddingTop: "29px" }}>
+                <div class="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Open 24 Hours
+                  </label>
+                </div>
+              </div>
+              <div className="col-md-2" style={{ paddingTop: "29px" }}>
+                <div class="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Close
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="d-flex w-50 justify-content-between align-items-center">
             {propertyType === "Commercial" ? (
               <h4>Commercial Plans</h4>
@@ -340,7 +576,7 @@ function Addpropertyform() {
                       <option>Select type</option>
                       <option value="1BHK">1BHK</option>
                       <option value="2BHK">2BHK</option>
-                      <option value="3BHK">BHK</option>
+                      <option value="3BHK">3BHK</option>
                     </select>
                   </div>
                 </div>
