@@ -1,29 +1,17 @@
 import React from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
-import { BsBookmarkPlus } from "react-icons/bs";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  useDisclosure,
-  Spinner,
-} from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import Addbrand from "./Addbrand";
+import Addpropertybtn from "../add-new-btn/Addpropertybtn";
 
 const Brands = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
-      <Button className="addnew-btn" onClick={onOpen}>
-          <BsBookmarkPlus />
-          ADD NEW
-      </Button>
+      <Link to="/brands/add-brand">
+        <Addpropertybtn />
+      </Link>
     </div>
   );
 };

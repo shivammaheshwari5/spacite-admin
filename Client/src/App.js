@@ -17,6 +17,7 @@ import CoworkingSpace from "./components/coworking-space/CoworkingSpace";
 import Brands from "./components/brands/Brands";
 import Seo from "./components/SEO/Seo";
 import AddSeoForm from "./components/SEO/AddSeoForm";
+import Addbrand from "./components/brands/Addbrand";
 function App() {
   const { isLogin } = GpState();
 
@@ -161,6 +162,16 @@ function App() {
               element={
                 isLogin ? (
                   [<Sidebar key={26} />, <Brands key={27} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/brands/add-brand"
+              element={
+                isLogin ? (
+                  [<Sidebar key={27} />, <Addbrand key={28} />]
                 ) : (
                   <Navigate to="/" />
                 )
