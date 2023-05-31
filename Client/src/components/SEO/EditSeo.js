@@ -1,113 +1,101 @@
-import React, { useEffect, useState } from "react";
-import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useToast } from "@chakra-ui/react";
+import { AiFillEdit } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import axios from "axios";
-import { useDisclosure, Spinner, useToast } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 
-function AddSeoForm() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+const initialValue = {
+  page_title: "",
+  title: "",
+  description: "",
+  twitter: { title: "", description: "" },
+  open_graph: { title: "", description: "" },
+  path: "",
+  keywords: "",
+  robots: "",
+  twitterTitle: "",
+  twitterDescription: "",
+  graphTitle: "",
+  graphDescription: "",
+  script: "",
+  footer_title: "",
+};
 
+const EditSeo = () => {
+  const [loading, setLoading] = useState(false);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
-  const [seo, setSeo] = useState({
-    heading: "",
-    title: "",
-    description: "",
-    path: "",
-    keywords: "",
-    robots: "",
-    twitterTitle: "",
-    twitterDescription: "",
-    graphTitle: "",
-    graphDescription: "",
-    script: "",
-    footerTitle: "",
-  });
+  const [seos, setSeos] = useState(initialValue);
+  const {
+    title,
+    description,
+    path,
+    keywords,
+    robots,
+    script,
+    footer_title,
+    footer_description,
+  } = seos;
   const [updateTable, setUpdateTable] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
-
+  const { id } = useParams();
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setSeo({
-      ...seo,
-      [name]: value,
-    });
+    console.log(e.target.value);
+    setSeos({ ...seos, [e.target.name]: e.target.value });
   };
 
-  const handleSaveSeo = async (e) => {
-    e.preventDefault();
+  const handleEditSeo = async () => {
+    //     try {
+    //       const { data } = await axios.put(`/api/seo/country/${seoId}`, {
+    //         title: seo.heading,
+    //         page_title: seo.title,
+    //         script: seo.script,
+    //         description: seo.description,
+    //         robots: seo.robots,
+    //         keywords: seo.keywords,
+    //         path: seo.path,
+    //         footer_title: seo.footerTitle,
+    //       });
+    //       setSeos(data);
+    //       setUpdateTable((prev) => !prev);
+    //       toast({
+    //         title: "Update Successfully!",
+    //         status: "success",
+    //         duration: 5000,
+    //         isClosable: true,
+    //         position: "bottom",
+    //       });
+    //     } catch (error) {
+    //       console.log(error);
+    //     }
+  };
+  const onEditorStateChange = () => {
+    setEditorState(footer_description);
+  };
+
+  const getSeoDataById = async () => {
     try {
-      const { data } = await axios.post("/api/seo/seos", {
-        title: seo.heading,
-        page_title: seo.title,
-        script: seo.script,
-        description: seo.description,
-        robots: seo.robots,
-        keywords: seo.keywords,
-        path: seo.path,
-        footer_title: seo.footerTitle,
-        footer_description: footer_description,
-        twitter: {
-          title: seo.twitterTitle,
-          description: seo.twitterDescription,
-        },
-        open_graph: {
-          title: seo.graphTitle,
-          description: seo.graphDescription,
-        },
-      });
-      setSeo({
-        heading: "",
-        title: "",
-        description: "",
-        path: "",
-        keywords: "",
-        robots: "",
-        twitterTitle: "",
-        twitterDescription: "",
-        graphTitle: "",
-        graphDescription: "",
-        script: "",
-        footerTitle: "",
-      });
-      setUpdateTable((prev) => !prev);
-      navigate("/seo");
-      toast({
-        title: "Saved Successfully!",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
+      setLoading(true);
+      const { data } = await axios.get(`/api/seo/seos/${id}`);
+      setLoading(false);
+      setSeos(data);
     } catch (error) {
-      toast({
-        title: "Error Occured!",
-        description: "Failed to Load the Search Results",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
+      console.log(error);
     }
   };
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-  };
-
-  const footer_description = draftToHtml(
-    convertToRaw(editorState.getCurrentContent())
-  );
-  // console.log(footer_description);
+  useEffect(() => {
+    getSeoDataById();
+  }, [updateTable]);
+  console.log(seos);
   return (
-    <div className="mx-5 mt-3">
-      <Mainpanelnav />
+    <>
       <div className="container form-box">
-        <form style={{ textAlign: "left" }} onSubmit={handleSaveSeo}>
+        <form style={{ textAlign: "left" }} onSubmit={handleEditSeo}>
           <div className="container">
             <div className="row">
               <div className="col-md-6">
@@ -115,9 +103,9 @@ function AddSeoForm() {
                   type="text"
                   className="property-input"
                   placeholder="Heading"
-                  name="heading"
-                  onChange={handleInputChange}
-                  value={seo.heading}
+                  name="page_title"
+                  onChange={(e) => handleInputChange(e)}
+                  value={seos.page_title}
                 />
               </div>
               <div className="col-md-6">
@@ -127,8 +115,8 @@ function AddSeoForm() {
                   placeholder="Title*"
                   name="title"
                   required
-                  onChange={handleInputChange}
-                  value={seo.title}
+                  onChange={(e) => handleInputChange(e)}
+                  value={title}
                 />
               </div>
             </div>
@@ -139,8 +127,8 @@ function AddSeoForm() {
                   type="text"
                   placeholder="Description"
                   name="description"
-                  onChange={handleInputChange}
-                  value={seo.description}
+                  onChange={(e) => handleInputChange(e)}
+                  value={description}
                 />
               </div>
               <div className="col-md-6">
@@ -150,8 +138,8 @@ function AddSeoForm() {
                   placeholder="Path*"
                   name="path"
                   required
-                  onChange={handleInputChange}
-                  value={seo.path}
+                  onChange={(e) => handleInputChange(e)}
+                  value={path}
                 />
               </div>
             </div>
@@ -176,8 +164,8 @@ function AddSeoForm() {
                   placeholder="Keywords*"
                   name="keywords"
                   className="property-input"
-                  onChange={handleInputChange}
-                  value={seo.keywords}
+                  onChange={(e) => handleInputChange(e)}
+                  value={keywords}
                 />
               </div>
             </div>
@@ -188,8 +176,8 @@ function AddSeoForm() {
                   className="property-input"
                   placeholder="Robots"
                   name="robots"
-                  onChange={handleInputChange}
-                  value={seo.robots}
+                  onChange={(e) => handleInputChange(e)}
+                  value={robots}
                 />
               </div>
             </div>
@@ -200,8 +188,8 @@ function AddSeoForm() {
                   className="property-input"
                   placeholder="Twitter title"
                   name="twitterTitle"
-                  onChange={handleInputChange}
-                  value={seo.twitterTitle}
+                  onChange={(e) => handleInputChange(e)}
+                  value={seos?.twitter.title}
                 />
               </div>
               <div className="col-md-6">
@@ -210,8 +198,8 @@ function AddSeoForm() {
                   className="property-input"
                   placeholder="Twitter description"
                   name="twitterDescription"
-                  onChange={handleInputChange}
-                  value={seo.twitterDescription}
+                  onChange={(e) => handleInputChange(e)}
+                  value={seos?.twitter.description}
                 />
               </div>
             </div>
@@ -222,8 +210,8 @@ function AddSeoForm() {
                   className="property-input"
                   placeholder="Open graph title"
                   name="graphTitle"
-                  onChange={handleInputChange}
-                  value={seo.graphTitle}
+                  onChange={(e) => handleInputChange(e)}
+                  value={seos?.open_graph.title}
                 />
               </div>
               <div className="col-md-6">
@@ -232,8 +220,8 @@ function AddSeoForm() {
                   className="property-input"
                   placeholder="Open graph description"
                   name="graphDescription"
-                  onChange={handleInputChange}
-                  value={seo.graphDescription}
+                  onChange={(e) => handleInputChange(e)}
+                  value={seos?.open_graph.description}
                 />
               </div>
             </div>
@@ -246,8 +234,8 @@ function AddSeoForm() {
                   placeholder="Script tag"
                   name="script"
                   required
-                  onChange={handleInputChange}
-                  value={seo.script}
+                  onChange={(e) => handleInputChange(e)}
+                  value={script}
                 ></textarea>
               </div>
             </div>
@@ -257,9 +245,9 @@ function AddSeoForm() {
                   type="text"
                   className="property-input"
                   placeholder="Footer title"
-                  name="footerTitle"
-                  onChange={handleInputChange}
-                  value={seo.footerTitle}
+                  name="footer_title"
+                  onChange={(e) => handleInputChange(e)}
+                  value={footer_title}
                 />
               </div>
             </div>
@@ -267,13 +255,11 @@ function AddSeoForm() {
             <div className="row">
               <div className="col-md-12">
                 <Editor
-                  // editorState={editorState}
+                  value={editorState}
                   toolbarClassName="toolbarClassName"
                   wrapperClassName="wrapperClassName"
                   editorClassName="editorClassName"
-                  onEditorStateChange={(editorState) =>
-                    onEditorStateChange(editorState)
-                  }
+                  onEditorStateChange={onEditorStateChange}
                 />
               </div>
             </div>
@@ -286,8 +272,8 @@ function AddSeoForm() {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
-}
+};
 
-export default AddSeoForm;
+export default EditSeo;
