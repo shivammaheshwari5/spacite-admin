@@ -9,7 +9,7 @@ const {
 const router = express.Router();
 
 router
-  .get("/cities", protect, getCity)
+  .get("/cities", getCity)
   .post("/cities", protect, postCity)
   .delete("/delete/:cityId", protect, deleteCity)
   .post("/citybystate", protect, getCityByState);

@@ -6,7 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw } from "draft-js";
+import {
+  EditorState,
+  convertToRaw,
+  convertFromHTML,
+  ContentState,
+} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 
 const initialValue = {
@@ -28,15 +33,23 @@ const initialValue = {
 
 const EditSeo = () => {
   const [loading, setLoading] = useState(false);
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(
+    EditorState.createWithContent(
+      ContentState.createFromBlockArray(convertFromHTML(""))
+    )
+  );
   const [seos, setSeos] = useState(initialValue);
   const {
     title,
+    page_title,
+
     description,
     path,
     keywords,
     robots,
     script,
+    twitter,
+    open_graph,
     footer_title,
     footer_description,
   } = seos;
@@ -48,34 +61,56 @@ const EditSeo = () => {
     console.log(e.target.value);
     setSeos({ ...seos, [e.target.name]: e.target.value });
   };
-
-  const handleEditSeo = async () => {
-    //     try {
-    //       const { data } = await axios.put(`/api/seo/country/${seoId}`, {
-    //         title: seo.heading,
-    //         page_title: seo.title,
-    //         script: seo.script,
-    //         description: seo.description,
-    //         robots: seo.robots,
-    //         keywords: seo.keywords,
-    //         path: seo.path,
-    //         footer_title: seo.footerTitle,
-    //       });
-    //       setSeos(data);
-    //       setUpdateTable((prev) => !prev);
-    //       toast({
-    //         title: "Update Successfully!",
-    //         status: "success",
-    //         duration: 5000,
-    //         isClosable: true,
-    //         position: "bottom",
-    //       });
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
+  const handleInputChangeObject = (event, section, property) => {
+    const { value } = event.target;
+    const updatedState = {
+      ...seos,
+      [section]: {
+        ...seos[section],
+        [property]: value,
+      },
+    };
+    setSeos(updatedState);
   };
-  const onEditorStateChange = () => {
-    setEditorState(footer_description);
+
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
+  };
+
+  const footer_descrip = draftToHtml(
+    convertToRaw(editorState.getCurrentContent())
+  );
+
+  const handleEditSeo = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.put(`/api/seo/seos/${id}`, {
+        id,
+        title,
+        page_title,
+        script,
+        description,
+        robots,
+        keywords,
+        path,
+        footer_title,
+        footer_description,
+        twitter,
+        open_graph,
+      });
+      setSeos(data);
+      setUpdateTable((prev) => !prev);
+      navigate("/seo");
+      toast({
+        title: "Update Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getSeoDataById = async () => {
@@ -91,7 +126,8 @@ const EditSeo = () => {
   useEffect(() => {
     getSeoDataById();
   }, [updateTable]);
-  console.log(seos);
+  console.log(footer_description);
+  console.log(twitter.title);
   return (
     <>
       <div className="container form-box">
@@ -105,7 +141,7 @@ const EditSeo = () => {
                   placeholder="Heading"
                   name="page_title"
                   onChange={(e) => handleInputChange(e)}
-                  value={seos.page_title}
+                  value={page_title}
                 />
               </div>
               <div className="col-md-6">
@@ -187,9 +223,11 @@ const EditSeo = () => {
                   type="text"
                   className="property-input"
                   placeholder="Twitter title"
-                  name="twitterTitle"
-                  onChange={(e) => handleInputChange(e)}
-                  value={seos?.twitter.title}
+                  name="twitter"
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "twitter", "title")
+                  }
+                  value={twitter.title}
                 />
               </div>
               <div className="col-md-6">
@@ -197,9 +235,11 @@ const EditSeo = () => {
                   type="text"
                   className="property-input"
                   placeholder="Twitter description"
-                  name="twitterDescription"
-                  onChange={(e) => handleInputChange(e)}
-                  value={seos?.twitter.description}
+                  name="twitter"
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "twitter", "description")
+                  }
+                  value={twitter.description}
                 />
               </div>
             </div>
@@ -209,9 +249,11 @@ const EditSeo = () => {
                   type="text"
                   className="property-input"
                   placeholder="Open graph title"
-                  name="graphTitle"
-                  onChange={(e) => handleInputChange(e)}
-                  value={seos?.open_graph.title}
+                  name="open_graph"
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "open_graph", "title")
+                  }
+                  value={open_graph.title}
                 />
               </div>
               <div className="col-md-6">
@@ -219,9 +261,11 @@ const EditSeo = () => {
                   type="text"
                   className="property-input"
                   placeholder="Open graph description"
-                  name="graphDescription"
-                  onChange={(e) => handleInputChange(e)}
-                  value={seos?.open_graph.description}
+                  name="open_graph"
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "open_graph", "description")
+                  }
+                  value={open_graph.description}
                 />
               </div>
             </div>
@@ -255,7 +299,7 @@ const EditSeo = () => {
             <div className="row">
               <div className="col-md-12">
                 <Editor
-                  value={editorState}
+                  editorState={editorState}
                   toolbarClassName="toolbarClassName"
                   wrapperClassName="wrapperClassName"
                   editorClassName="editorClassName"
@@ -266,7 +310,7 @@ const EditSeo = () => {
           </div>
           <div className="form-footer">
             <button type="submit" className="saveproperty-btn">
-              Save
+              Update
             </button>
             <button className="cancel-btn">Cancel</button>
           </div>

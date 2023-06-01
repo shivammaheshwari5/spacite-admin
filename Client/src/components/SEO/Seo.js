@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import Delete from "../delete/Delete";
-import EditSeo from "./EditSeo";
 import { AiFillEdit } from "react-icons/ai";
 
 function Seo() {

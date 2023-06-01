@@ -113,6 +113,16 @@ select {
   padding: 20px 20px 0;
   border-radius: 6px;
 }
+.searchWrapper {
+  border: none !important;
+}
+.searchBox {
+  margin: 0;
+  padding: 0;
+}
+.multiSelectContainer {
+  height: 32px;
+}
 
 /* .App {
   .container {

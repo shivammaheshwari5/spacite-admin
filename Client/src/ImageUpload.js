@@ -56,7 +56,7 @@ const ImageUpload = ({
       input.click();
     });
   }, []);
-  // console.log(images);
+  console.log(images);
 
   return (
     <div className="App">
@@ -75,7 +75,6 @@ const ImageUpload = ({
               type="file"
               multiple
               onChange={handleInputByClick}
-              required
             />
           </div>
         </div>

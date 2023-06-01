@@ -51,7 +51,7 @@ function AddSeoForm() {
         keywords: seo.keywords,
         path: seo.path,
         footer_title: seo.footerTitle,
-        footer_description: footer_description,
+        footer_description: footer_descript_value,
         twitter: {
           title: seo.twitterTitle,
           description: seo.twitterDescription,
@@ -99,10 +99,8 @@ function AddSeoForm() {
     setEditorState(editorState);
   };
 
-  const footer_description = draftToHtml(
-    convertToRaw(editorState.getCurrentContent())
-  );
-  // console.log(footer_description);
+  let footer_descript_value = convertToRaw(editorState.getCurrentContent())
+    .blocks[0].text;
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />

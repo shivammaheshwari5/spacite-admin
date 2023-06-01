@@ -112,12 +112,7 @@ function City() {
   const getCity = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const { data } = await axios.get("/api/city/cities", config);
+      const { data } = await axios.get("/api/city/cities");
       setLoading(false);
       setCities(data);
     } catch (error) {
