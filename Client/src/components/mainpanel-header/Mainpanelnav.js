@@ -7,7 +7,7 @@ import { GpState } from "../../context/context";
 function Mainpanelnav() {
   const [showLogoutBtn, setShowLogoutBtn] = useState(false);
   const navigate = useNavigate();
-  const { isLogin } = GpState();
+  let { isLogin } = GpState();
   let url = window.location.href;
   let splitUrl = url.split("/");
   let title = splitUrl[splitUrl.length - 1];
