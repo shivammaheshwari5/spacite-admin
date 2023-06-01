@@ -5,13 +5,10 @@ import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import "./Seo.css";
 
-// export default class EditorConvertToHTML extends Component {
-//   state = {
-//     editorState: EditorState.createEmpty(),
-//   }
+
+
 function EditorConvertToHTML({ onEditorStateChange, editorState }) {
-  // render() {
-  // const {editorState} = this.state;
+  
   console.log(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   console.log(editorState);
   return (
@@ -25,8 +22,6 @@ function EditorConvertToHTML({ onEditorStateChange, editorState }) {
       />
     </div>
   );
-  // }
-  // }
 }
 
 export default EditorConvertToHTML;

@@ -11,7 +11,7 @@ const AppProvider = ({ children }) => {
   const [seoData, setSeoData] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
   const navigate = useNavigate();
-  const isLogin = localStorage.getItem("token") ? true : false;
+  let isLogin = localStorage.getItem("token") ? true : false;
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);

@@ -12,8 +12,13 @@ function Addpropertyform() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
   const [pic, setPic] = useState();
-  const [showDiffrentDays, setShowDiffrentDays] = useState(false);
-  const [satOpen, setSatOpen] = useState(false);
+  // const [showDiffrentDays, setShowDiffrentDays] = useState(false);
+  // const [satOpen, setSatOpen] = useState(false);
+  // const [sunOpen, setSunOpen] = useState(false);
+  // const [fullOpen, setFullOpen] = useState(false);
+  // const [isClose, setIsClose] = useState(false);
+  const [open, setOpen] = useState({satOpen: false, sunOpen: false, fullOpen1: false, isClose1: false, showDiffrentDays: false, fullOpen2: false, isClose2: false, fullOpen3: false, isClose3: false,})
+  const {satOpen, sunOpen, fullOpen1, isClose1, fullOpen2, isClose2, fullOpen3, isClose3, showDiffrentDays} = open
   const [options, setOptions] = useState([
     { name: "01:00 AM" },
     { name: "01:15 AM" },
@@ -30,24 +35,62 @@ function Addpropertyform() {
 
   const diffrentDaysHandler = () => {
     if (showDiffrentDays === true) {
-      setShowDiffrentDays(false);
+      setOpen({...open, showDiffrentDays: false});
     } else {
-      setShowDiffrentDays(true);
+      setOpen({...open, showDiffrentDays: true});
     }
   };
 
-  // if(showDiffrentDays === false){
   const satOpenHandler = (e) => {
-    // if (showDiffrentDays === false) {
-    //   if (satOpen === false) {
-    //     setSatOpen(true);
-    //   } else {
-    //     setSatOpen(false);
-    //   }
-    // }
-    console.log(e.target.checked);
+    if (showDiffrentDays === false) {
+      if (e.target.checked) {
+        setOpen({...open, satOpen: true});
+      } else {
+        setOpen({...open, satOpen: false, fullOpen2: false, isClose2: false});
+      }
+    }
+    console.log(e.target.value);
   };
-  // }
+
+  const sunOpenHandler = (e) => {
+      if (e.target.checked) {
+        setOpen({...open, sunOpen: true});
+      } else {
+        setOpen({...open, sunOpen: false, fullOpen3: false, isClose3: false});
+      }
+  }
+
+  const openFullHoursHandler = (e) => {
+    if(e.target.checked && e.target.value === "mon-fri"){
+      setOpen({...open, fullOpen1: true});
+    }else if(!e.target.checked && e.target.value === "mon-fri"){
+      setOpen({...open, fullOpen1: false});
+    }else if(e.target.checked && e.target.value === "sat"){
+      setOpen({...open, fullOpen2: true});
+    }else if(!e.target.checked && e.target.value === "sat"){
+      setOpen({...open, fullOpen2: false});
+    }else if(e.target.checked && e.target.value === "sun"){
+      setOpen({...open, fullOpen3: true});
+    }else if(!e.target.checked && e.target.value === "sun"){
+      setOpen({...open, fullOpen3: false});
+    }
+  }
+
+  const closeHandler = (e) => {
+    if(e.target.checked && e.target.value === "mon-fri-close") {
+      setOpen({...open, isClose1: true});
+    }else if(!e.target.checked && e.target.value === "mon-fri-close") {
+      setOpen({...open, isClose1: false});
+    }else if(e.target.checked && e.target.value === "sat") {
+      setOpen({...open, isClose2: true});
+    }else if(!e.target.checked && e.target.value === "sat") {
+      setOpen({...open, isClose2: false});
+    }else if(e.target.checked && e.target.value === "sun") {
+      setOpen({...open, isClose3: true});
+    }else if(!e.target.checked && e.target.value === "sun") {
+      setOpen({...open, isClose3: false});
+    }
+  }
 
   const toast = useToast();
   const onchangeHandler = (e) => {
@@ -392,7 +435,7 @@ function Addpropertyform() {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value={satOpen}
+                  value="saturday open"
                   id="flexCheckDefault"
                   onChange={satOpenHandler}
                 />
@@ -408,6 +451,7 @@ function Addpropertyform() {
                   type="checkbox"
                   value=""
                   id="flexCheckDefault"
+                  onChange={sunOpenHandler}
                 />
                 <label className="form-check-label" htmlFor="flexCheckDefault">
                   Sunday Open
@@ -416,11 +460,11 @@ function Addpropertyform() {
             </div>
           </div>
           {showDiffrentDays ? (
-            <AddDays />
+            <AddDays fullOpen={fullOpen1} isClose={isClose1}/>
           ) : (
             <div className="row">
               <div className="col-md-3">Monday-Friday</div>
-              <div className="col-md-2">
+              {fullOpen1 === false && isClose1 === false && <div className="col-md-2">
                 <div style={{ borderBottom: "1px solid gray" }}>
                   <Multiselect
                     options={options} // Options to display in the dropdown
@@ -432,8 +476,8 @@ function Addpropertyform() {
                     placeholder="From*"
                   />
                 </div>
-              </div>
-              <div className="col-md-2">
+              </div>}
+              {fullOpen1 === false && isClose1 === false && <div className="col-md-2">
                 <div style={{ borderBottom: "1px solid gray" }}>
                   <Multiselect
                     options={options} // Options to display in the dropdown
@@ -445,14 +489,15 @@ function Addpropertyform() {
                     placeholder="To*"
                   />
                 </div>
-              </div>
-              <div className="col-md-3" style={{ paddingTop: "29px" }}>
+              </div>}
+              {isClose1 === false && <div className="col-md-3" style={{ paddingTop: "8px" }}>
                 <div class="form-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
+                    value="mon-fri"
                     id="flexCheckDefault"
+                    onChange={openFullHoursHandler}
                   />
                   <label
                     className="form-check-label"
@@ -461,29 +506,31 @@ function Addpropertyform() {
                     Open 24 Hours
                   </label>
                 </div>
-              </div>
-              <div className="col-md-2" style={{ paddingTop: "29px" }}>
+              </div>}
+              {fullOpen1 === false && <div className="col-md-2" style={{ paddingTop: "8px" }}>
                 <div class="form-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
+                    value="mon-fri-close"
                     id="flexCheckDefault"
+                    onChange={closeHandler}
                   />
                   <label
                     className="form-check-label"
                     htmlFor="flexCheckDefault"
                   >
-                    Close
+                    Closed
                   </label>
                 </div>
-              </div>
+              </div>}
             </div>
           )}
-          {satOpen && showDiffrentDays === false && (
+
+          {satOpen && (
             <div className="row">
               <div className="col-md-3">Saturday</div>
-              <div className="col-md-2">
+              {fullOpen2 === false && isClose2 === false && <div className="col-md-2">
                 <div style={{ borderBottom: "1px solid gray" }}>
                   <Multiselect
                     options={options} // Options to display in the dropdown
@@ -495,8 +542,8 @@ function Addpropertyform() {
                     placeholder="From*"
                   />
                 </div>
-              </div>
-              <div className="col-md-2">
+              </div>}
+              {fullOpen2 === false && isClose2 === false && <div className="col-md-2">
                 <div style={{ borderBottom: "1px solid gray" }}>
                   <Multiselect
                     options={options} // Options to display in the dropdown
@@ -508,14 +555,15 @@ function Addpropertyform() {
                     placeholder="To*"
                   />
                 </div>
-              </div>
-              <div className="col-md-3" style={{ paddingTop: "29px" }}>
+                </div>}
+              {isClose2 === false && <div className="col-md-3" style={{ paddingTop: "8px" }}>
                 <div class="form-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
+                    value="sat"
                     id="flexCheckDefault"
+                    onChange={openFullHoursHandler}
                   />
                   <label
                     className="form-check-label"
@@ -524,32 +572,95 @@ function Addpropertyform() {
                     Open 24 Hours
                   </label>
                 </div>
-              </div>
-              <div className="col-md-2" style={{ paddingTop: "29px" }}>
+              </div>}
+              {fullOpen2 === false && <div className="col-md-2" style={{ paddingTop: "8px" }}>
                 <div class="form-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value=""
+                    value="sat"
                     id="flexCheckDefault"
+                    onChange={closeHandler}
                   />
                   <label
                     className="form-check-label"
                     htmlFor="flexCheckDefault"
                   >
-                    Close
+                    Closed
                   </label>
                 </div>
-              </div>
+              </div>}
+            </div>
+          )}
+
+          {sunOpen &&  (
+            <div className="row">
+              <div className="col-md-3">Sunday</div>
+              {fullOpen3 === false && isClose3 === false && <div className="col-md-2">
+                <div style={{ borderBottom: "1px solid gray" }}>
+                  <Multiselect
+                    options={options} // Options to display in the dropdown
+                    // selectedValues={selectedValue}
+                    // onSelect={onSelect}
+                    // onRemove={onRemove}
+                    displayValue="name"
+                    singleSelect
+                    placeholder="From*"
+                  />
+                </div>
+              </div>}
+              {fullOpen3 === false && isClose3 === false && <div className="col-md-2">
+                <div style={{ borderBottom: "1px solid gray" }}>
+                  <Multiselect
+                    options={options} // Options to display in the dropdown
+                    // selectedValues={selectedValue}
+                    // onSelect={onSelect}
+                    // onRemove={onRemove}
+                    displayValue="name"
+                    singleSelect
+                    placeholder="To*"
+                  />
+                </div>
+              </div>}
+              {isClose3 === false && <div className="col-md-3" style={{ paddingTop: "8px" }}>
+                <div class="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value="sun"
+                    id="flexCheckDefault"
+                    onChange={openFullHoursHandler}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Open 24 Hours
+                  </label>
+                </div>
+              </div>}
+              {fullOpen3 === false && <div className="col-md-2" style={{ paddingTop: "8px" }}>
+                <div class="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value="sun"
+                    id="flexCheckDefault"
+                    onChange={closeHandler}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Closed
+                  </label>
+                </div>
+              </div>}
             </div>
           )}
 
           <div className="d-flex w-50 justify-content-between align-items-center">
-            {propertyType === "Commercial" ? (
-              <h4>Commercial Plans</h4>
-            ) : (
-              <h4>Residential Plans</h4>
-            )}
+              <h4>Plans</h4>
             <IoIosAddCircle
               onClick={createPlans}
               className="icon"
@@ -557,9 +668,9 @@ function Addpropertyform() {
             />
           </div>
 
-          {plans?.map((id, data) => {
+          {plans?.map((id) => {
             return (
-              <div className="row">
+              <div className="row" key={id}>
                 <div className="col-md-3">
                   <div
                     style={{
@@ -571,10 +682,28 @@ function Addpropertyform() {
                       className="form-select"
                       aria-label="Default select example"
                     >
-                      <option>Select type</option>
+                      <option>Category</option>
                       <option value="1BHK">1BHK</option>
                       <option value="2BHK">2BHK</option>
                       <option value="3BHK">3BHK</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div
+                    style={{
+                      borderBottom: "1px solid gray",
+                      margin: "20px 0",
+                    }}
+                  >
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                    >
+                      <option>Duration</option>
+                      <option value="1BHK">Month</option>
+                      <option value="2BHK">Day</option>
+                      <option value="3BHK">Year</option>
                     </select>
                   </div>
                 </div>
@@ -584,15 +713,6 @@ function Addpropertyform() {
                     onChange={handleChange}
                     className="property-input"
                     placeholder="Price*"
-                    required
-                  />
-                </div>
-                <div className="col-md-3">
-                  <input
-                    type="text"
-                    onChange={handleChange}
-                    className="property-input"
-                    placeholder="Area*"
                     required
                   />
                 </div>

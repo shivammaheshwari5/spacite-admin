@@ -21,7 +21,7 @@ import EditSeo from "./components/SEO/EditSeo";
 import Addbrand from "./components/brands/Addbrand";
 import EditBrand from "./components/brands/EditBrand";
 function App() {
-  const { isLogin } = GpState();
+  let { isLogin } = GpState();
 
   localStorage.setItem("isLogin", isLogin);
   return (
