@@ -14,10 +14,7 @@ const brandModel = mongoose.Schema(
       enum: ["coworking", "virtual office", "officespace"],
       default: "coworking",
     },
-    image: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Image",
-    },
+    image: String,
     cities: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,8 +23,25 @@ const brandModel = mongoose.Schema(
     ],
     slug: String,
     seo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "SEO",
+      title: { type: String, required: true },
+      description: { type: String, required: true },
+      footer_title: String,
+      footer_description: String,
+      robots: String,
+      keywords: String,
+      url: String,
+      status: {
+        type: Boolean,
+        default: true,
+      },
+      twitter: {
+        title: String,
+        description: String,
+      },
+      open_graph: {
+        title: String,
+        description: String,
+      },
     },
   },
   {

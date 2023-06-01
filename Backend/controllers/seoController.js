@@ -102,4 +102,13 @@ const deleteSeo = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { getSeo, postSeo, addOrEditSeo, deleteSeo };
+const getSeoById = asyncHandler(async (req, res) => {
+  try {
+    const user = await SEO.findById(req.params.seoId);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
+module.exports = { getSeo, postSeo, addOrEditSeo, deleteSeo, getSeoById };

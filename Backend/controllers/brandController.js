@@ -17,6 +17,7 @@ const postBrand = asyncHandler(async (req, res) => {
     seo,
     cities,
     type,
+    slug,
     should_show_on_home,
   } = req.body;
 
@@ -29,6 +30,7 @@ const postBrand = asyncHandler(async (req, res) => {
       seo,
       cities,
       type,
+      slug,
       should_show_on_home,
     });
     res.json(brandData);
@@ -45,6 +47,7 @@ const addOrEditBrand = asyncHandler(async (req, res) => {
     seo,
     cities,
     type,
+    slug,
     should_show_on_home,
   } = req.body;
   const { brandId } = req.params;
@@ -58,6 +61,7 @@ const addOrEditBrand = asyncHandler(async (req, res) => {
       seo,
       cities,
       type,
+      slug,
       should_show_on_home,
     },
     { new: true }
@@ -83,4 +87,21 @@ const deleteBrand = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { getBrand, postBrand, addOrEditBrand, deleteBrand };
+const getBrandById = asyncHandler(async (req, res) => {
+  try {
+    const brand = await Brand.findById(req.params.brandId).populate(
+      "cities",
+      "name"
+    );
+    res.status(200).json(brand);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+module.exports = {
+  getBrand,
+  postBrand,
+  addOrEditBrand,
+  deleteBrand,
+  getBrandById,
+};

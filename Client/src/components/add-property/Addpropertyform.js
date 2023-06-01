@@ -187,9 +187,7 @@ function Addpropertyform() {
             </div>
           </div>
           <div className="row">
-            <div className="col-md-12">
-              <EditorConvertToHTML />
-            </div>
+            <div className="col-md-12">{/* <EditorConvertToHTML /> */}</div>
           </div>
           <h4>Slug Update</h4>
           <div className="row">
@@ -528,6 +526,7 @@ function Addpropertyform() {
               </div>}
             </div>
           )}
+
           {satOpen && (
             <div className="row">
               <div className="col-md-3">Saturday</div>

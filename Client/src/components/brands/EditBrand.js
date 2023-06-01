@@ -1,145 +1,171 @@
-import React, { useEffect, useState } from "react";
-import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
-import EditorConvertToHTML from "../SEO/EditorConvertToHTML";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useDisclosure, Spinner, useToast } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { GpState } from "../../context/context";
+import {
+  EditorState,
+  convertToRaw,
+  convertFromHTML,
+  ContentState,
+} from "draft-js";
+import draftToHtml from "draftjs-to-html";
 import Select from "react-dropdown-select";
 import ImageUpload from "../../ImageUpload";
 
-function Addbrand() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+const initialValue = {
+  name: "",
+  description: "",
+  order: "",
+  image: "",
+  seo: {
+    title: "",
+    description: "",
+    footer_title: "",
+    footer_description: "",
+    robots: "",
+    keywords: "",
+    url: "",
+    twitter: {
+      title: "",
+      description: "",
+    },
+    open_graph: {
+      title: "",
+      description: "",
+    },
+  },
+  cities: [],
+};
+
+const EditBrand = () => {
+  const [loading, setLoading] = useState(false);
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const [brands, setBrands] = useState(initialValue);
+  const {
+    name,
+    description,
+    order,
+    image,
+    seo,
+    cities,
+    type,
+    slug,
+    should_show_on_home,
+  } = brands;
+  const [updateTable, setUpdateTable] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [allCity, setAllCity] = useState([]);
   const [progress, setProgress] = useState(0);
   const [images, setImages] = useState([]);
-  const { user } = GpState();
-  const [brand, setBrand] = useState({
-    name: "",
-    description: "",
-    order: "",
-    cities: "",
-    title: "",
-    descriptionSeo: "",
-    path: "",
-    keywords: "",
-    robots: "",
-    twitterTitle: "",
-    twitterDescription: "",
-    graphTitle: "",
-    graphDescription: "",
-    script: "",
-    footerTitle: "",
-  });
-
-  const [updateTable, setUpdateTable] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [cities, setCities] = useState([]);
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const toast = useToast();
   const navigate = useNavigate();
-  console.log(images[0]);
+  const { id } = useParams();
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setBrand({
-      ...brand,
-      [name]: value,
-    });
+    console.log(e.target.value);
+    setBrands({ ...brands, [e.target.name]: e.target.value });
+  };
+  const handleInputChangeObject = (event, section, property) => {
+    const { value } = event.target;
+    const updatedState = {
+      ...brands,
+      [section]: {
+        ...brands[section],
+        [property]: value,
+      },
+    };
+    setBrands(updatedState);
+  };
+  const handleInputChange2 = (event) => {
+    const { name, value } = event.target;
+    const [category, subCategory, property] = name.split(".");
+
+    setBrands((prevState) => ({
+      ...prevState,
+      [category]: {
+        ...prevState[category],
+        [subCategory]: {
+          ...prevState[category][subCategory],
+          [property]: value,
+        },
+      },
+    }));
   };
 
-  const handleSaveBrand = async (e) => {
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
+  };
+
+  const footer_descrip = draftToHtml(
+    convertToRaw(editorState.getCurrentContent())
+  );
+
+  const handleEditBrands = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/brand/brands", {
-        name: brand.name,
-        description: brand.description,
-        order: brand.order,
+      const { data } = await axios.put(`/api/brand/brands/${id}`, {
+        name,
+        description,
+        order,
         image: images[0],
-        seo: {
-          title: brand.title,
-          description: brand.descriptionSeo,
-          footer_title: brand.footerTitle,
-          footer_description: footer_descript_value,
-          robots: brand.robots,
-          keywords: brand.keywords,
-          url: brand.path,
-          twitter: {
-            title: brand.twitterTitle,
-            description: brand.twitterDescription,
-          },
-          open_graph: {
-            title: brand.graphTitle,
-            description: brand.graphDescription,
-          },
-        },
+        seo,
         cities: selectedOptions,
+        type,
+        slug,
+        should_show_on_home,
       });
-      setBrand({
-        name: "",
-        description: "",
-        order: "",
-        cities: "",
-        title: "",
-        descriptionSeo: "",
-        path: "",
-        keywords: "",
-        robots: "",
-        twitterTitle: "",
-        twitterDescription: "",
-        graphTitle: "",
-        graphDescription: "",
-        script: "",
-        footerTitle: "",
-      });
+      setBrands(data);
       setUpdateTable((prev) => !prev);
       navigate("/brands");
       toast({
-        title: "Saved Successfully!",
+        title: "Update Successfully!",
         status: "success",
         duration: 5000,
         isClosable: true,
         position: "bottom",
       });
     } catch (error) {
-      toast({
-        title: "Error Occured!",
-        description: "Failed to Load the Search Results",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom-left",
-      });
+      console.log(error);
     }
   };
+
+  const getBrandsDataById = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`/api/brand/brands/${id}`);
+      setLoading(false);
+      setBrands(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    const contentState = ContentState.createFromText(seo.footer_description);
+    const initialEditorState = EditorState.createWithContent(contentState);
+    setEditorState(initialEditorState);
+  }, []);
   const getCity = async () => {
     try {
       setLoading(true);
       const { data } = await axios.get("/api/city/cities");
       setLoading(false);
-      setCities(data);
+      setAllCity(data);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     getCity();
+    getBrandsDataById();
   }, [updateTable]);
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-  };
-
-  let footer_descript_value = convertToRaw(editorState.getCurrentContent())
-    .blocks[0].text;
-
   const handleDropdownChange = (selectedValues) => {
     const ids = selectedValues.map((option) => option._id);
     setSelectedOptions(ids);
   };
-
   const previewFile = (data) => {
     const allimages = images;
     setImages(allimages.concat(data));
@@ -166,20 +192,18 @@ function Addbrand() {
       })
       .then((res) => {
         previewFile(res.data);
-        // setTimeout(() => {
-        //   setProgress(0);
-        // }, 3000);
       })
       .catch((err) => {
         console.log(err);
       });
     console.log("sshiva");
   };
+
+  console.log(seo.footer_description);
   return (
-    <div className="mx-5 mt-3">
-      <Mainpanelnav />
+    <>
       <div className="container form-box">
-        <form style={{ textAlign: "left" }} onSubmit={handleSaveBrand}>
+        <form style={{ textAlign: "left" }} onSubmit={handleEditBrands}>
           <div className="container">
             <div className="row">
               <div className="col-md-3">
@@ -188,7 +212,7 @@ function Addbrand() {
                   className="property-input"
                   placeholder="Name*"
                   name="name"
-                  value={brand.name}
+                  value={name}
                   onChange={handleInputChange}
                   required
                 />
@@ -199,7 +223,7 @@ function Addbrand() {
                   type="text"
                   placeholder="Description*"
                   name="description"
-                  value={brand.description}
+                  value={description}
                   onChange={handleInputChange}
                   required
                 />
@@ -213,6 +237,7 @@ function Addbrand() {
                   setProgress={setProgress}
                   uploadFile={uploadFile}
                 />
+                <img src={image} alt="image" />
               </div>
             </div>
             <div className="row">
@@ -222,7 +247,7 @@ function Addbrand() {
                   type="text"
                   placeholder="Order*"
                   name="order"
-                  value={brand.order}
+                  value={order}
                   onChange={handleInputChange}
                 />
               </div>
@@ -248,13 +273,12 @@ function Addbrand() {
                   style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
                 >
                   <Select
-                    options={cities}
+                    options={allCity}
                     multi
                     onChange={handleDropdownChange}
-                    values={selectedOptions}
+                    values={cities}
                     labelField="name"
                     valueField="_id"
-                    // values={selectedOptions}
                   />
                 </div>
               </div>
@@ -267,9 +291,11 @@ function Addbrand() {
                   placeholder="Title*"
                   className="property-input"
                   required
-                  name="title"
-                  value={brand.title}
-                  onChange={handleInputChange}
+                  name="seo"
+                  value={seo.title}
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "seo", "title")
+                  }
                 />
               </div>
               <div className="col-md-3">
@@ -278,19 +304,23 @@ function Addbrand() {
                   placeholder="Description*"
                   className="property-input"
                   required
-                  name="descriptionSeo"
-                  value={brand.descriptionSeo}
-                  onChange={handleInputChange}
+                  name="seo"
+                  value={seo.description}
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "seo", "description")
+                  }
                 />
               </div>
               <div className="col-md-3">
                 <input
                   type="text"
                   placeholder="Keywords*"
-                  name="keywords"
+                  name="seo"
                   className="property-input"
-                  value={brand.keywords}
-                  onChange={handleInputChange}
+                  value={seo.keywords}
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "seo", "keywords")
+                  }
                 />
               </div>
               <div className="col-md-3">
@@ -298,9 +328,11 @@ function Addbrand() {
                   type="text"
                   placeholder="URL*"
                   className="property-input"
-                  name="path"
-                  value={brand.path}
-                  onChange={handleInputChange}
+                  name="seo"
+                  value={seo.url}
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "seo", "url")
+                  }
                 />
               </div>
             </div>
@@ -324,9 +356,11 @@ function Addbrand() {
                   type="text"
                   className="property-input"
                   placeholder="Robots"
-                  name="robots"
-                  value={brand.robots}
-                  onChange={handleInputChange}
+                  name="seo"
+                  value={seo.robots}
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "seo", "robots")
+                  }
                 />
               </div>
               <div className="col-md-3">
@@ -334,19 +368,19 @@ function Addbrand() {
                   type="text"
                   className="property-input"
                   placeholder="Twitter title"
-                  name="twitterTitle"
-                  value={brand.twitterTitle}
-                  onChange={handleInputChange}
+                  name="seo.twitter.title"
+                  value={seo.twitter.title}
+                  onChange={handleInputChange2}
                 />
               </div>
               <div className="col-md-3">
                 <input
                   type="text"
                   className="property-input"
-                  name="twitterDescription"
+                  name="seo.twitter.description"
                   placeholder="Twitter description"
-                  value={brand.twitterDescription}
-                  onChange={handleInputChange}
+                  value={seo.twitter.description}
+                  onChange={handleInputChange2}
                 />
               </div>
             </div>
@@ -356,9 +390,9 @@ function Addbrand() {
                   type="text"
                   className="property-input"
                   placeholder="Open graph title"
-                  name="graphTitle"
-                  value={brand.graphTitle}
-                  onChange={handleInputChange}
+                  name="seo.open_graph.title"
+                  value={seo.open_graph.title}
+                  onChange={handleInputChange2}
                 />
               </div>
               <div className="col-md-3">
@@ -366,9 +400,9 @@ function Addbrand() {
                   type="text"
                   className="property-input"
                   placeholder="Open graph description"
-                  name="graphDescription"
-                  value={brand.graphDescription}
-                  onChange={handleInputChange}
+                  name="seo.open_graph.description"
+                  value={seo.open_graph.description}
+                  onChange={handleInputChange2}
                 />
               </div>
             </div>
@@ -378,9 +412,11 @@ function Addbrand() {
                   type="text"
                   className="property-input"
                   placeholder="Footer title"
-                  value={brand.footerTitle}
-                  name="footerTitle"
-                  onChange={handleInputChange}
+                  value={seo.footer_title}
+                  name="seo"
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "seo", "footer_title")
+                  }
                 />
               </div>
             </div>
@@ -388,13 +424,11 @@ function Addbrand() {
             <div className="row">
               <div className="col-md-12">
                 <Editor
-                  // editorState={editorState}
+                  editorState={editorState}
                   toolbarClassName="toolbarClassName"
                   wrapperClassName="wrapperClassName"
                   editorClassName="editorClassName"
-                  onEditorStateChange={(editorState) =>
-                    onEditorStateChange(editorState)
-                  }
+                  onEditorStateChange={onEditorStateChange}
                 />
               </div>
             </div>
@@ -407,8 +441,8 @@ function Addbrand() {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
-}
+};
 
-export default Addbrand;
+export default EditBrand;
