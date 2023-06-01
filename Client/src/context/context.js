@@ -7,7 +7,7 @@ const AppProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [country, setCountry] = useState([]);
   const navigate = useNavigate();
-  const isLogin = localStorage.getItem("token") ? true : false;
+  let isLogin = localStorage.getItem("token") ? true : false;
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInfo);

@@ -10,10 +10,12 @@ export default class EditorConvertToHTML extends Component {
     editorState: EditorState.createEmpty(),
   }
 
+  
   onEditorStateChange = (editorState) => {
     this.setState({
       editorState,
     })
+    // console.log(editorState)
   }
 
   render() {

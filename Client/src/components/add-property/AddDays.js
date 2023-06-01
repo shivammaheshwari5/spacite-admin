@@ -8,7 +8,6 @@ function AddDays() {
     "Wednesday",
     "Thursday",
     "Friday",
-    "Saturday",
   ];
   const [options, setOptions] = useState([
     { name: "01:00 AM" },
@@ -23,13 +22,25 @@ function AddDays() {
     { name: "03:15 AM" },
     { name: "03:30 AM" },
   ]);
+
+  const [open, setOpen] = useState({open1: false, open2: false, open3: false, open4: false, open5: false, open6: false, close1: false, close2: false, close3: false, close4: false, close5: false, close6: false});
+
+  const getDayKey = (e, id) => {
+    if (id === 0 && e.target.checked){
+      setOpen({...open, open1: true})
+    }else {
+      setOpen({...open, open1: false})
+    }
+    console.log(id, e.target.checked);
+  }
+
   return (
     <div className="container">
       {days.map((day, i) => {
         return (
           <div className="row" key={i}>
             <div className="col-md-3">{day}</div>
-            <div className="col-md-2">
+            {!open.open1 && <div className="col-md-2">
               <div style={{ borderBottom: "1px solid gray" }}>
                 <Multiselect
                   options={options} // Options to display in the dropdown
@@ -41,7 +52,7 @@ function AddDays() {
                   placeholder="From*"
                 />
               </div>
-            </div>
+            </div>}
             <div className="col-md-2">
               <div style={{ borderBottom: "1px solid gray" }}>
                 <Multiselect
@@ -55,25 +66,26 @@ function AddDays() {
                 />
               </div>
             </div>
-            <div className="col-md-3" style={{ paddingTop: "29px" }}>
+            <div className="col-md-3" style={{ paddingTop: "8px" }}>
               <div class="form-check">
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value=""
+                  value={day}
                   id="flexCheckDefault"
+                  onChange={(e) => getDayKey(e,i)}
                 />
                 <label className="form-check-label" htmlFor="flexCheckDefault">
                   Open 24 Hours
                 </label>
               </div>
             </div>
-            <div className="col-md-2" style={{ paddingTop: "29px" }}>
+            <div className="col-md-2" style={{ paddingTop: "8px" }}>
               <div class="form-check">
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value=""
+                  value={i}
                   id="flexCheckDefault"
                 />
                 <label className="form-check-label" htmlFor="flexCheckDefault">

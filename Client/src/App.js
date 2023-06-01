@@ -19,7 +19,7 @@ import Seo from "./components/SEO/Seo";
 import AddSeoForm from "./components/SEO/AddSeoForm";
 import Addbrand from "./components/brands/Addbrand";
 function App() {
-  const { isLogin } = GpState();
+  let { isLogin } = GpState();
 
   localStorage.setItem("isLogin", isLogin);
   return (
