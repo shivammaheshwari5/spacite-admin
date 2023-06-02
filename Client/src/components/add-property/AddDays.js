@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import Multiselect from "multiselect-react-dropdown";
 
 function AddDays() {
+  const [condition, setCondition] = useState(true);
+  const [closedDays, setClosedDays] = useState([]);
+  const [openDays, setOpenDays] = useState([]);
+
   const days = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
+    { id: 1, name: "Monday", condition: true },
+    { id: 2, name: "Tuesday", condition: true },
+    { id: 3, name: "Wednesday", condition: true },
+    { id: 4, name: "Thursday", condition: true },
+    { id: 5, name: "Friday", condition: true },
   ];
+
   const [options, setOptions] = useState([
     { name: "01:00 AM" },
     { name: "01:15 AM" },
@@ -23,79 +28,86 @@ function AddDays() {
     { name: "03:30 AM" },
   ]);
 
-  const [open, setOpen] = useState({open1: false, open2: false, open3: false, open4: false, open5: false, open6: false, close1: false, close2: false, close3: false, close4: false, close5: false, close6: false});
-
-  const getDayKey = (e, id) => {
-    if (id === 0 && e.target.checked){
-      setOpen({...open, open1: true})
-    }else {
-      setOpen({...open, open1: false})
+  const handleClosedDay = (dayId) => {
+    if (closedDays.includes(dayId)) {
+      setClosedDays(closedDays.filter((day) => day !== dayId));
+    } else {
+      setClosedDays([...closedDays, dayId]);
     }
-    console.log(id, e.target.checked);
-  }
+  };
+  const handleOpenDay = (dayId) => {
+    if (openDays.includes(dayId)) {
+      setOpenDays(openDays.filter((day) => day !== dayId));
+    } else {
+      setOpenDays([...openDays, dayId]);
+    }
+  };
 
   return (
     <div className="container">
-      {days.map((day, i) => {
-        return (
-          <div className="row" key={i}>
-            <div className="col-md-3">{day}</div>
-            {!open.open1 && <div className="col-md-2">
-              <div style={{ borderBottom: "1px solid gray" }}>
-                <Multiselect
-                  options={options} // Options to display in the dropdown
-                  // selectedValues={selectedValue}
-                  // onSelect={onSelect}
-                  // onRemove={onRemove}
-                  displayValue="name"
-                  singleSelect
-                  placeholder="From*"
-                />
+      {days.map((day) => (
+        <div className="row" key={day.id}>
+          <div className="col-md-3">{day.name}</div>
+          {day.condition === condition &&
+            !closedDays.includes(day.id) &&
+            day.condition === condition &&
+            !openDays.includes(day.id) && (
+              <div>
+                <div className="col-md-2">
+                  <div style={{ borderBottom: "1px solid gray" }}>
+                    <Multiselect
+                      options={options}
+                      displayValue="name"
+                      singleSelect
+                      placeholder="From*"
+                    />
+                  </div>
+                </div>
+                <div className="col-md-2">
+                  <div style={{ borderBottom: "1px solid gray" }}>
+                    <Multiselect
+                      options={options}
+                      displayValue="name"
+                      singleSelect
+                      placeholder="To*"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>}
-            <div className="col-md-2">
-              <div style={{ borderBottom: "1px solid gray" }}>
-                <Multiselect
-                  options={options} // Options to display in the dropdown
-                  // selectedValues={selectedValue}
-                  // onSelect={onSelect}
-                  // onRemove={onRemove}
-                  displayValue="name"
-                  singleSelect
-                  placeholder="To*"
-                />
-              </div>
-            </div>
+            )}
+          {day.condition === condition && !closedDays.includes(day.id) && (
             <div className="col-md-3" style={{ paddingTop: "8px" }}>
-              <div class="form-check">
+              <div className="form-check">
                 <input
                   className="form-check-input"
                   type="checkbox"
                   value={day}
-                  id="flexCheckDefault"
-                  onChange={(e) => getDayKey(e,i)}
+                  onClick={() => handleOpenDay(day.id)}
+                  id={`open${day.id}`}
                 />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
+                <label className="form-check-label" htmlFor={`open${day.id}`}>
                   Open 24 Hours
                 </label>
               </div>
             </div>
+          )}
+          {day.condition === condition && !openDays.includes(day.id) && (
             <div className="col-md-2" style={{ paddingTop: "8px" }}>
-              <div class="form-check">
+              <div className="form-check">
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value={i}
-                  id="flexCheckDefault"
+                  onClick={() => handleClosedDay(day.id)}
+                  id={`close${day.id}`}
                 />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
+                <label className="form-check-label" htmlFor={`close${day.id}`}>
                   Close
                 </label>
               </div>
             </div>
-          </div>
-        );
-      })}
+          )}
+        </div>
+      ))}
     </div>
   );
 }
