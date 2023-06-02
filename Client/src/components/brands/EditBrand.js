@@ -147,7 +147,7 @@ const EditBrand = () => {
     const contentState = ContentState.createFromText(seo.footer_description);
     const initialEditorState = EditorState.createWithContent(contentState);
     setEditorState(initialEditorState);
-  }, []);
+  }, [brands]);
   const getCity = async () => {
     try {
       setLoading(true);
@@ -199,7 +199,7 @@ const EditBrand = () => {
     console.log("sshiva");
   };
 
-  console.log(seo.footer_description);
+  console.log(footer_descrip);
   return (
     <>
       <div className="container form-box">

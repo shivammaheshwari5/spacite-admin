@@ -42,7 +42,6 @@ const EditSeo = () => {
   const {
     title,
     page_title,
-
     description,
     path,
     keywords,
