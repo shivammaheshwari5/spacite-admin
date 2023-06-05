@@ -12,7 +12,7 @@ import Amenities from "./components/amenities/Amenities";
 import Login from "./components/login-page/Login";
 import { useState, useContext } from "react";
 import { GpState } from "./context/context";
-import AddListingSpace from "./components/listing-space/AddListingSpace";
+import AddWorkSpace from "./components/coworking-space/AddWorkSpace";
 import CoworkingSpace from "./components/coworking-space/CoworkingSpace";
 import Brands from "./components/brands/Brands";
 import Seo from "./components/SEO/Seo";
@@ -143,7 +143,7 @@ function App() {
               path="/coworking-space/add-coworking-space"
               element={
                 isLogin ? (
-                  [<Sidebar key={22} />, <AddListingSpace key={23} />]
+                  [<Sidebar key={22} />, <AddWorkSpace key={23} />]
                 ) : (
                   <Navigate to="/" />
                 )
