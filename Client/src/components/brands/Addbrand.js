@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
-import EditorConvertToHTML from "../SEO/EditorConvertToHTML";
+// import EditorConvertToHTML from "../SEO/EditorConvertToHTML";
 import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
+// import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useDisclosure, Spinner, useToast } from "@chakra-ui/react";
@@ -13,12 +13,12 @@ import Select from "react-dropdown-select";
 import ImageUpload from "../../ImageUpload";
 
 function Addbrand() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [progress, setProgress] = useState(0);
   const [images, setImages] = useState([]);
-  const { user } = GpState();
+  // const { user } = GpState();
   const [brand, setBrand] = useState({
     name: "",
     description: "",
@@ -204,19 +204,25 @@ function Addbrand() {
                   required
                 />
               </div>
-              <div className="col-md-3">
-                <h5 style={{ marginTop: "25px" }}>Logo Upload</h5>
-                <ImageUpload
-                  images={images}
-                  setImages={setImages}
-                  progress={progress}
-                  setProgress={setProgress}
-                  uploadFile={uploadFile}
-                />
+              <div className="col-md-6">
+                <div className="row">
+                  <div className="col-md-4">
+                    <h5 style={{ marginTop: "25px" }}>Logo Upload</h5>
+                  </div>
+                  <div className="col-md-8">
+                    <ImageUpload
+                      images={images}
+                      setImages={setImages}
+                      progress={progress}
+                      setProgress={setProgress}
+                      uploadFile={uploadFile}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
             <div className="row">
-              <div className="col-md-3">
+              {/* <div className="col-md-3">
                 <input
                   className="property-input"
                   type="text"
@@ -225,8 +231,8 @@ function Addbrand() {
                   value={brand.order}
                   onChange={handleInputChange}
                 />
-              </div>
-              <div className="col-md-3">
+              </div> */}
+              {/* <div className="col-md-3">
                 <div className="form-check mt-4">
                   <input
                     className="form-check-input"
@@ -242,7 +248,7 @@ function Addbrand() {
                     Should Show on Home
                   </label>
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-6">
                 <div
                   style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
@@ -254,6 +260,7 @@ function Addbrand() {
                     values={selectedOptions}
                     labelField="name"
                     valueField="_id"
+                    placeholder="Select Cities"
                     // values={selectedOptions}
                   />
                 </div>

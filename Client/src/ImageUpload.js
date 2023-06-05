@@ -3,6 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { AiFillDelete } from "react-icons/ai";
+import { BiUpload } from "react-icons/bi";
 
 const ImageUpload = ({
   images,
@@ -69,13 +70,15 @@ const ImageUpload = ({
         >
           <div id="drop-region" className="drop-region text-center">
             <img id="download-btn" src="/Download.png" width="80" alt="" />
-            <h2>Drag and Drop or Click to Upload</h2>
-            <input
-              id="file-input"
-              type="file"
-              multiple
-              onChange={handleInputByClick}
-            />
+            <div>
+              {/* <BiUpload /> */}
+              <input
+                id="file-input"
+                type="file"
+                multiple
+                onChange={handleInputByClick}
+              />
+            </div>
           </div>
         </div>
 

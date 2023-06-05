@@ -170,7 +170,7 @@ function App() {
               }
             />
             <Route
-              path="/editseo/:id"
+              path="/seo/editseo/:id"
               element={
                 isLogin ? (
                   [<Sidebar key={28} />, <EditSeo key={29} />]

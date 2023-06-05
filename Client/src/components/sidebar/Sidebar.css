@@ -4,6 +4,7 @@
   display: block;
   position: relative;
   z-index: 4;
+  box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
 .nav-menu-wrapper {
   position: relative;
@@ -26,6 +27,8 @@
   text-decoration: none;
   transition: all 150ms ease-in;
   font-size: 15px;
+  width: 215px;
+  display: inline-block;
 }
 .nav-menu-wrapper .nav li a:hover {
   background-color: rgba(235, 233, 233, 0.34);
@@ -38,7 +41,7 @@
 }
 .nav-item {
   list-style: none;
-  margin: 27px 0;
+  margin: 9px 0;
   width: 100%;
 }
 .icon {

@@ -11,8 +11,13 @@ function Mainpanelnav() {
   let url = window.location.href;
   let splitUrl = url.split("/");
   let title = splitUrl[splitUrl.length - 1];
+  let title2 = splitUrl[splitUrl.length - 2];
   if (title === "") {
     title = "Commercial Properties";
+  }else if(title2.startsWith("edit")){
+    title = title2;
+  }else {
+    title = title
   }
   const logoutHandle = () => {
     localStorage.removeItem("token");

@@ -161,7 +161,7 @@ function ResPropertyType() {
         </div>
       </div>
       <div className="table-box">
-        <div className="table-top-box">City Table</div>
+        <div className="table-top-box">Coworking Plans Table</div>
         <TableContainer marginTop="60px" variant="striped" color="teal">
           <Table variant="simple">
             <Thead>
