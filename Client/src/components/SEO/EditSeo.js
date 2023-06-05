@@ -5,6 +5,7 @@ import { AiFillEdit } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
+import Mainpanelnav from "../mainpanel-header/Mainpanelnav"
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import {
   EditorState,
@@ -23,10 +24,6 @@ const initialValue = {
   path: "",
   keywords: "",
   robots: "",
-  twitterTitle: "",
-  twitterDescription: "",
-  graphTitle: "",
-  graphDescription: "",
   script: "",
   footer_title: "",
 };
@@ -128,7 +125,8 @@ const EditSeo = () => {
   console.log(footer_description);
   console.log(twitter.title);
   return (
-    <>
+    <div className="mx-5 mt-3">
+      <Mainpanelnav />
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleEditSeo}>
           <div className="container">
@@ -315,7 +313,7 @@ const EditSeo = () => {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

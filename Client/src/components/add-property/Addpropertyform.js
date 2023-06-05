@@ -62,14 +62,12 @@ function Addpropertyform() {
   };
 
   const satOpenHandler = (e) => {
-    if (showDiffrentDays === false) {
       if (e.target.checked) {
         setOpen({ ...open, satOpen: true });
       } else {
         setOpen({ ...open, satOpen: false, fullOpen2: false, isClose2: false });
       }
-    }
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   const sunOpenHandler = (e) => {
@@ -446,7 +444,7 @@ function Addpropertyform() {
                   onClick={diffrentDaysHandler}
                 />
                 <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Different(6 days)
+                  Different(5 days)
                 </label>
               </div>
             </div>
@@ -557,7 +555,7 @@ function Addpropertyform() {
 
           {satOpen && (
             <div className="row">
-              <div className="col-md-3">Saturday</div>
+              <div className="col-md-2">Saturday</div>
               {fullOpen2 === false && isClose2 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
@@ -631,7 +629,7 @@ function Addpropertyform() {
 
           {sunOpen && (
             <div className="row">
-              <div className="col-md-3">Sunday</div>
+              <div className="col-md-2">Sunday</div>
               {fullOpen3 === false && isClose3 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>

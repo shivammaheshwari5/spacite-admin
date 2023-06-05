@@ -47,13 +47,14 @@ function AddDays() {
     <div className="container">
       {days.map((day) => (
         <div className="row" key={day.id}>
-          <div className="col-md-3">{day.name}</div>
+          <div className="col-md-2">{day.name}</div>
           {day.condition === condition &&
             !closedDays.includes(day.id) &&
             day.condition === condition &&
             !openDays.includes(day.id) && (
-              <div>
-                <div className="col-md-2">
+              <div className="col-md-4">
+                <div className="row">
+                <div className="col-md-6">
                   <div style={{ borderBottom: "1px solid gray" }}>
                     <Multiselect
                       options={options}
@@ -63,7 +64,7 @@ function AddDays() {
                     />
                   </div>
                 </div>
-                <div className="col-md-2">
+                <div className="col-md-6">
                   <div style={{ borderBottom: "1px solid gray" }}>
                     <Multiselect
                       options={options}
@@ -72,6 +73,7 @@ function AddDays() {
                       placeholder="To*"
                     />
                   </div>
+                </div>
                 </div>
               </div>
             )}
@@ -101,7 +103,7 @@ function AddDays() {
                   id={`close${day.id}`}
                 />
                 <label className="form-check-label" htmlFor={`close${day.id}`}>
-                  Close
+                  Closed
                 </label>
               </div>
             </div>
