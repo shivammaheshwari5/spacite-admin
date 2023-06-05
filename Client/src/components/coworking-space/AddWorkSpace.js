@@ -15,6 +15,7 @@ import Multiselect from "multiselect-react-dropdown";
 import AddDays from "./AddDays";
 import { GpState } from "../../context/context";
 import ImageUpload from "../../ImageUpload";
+import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 
 function AddWorkSpace() {
   const [plans, setPlans] = useState([]);
@@ -109,14 +110,12 @@ function AddWorkSpace() {
   };
 
   const satOpenHandler = (e) => {
-    if (showDiffrentDays === false) {
-      if (e.target.checked) {
-        setOpen({ ...open, satOpen: true });
-      } else {
-        setOpen({ ...open, satOpen: false, fullOpen2: false, isClose2: false });
-      }
+    if (e.target.checked) {
+      setOpen({ ...open, satOpen: true });
+    } else {
+      setOpen({ ...open, satOpen: false, fullOpen2: false, isClose2: false });
     }
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   const sunOpenHandler = (e) => {
@@ -478,712 +477,736 @@ function AddWorkSpace() {
   }, []);
   console.log(brandId);
   return (
-    <div className="container form-box">
-      <form style={{ textAlign: "left" }} onSubmit={handleSaveWorkSpace}>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6">
-              <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
-                <select
-                  className="form-select"
-                  name="brand"
-                  aria-label="Default select example"
-                  value={coSpace.brand}
-                  onChange={onChangeHandler}
+    <div className="mx-5 mt-3">
+      <Mainpanelnav />
+      <div className="container form-box">
+        <form style={{ textAlign: "left" }} onSubmit={handleSaveWorkSpace}>
+          <div className="container">
+            <div className="row">
+              <div className="col-md-6">
+                <div
+                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
                 >
-                  <option>Select a brand</option>
-                  {brands?.map((brand) => (
-                    <option id={brand._id} key={brand._id} value={brand.name}>
-                      {brand.name}
-                    </option>
-                  ))}
-                </select>
+                  <select
+                    className="form-select"
+                    name="brand"
+                    aria-label="Default select example"
+                    value={coSpace.brand}
+                    onChange={onChangeHandler}
+                  >
+                    <option>Select a brand</option>
+                    {brands?.map((brand) => (
+                      <option id={brand._id} key={brand._id} value={brand.name}>
+                        {brand.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div className="col-md-6">
-              <input
-                className="property-input"
-                type="text"
-                placeholder="Name*"
-                name="name"
-                value={coSpace.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-12">
-              <Editor
-                editorState={editorState}
-                toolbarClassName="toolbarClassName"
-                wrapperClassName="wrapperClassName"
-                editorClassName="editorClassName"
-                onEditorStateChange={onEditorStateChange}
-              />
-            </div>
-          </div>
-          <h4>Slug Update</h4>
-          <div className="row">
-            <div className="col-md-12">
-              <input
-                className="property-input"
-                type="text"
-                placeholder="Slug"
-                value={coSpace.slug}
-                name="slug"
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-          <h4>SEO Details</h4>
-          <div className="row">
-            <div className="col-md-3">
-              <input
-                type="text"
-                className="property-input"
-                placeholder="Title"
-                name="title"
-                value={coSpace.title}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-md-3">
-              <input
-                type="text"
-                className="property-input"
-                placeholder="Description"
-                name="description"
-                value={coSpace.description}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-md-3">
-              <input
-                type="text"
-                className="property-input"
-                placeholder="Robots"
-                name="robots"
-                value={coSpace.robots}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3">
-              <input
-                type="text"
-                className="property-input"
-                placeholder="Keywords"
-                name="keywords"
-                value={coSpace.keywords}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-md-3">
-              <input
-                type="text"
-                className="property-input"
-                placeholder="Url"
-                value={coSpace.url}
-                onChange={handleInputChange}
-                name="url"
-              />
-            </div>
-            <div className="col-md-3">
-              <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={coSpace.status}
-                  name="status"
+              <div className="col-md-6">
+                <input
+                  className="property-input"
+                  type="text"
+                  placeholder="Name*"
+                  name="name"
+                  value={coSpace.name}
                   onChange={handleInputChange}
-                >
-                  <option>Status</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3">
-              <input
-                type="text"
-                placeholder="Twitter title"
-                className="property-input"
-                name="twitterTitle"
-                value={coSpace.twitterTitle}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-md-3">
-              <input
-                type="text"
-                placeholder="Twitter description"
-                name="twitterDescription"
-                value={coSpace.twitterDescription}
-                onChange={handleInputChange}
-                className="property-input"
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3">
-              <input
-                type="text"
-                placeholder="Open graph title"
-                className="property-input"
-                name="graphTitle"
-                value={coSpace.graphTitle}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-md-3">
-              <input
-                type="text"
-                placeholder="Open graph description"
-                className="property-input"
-                value={coSpace.graphDescription}
-                name="graphDescription"
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-          <h4>Location</h4>
-          <div className="row">
-            <div className="col-md-12">
-              <textarea
-                cols="100"
-                rows="2"
-                className="property-input"
-                placeholder="Address*"
-                name="address"
-                value={coSpace.address}
-                onChange={handleInputChange}
-                required
-              ></textarea>
-            </div>
-            <div className="col-md-3">
-              <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={coSpace.country}
-                  onChange={onChangeHandler}
-                  name="country"
-                  onClick={getStateByCountry}
                   required
-                >
-                  <option>Select a country*</option>
-                  {country?.map((countryElem) => (
-                    <option
-                      id={countryElem._id}
-                      key={countryElem._id}
-                      value={countryElem.name}
-                    >
-                      {countryElem.name}
-                    </option>
-                  ))}
-                </select>
+                />
               </div>
             </div>
-            <div className="col-md-3">
-              <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={coSpace.state}
-                  name="state"
-                  onChange={onChangeHandler}
-                  onClick={getCityByState}
+            <div className="row">
+              <div className="col-md-12">
+                <Editor
+                  editorState={editorState}
+                  toolbarClassName="toolbarClassName"
+                  wrapperClassName="wrapperClassName"
+                  editorClassName="editorClassName"
+                  onEditorStateChange={onEditorStateChange}
+                />
+              </div>
+            </div>
+            <h4>Slug Update</h4>
+            <div className="row">
+              <div className="col-md-12">
+                <input
+                  className="property-input"
+                  type="text"
+                  placeholder="Slug"
+                  value={coSpace.slug}
+                  name="slug"
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <h4>SEO Details</h4>
+            <div className="row">
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  className="property-input"
+                  placeholder="Title"
+                  name="title"
+                  value={coSpace.title}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  className="property-input"
+                  placeholder="Description"
+                  name="description"
+                  value={coSpace.description}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  className="property-input"
+                  placeholder="Robots"
+                  name="robots"
+                  value={coSpace.robots}
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  className="property-input"
+                  placeholder="Keywords"
+                  name="keywords"
+                  value={coSpace.keywords}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  className="property-input"
+                  placeholder="Url"
+                  value={coSpace.url}
+                  onChange={handleInputChange}
+                  name="url"
+                />
+              </div>
+              <div className="col-md-3">
+                <div
+                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                >
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={coSpace.status}
+                    name="status"
+                    onChange={handleInputChange}
+                  >
+                    <option>Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="Twitter title"
+                  className="property-input"
+                  name="twitterTitle"
+                  value={coSpace.twitterTitle}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="Twitter description"
+                  name="twitterDescription"
+                  value={coSpace.twitterDescription}
+                  onChange={handleInputChange}
+                  className="property-input"
+                />
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="Open graph title"
+                  className="property-input"
+                  name="graphTitle"
+                  value={coSpace.graphTitle}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="Open graph description"
+                  className="property-input"
+                  value={coSpace.graphDescription}
+                  name="graphDescription"
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            <h4>Location</h4>
+            <div className="row">
+              <div className="col-md-12">
+                <textarea
+                  cols="100"
+                  rows="2"
+                  className="property-input"
+                  placeholder="Address*"
+                  name="address"
+                  value={coSpace.address}
+                  onChange={handleInputChange}
                   required
+                ></textarea>
+              </div>
+              <div className="col-md-3">
+                <div
+                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
                 >
-                  <option>Select a state*</option>
-                  {states?.map((stateElem) => (
-                    <option
-                      id={stateElem._id}
-                      key={stateElem._id}
-                      value={stateElem.name}
-                    >
-                      {stateElem.name}
-                    </option>
-                  ))}
-                </select>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={coSpace.country}
+                    onChange={onChangeHandler}
+                    name="country"
+                    onClick={getStateByCountry}
+                    required
+                  >
+                    <option>Select a country*</option>
+                    {country?.map((countryElem) => (
+                      <option
+                        id={countryElem._id}
+                        key={countryElem._id}
+                        value={countryElem.name}
+                      >
+                        {countryElem.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div
+                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                >
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={coSpace.state}
+                    name="state"
+                    onChange={onChangeHandler}
+                    onClick={getCityByState}
+                    required
+                  >
+                    <option>Select a state*</option>
+                    {states?.map((stateElem) => (
+                      <option
+                        id={stateElem._id}
+                        key={stateElem._id}
+                        value={stateElem.name}
+                      >
+                        {stateElem.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div
+                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                >
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={coSpace.city}
+                    onChange={onChangeHandler}
+                    onClick={getMicrolocationByCity}
+                    name="city"
+                    required
+                  >
+                    <option>Select a city*</option>
+                    {cities?.map((cityElem) => (
+                      <option
+                        id={cityElem._id}
+                        key={cityElem._id}
+                        value={cityElem.name}
+                      >
+                        {cityElem.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
-            <div className="col-md-3">
-              <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={coSpace.city}
-                  onChange={onChangeHandler}
-                  onClick={getMicrolocationByCity}
-                  name="city"
-                  required
+            <div className="row">
+              <div className="col-md-3">
+                <div
+                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
                 >
-                  <option>Select a city*</option>
-                  {cities?.map((cityElem) => (
-                    <option
-                      id={cityElem._id}
-                      key={cityElem._id}
-                      value={cityElem.name}
-                    >
-                      {cityElem.name}
-                    </option>
-                  ))}
-                </select>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    name="microLocation"
+                    value={coSpace.microLocation}
+                    onChange={onChangeHandler}
+                    required
+                  >
+                    <option>Select a microlocation*</option>
+                    {microlocations?.map((microLocation) => (
+                      <option
+                        id={microLocation._id}
+                        key={microLocation._id}
+                        value={microLocation.name}
+                      >
+                        {microLocation.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="Lattitude*"
+                  className="property-input"
+                  name="lattitude"
+                  value={coSpace.lattitude}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="Longitude*"
+                  className="property-input"
+                  value={coSpace.longitude}
+                  name="longitude"
+                  onChange={handleInputChange}
+                />
               </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3">
-              <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  name="microLocation"
-                  value={coSpace.microLocation}
-                  onChange={onChangeHandler}
-                  required
-                >
-                  <option>Select a microlocation*</option>
-                  {microlocations?.map((microLocation) => (
-                    <option
-                      id={microLocation._id}
-                      key={microLocation._id}
-                      value={microLocation.name}
-                    >
-                      {microLocation.name}
-                    </option>
-                  ))}
-                </select>
+            <div className="row">
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  className="property-input"
+                  placeholder="Postel code"
+                  name="postalCode"
+                  value={coSpace.postalCode}
+                  onChange={handleInputChange}
+                />
               </div>
             </div>
-            <div className="col-md-3">
-              <input
-                type="text"
-                placeholder="Lattitude*"
-                className="property-input"
-                name="lattitude"
-                value={coSpace.lattitude}
-                onChange={handleInputChange}
+            <h4>Amenities</h4>
+            <div className="row">
+              <div className="form-check">
+                {amenities?.map((amenity) => (
+                  <div key={amenity._id}>
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value={coSpace.amenity}
+                      id="flexCheckDefault"
+                      name="amenity"
+                      onChange={handleInputChange}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="flexCheckDefault"
+                    >
+                      {amenity.name}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <h4>Images</h4>
+            <div className="row">
+              <ImageUpload
+                images={images}
+                setImages={setImages}
+                progress={progress}
+                setProgress={setProgress}
+                uploadFile={uploadFile}
               />
             </div>
-            <div className="col-md-3">
-              <input
-                type="text"
-                placeholder="Longitude*"
-                className="property-input"
-                value={coSpace.longitude}
-                name="longitude"
-                onChange={handleInputChange}
-              />
+            <div className="row">
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  placeholder="No. of seats*"
+                  className="property-input"
+                  name="seats"
+                  value={coSpace.seats}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3">
-              <input
-                type="text"
-                className="property-input"
-                placeholder="Postel code"
-                name="postalCode"
-                value={coSpace.postalCode}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-          <h4>Amenities</h4>
-          <div className="row">
-            <div className="form-check">
-              {amenities?.map((amenity) => (
-                <div key={amenity._id}>
+            <h4>Hours of operation</h4>
+            <div className="row">
+              <div className="col-md-3">
+                <div className="form-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
-                    value={coSpace.amenity}
+                    value=""
                     id="flexCheckDefault"
-                    name="amenity"
-                    onChange={handleInputChange}
+                    onClick={diffrentDaysHandler}
                   />
                   <label
                     className="form-check-label"
                     htmlFor="flexCheckDefault"
                   >
-                    {amenity.name}
+                    Different(5 days)
                   </label>
                 </div>
-              ))}
+              </div>
+              <div className="col-md-3">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value="saturday open"
+                    id="flexCheckDefault"
+                    onChange={satOpenHandler}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Saturday Open
+                  </label>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                    onChange={sunOpenHandler}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Sunday Open
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-          <h4>Images</h4>
-          <div className="row">
-            <ImageUpload
-              images={images}
-              setImages={setImages}
-              progress={progress}
-              setProgress={setProgress}
-              uploadFile={uploadFile}
-            />
-          </div>
-          <div className="row">
-            <div className="col-md-3">
-              <input
-                type="text"
-                placeholder="No. of seats*"
-                className="property-input"
-                name="seats"
-                value={coSpace.seats}
-                onChange={handleInputChange}
-                required
+            {showDiffrentDays ? (
+              <AddDays fullOpen={fullOpen1} isClose={isClose1} />
+            ) : (
+              <div className="row">
+                <div className="col-md-3">Monday-Friday</div>
+                {fullOpen1 === false && isClose1 === false && (
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <Multiselect
+                        options={options} // Options to display in the dropdown
+                        // selectedValues={selectedValue}
+                        // onSelect={onSelect}
+                        // onRemove={onRemove}
+                        displayValue="name"
+                        singleSelect
+                        placeholder="From*"
+                      />
+                    </div>
+                  </div>
+                )}
+                {fullOpen1 === false && isClose1 === false && (
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <Multiselect
+                        options={options} // Options to display in the dropdown
+                        // selectedValues={selectedValue}
+                        // onSelect={onSelect}
+                        // onRemove={onRemove}
+                        displayValue="name"
+                        singleSelect
+                        placeholder="To*"
+                      />
+                    </div>
+                  </div>
+                )}
+                {isClose1 === false && (
+                  <div className="col-md-3" style={{ paddingTop: "8px" }}>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value="mon-fri"
+                        id="flexCheckDefault"
+                        onChange={openFullHoursHandler}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
+                        Open 24 Hours
+                      </label>
+                    </div>
+                  </div>
+                )}
+                {fullOpen1 === false && (
+                  <div className="col-md-2" style={{ paddingTop: "8px" }}>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value="mon-fri-close"
+                        id="flexCheckDefault"
+                        onChange={closeHandler}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
+                        Closed
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {satOpen && (
+              <div className="row">
+                <div className="col-md-2">Saturday</div>
+                {fullOpen2 === false && isClose2 === false && (
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <Multiselect
+                        options={options} // Options to display in the dropdown
+                        // selectedValues={selectedValue}
+                        // onSelect={onSelect}
+                        // onRemove={onRemove}
+                        displayValue="name"
+                        singleSelect
+                        placeholder="From*"
+                      />
+                    </div>
+                  </div>
+                )}
+                {fullOpen2 === false && isClose2 === false && (
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <Multiselect
+                        options={options} // Options to display in the dropdown
+                        // selectedValues={selectedValue}
+                        // onSelect={onSelect}
+                        // onRemove={onRemove}
+                        displayValue="name"
+                        singleSelect
+                        placeholder="To*"
+                      />
+                    </div>
+                  </div>
+                )}
+                {isClose2 === false && (
+                  <div className="col-md-3" style={{ paddingTop: "8px" }}>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value="sat"
+                        id="flexCheckDefault"
+                        onChange={openFullHoursHandler}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
+                        Open 24 Hours
+                      </label>
+                    </div>
+                  </div>
+                )}
+                {fullOpen2 === false && (
+                  <div className="col-md-2" style={{ paddingTop: "8px" }}>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value="sat"
+                        id="flexCheckDefault"
+                        onChange={closeHandler}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
+                        Closed
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {sunOpen && (
+              <div className="row">
+                <div className="col-md-2">Sunday</div>
+                {fullOpen3 === false && isClose3 === false && (
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <Multiselect
+                        options={options} // Options to display in the dropdown
+                        // selectedValues={selectedValue}
+                        // onSelect={onSelect}
+                        // onRemove={onRemove}
+                        displayValue="name"
+                        singleSelect
+                        placeholder="From*"
+                      />
+                    </div>
+                  </div>
+                )}
+                {fullOpen3 === false && isClose3 === false && (
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <Multiselect
+                        options={options} // Options to display in the dropdown
+                        // selectedValues={selectedValue}
+                        // onSelect={onSelect}
+                        // onRemove={onRemove}
+                        displayValue="name"
+                        singleSelect
+                        placeholder="To*"
+                      />
+                    </div>
+                  </div>
+                )}
+                {isClose3 === false && (
+                  <div className="col-md-3" style={{ paddingTop: "8px" }}>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value="sun"
+                        id="flexCheckDefault"
+                        onChange={openFullHoursHandler}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
+                        Open 24 Hours
+                      </label>
+                    </div>
+                  </div>
+                )}
+                {fullOpen3 === false && (
+                  <div className="col-md-2" style={{ paddingTop: "8px" }}>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value="sun"
+                        id="flexCheckDefault"
+                        onChange={closeHandler}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckDefault"
+                      >
+                        Closed
+                      </label>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="d-flex w-50 justify-content-between align-items-center">
+              <h4>Plans</h4>
+              <IoIosAddCircle
+                onClick={createPlans}
+                className="icon"
+                style={{ cursor: "pointer" }}
               />
             </div>
+
+            {plans?.map((id) => {
+              return (
+                <div className="row" key={id}>
+                  <div className="col-md-3">
+                    <div
+                      style={{
+                        borderBottom: "1px solid gray",
+                        margin: "20px 0",
+                      }}
+                    >
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                      >
+                        <option>Category</option>
+                        <option value="1BHK">1BHK</option>
+                        <option value="2BHK">2BHK</option>
+                        <option value="3BHK">3BHK</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div
+                      style={{
+                        borderBottom: "1px solid gray",
+                        margin: "20px 0",
+                      }}
+                    >
+                      <select
+                        className="form-select"
+                        aria-label="Default select example"
+                      >
+                        <option>Duration</option>
+                        <option value="1BHK">Month</option>
+                        <option value="2BHK">Day</option>
+                        <option value="3BHK">Year</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <input
+                      type="text"
+                      // onChange={handleChange}
+                      className="property-input"
+                      placeholder="Price*"
+                      required
+                    />
+                  </div>
+                  <div className="col-md-3 d-flex align-items-center">
+                    <AiFillDelete
+                      className="icon"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => removePlan(id)}
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
-          <h4>Hours of operation</h4>
-          <div className="row">
-            <div className="col-md-3">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  onClick={diffrentDaysHandler}
-                />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Different(6 days)
-                </label>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value="saturday open"
-                  id="flexCheckDefault"
-                  onChange={satOpenHandler}
-                />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Saturday Open
-                </label>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="flexCheckDefault"
-                  onChange={sunOpenHandler}
-                />
-                <label className="form-check-label" htmlFor="flexCheckDefault">
-                  Sunday Open
-                </label>
-              </div>
-            </div>
+          <div className="form-footer">
+            <button type="submit" className="saveproperty-btn">
+              Save
+            </button>
+            <button className="cancel-btn">Cancel</button>
           </div>
-          {showDiffrentDays ? (
-            <AddDays fullOpen={fullOpen1} isClose={isClose1} />
-          ) : (
-            <div className="row">
-              <div className="col-md-3">Monday-Friday</div>
-              {fullOpen1 === false && isClose1 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options} // Options to display in the dropdown
-                      // selectedValues={selectedValue}
-                      // onSelect={onSelect}
-                      // onRemove={onRemove}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                    />
-                  </div>
-                </div>
-              )}
-              {fullOpen1 === false && isClose1 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options} // Options to display in the dropdown
-                      // selectedValues={selectedValue}
-                      // onSelect={onSelect}
-                      // onRemove={onRemove}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="To*"
-                    />
-                  </div>
-                </div>
-              )}
-              {isClose1 === false && (
-                <div className="col-md-3" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="mon-fri"
-                      id="flexCheckDefault"
-                      onChange={openFullHoursHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Open 24 Hours
-                    </label>
-                  </div>
-                </div>
-              )}
-              {fullOpen1 === false && (
-                <div className="col-md-2" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="mon-fri-close"
-                      id="flexCheckDefault"
-                      onChange={closeHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Closed
-                    </label>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {satOpen && (
-            <div className="row">
-              <div className="col-md-3">Saturday</div>
-              {fullOpen2 === false && isClose2 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options} // Options to display in the dropdown
-                      // selectedValues={selectedValue}
-                      // onSelect={onSelect}
-                      // onRemove={onRemove}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                    />
-                  </div>
-                </div>
-              )}
-              {fullOpen2 === false && isClose2 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options} // Options to display in the dropdown
-                      // selectedValues={selectedValue}
-                      // onSelect={onSelect}
-                      // onRemove={onRemove}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="To*"
-                    />
-                  </div>
-                </div>
-              )}
-              {isClose2 === false && (
-                <div className="col-md-3" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="sat"
-                      id="flexCheckDefault"
-                      onChange={openFullHoursHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Open 24 Hours
-                    </label>
-                  </div>
-                </div>
-              )}
-              {fullOpen2 === false && (
-                <div className="col-md-2" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="sat"
-                      id="flexCheckDefault"
-                      onChange={closeHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Closed
-                    </label>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {sunOpen && (
-            <div className="row">
-              <div className="col-md-3">Sunday</div>
-              {fullOpen3 === false && isClose3 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options} // Options to display in the dropdown
-                      // selectedValues={selectedValue}
-                      // onSelect={onSelect}
-                      // onRemove={onRemove}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                    />
-                  </div>
-                </div>
-              )}
-              {fullOpen3 === false && isClose3 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options} // Options to display in the dropdown
-                      // selectedValues={selectedValue}
-                      // onSelect={onSelect}
-                      // onRemove={onRemove}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="To*"
-                    />
-                  </div>
-                </div>
-              )}
-              {isClose3 === false && (
-                <div className="col-md-3" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="sun"
-                      id="flexCheckDefault"
-                      onChange={openFullHoursHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Open 24 Hours
-                    </label>
-                  </div>
-                </div>
-              )}
-              {fullOpen3 === false && (
-                <div className="col-md-2" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="sun"
-                      id="flexCheckDefault"
-                      onChange={closeHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Closed
-                    </label>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="d-flex w-50 justify-content-between align-items-center">
-            <h4>Plans</h4>
-            <IoIosAddCircle
-              onClick={createPlans}
-              className="icon"
-              style={{ cursor: "pointer" }}
-            />
-          </div>
-
-          {plans?.map((id) => {
-            return (
-              <div className="row" key={id}>
-                <div className="col-md-3">
-                  <div
-                    style={{
-                      borderBottom: "1px solid gray",
-                      margin: "20px 0",
-                    }}
-                  >
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option>Category</option>
-                      <option value="1BHK">1BHK</option>
-                      <option value="2BHK">2BHK</option>
-                      <option value="3BHK">3BHK</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div
-                    style={{
-                      borderBottom: "1px solid gray",
-                      margin: "20px 0",
-                    }}
-                  >
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                    >
-                      <option>Duration</option>
-                      <option value="1BHK">Month</option>
-                      <option value="2BHK">Day</option>
-                      <option value="3BHK">Year</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <input
-                    type="text"
-                    // onChange={handleChange}
-                    className="property-input"
-                    placeholder="Price*"
-                    required
-                  />
-                </div>
-                <div className="col-md-3 d-flex align-items-center">
-                  <AiFillDelete
-                    className="icon"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => removePlan(id)}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        <div className="form-footer">
-          <button type="submit" className="saveproperty-btn">
-            Save
-          </button>
-          <button className="cancel-btn">Cancel</button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

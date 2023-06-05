@@ -78,7 +78,7 @@ const Brands = () => {
               <Tr>
                 <Th>Name</Th>
                 <Th>Description</Th>
-                <Th>Order</Th>
+                {/* <Th>Order</Th> */}
                 <Th>Edit</Th>
                 <Th>Delete</Th>
               </Tr>
@@ -101,8 +101,8 @@ const Brands = () => {
                 brands?.map((brand) => (
                   <Tr key={brand._id} id={brand._id}>
                     <Td>{brand.name}</Td>
-                    <Td>{brand.description}</Td>
-                    <Td>{brand.order}</Td>
+                    <Td className="tableDescription">{brand.description}</Td>
+                    {/* <Td>{brand.order}</Td> */}
                     <Td>
                       <Link to={`/editbrand/${brand._id}`}>
                         <AiFillEdit

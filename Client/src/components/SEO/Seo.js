@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import Addpropertybtn from "../add-new-btn/Addpropertybtn";
 import { Link, useNavigate } from "react-router-dom";
+import "./Seo.css";
 import {
   Table,
   Thead,
@@ -98,9 +99,9 @@ function Seo() {
                   <Tr key={seo._id} id={seo._id}>
                     <Td>{seo.path}</Td>
                     <Td>{seo.title}</Td>
-                    <Td>{seo.description}</Td>
+                    <Td className="tableDescription">{seo.description}</Td>
                     <Td>
-                      <Link to={`/editseo/${seo._id}`}>
+                      <Link to={`/seo/editseo/${seo._id}`}>
                         <AiFillEdit
                           style={{ fontSize: "22px", cursor: "pointer" }}
                         />

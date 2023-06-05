@@ -109,8 +109,8 @@ select {
   cursor: pointer;
 }
 .img-drop-box {
-  border: 1px solid #d4d1d1;
-  padding: 20px 20px 0;
+  /* border: 1px solid #d4d1d1;
+  padding: 20px 20px 0; */
   border-radius: 6px;
 }
 .searchWrapper {
@@ -122,6 +122,24 @@ select {
 }
 .multiSelectContainer {
   height: 32px;
+}
+.tableDescription {
+    word-wrap: break-word;
+    white-space: normal;
+}
+.react-dropdown-select {
+  border: none !important;
+}
+.react-dropdown-select-content {
+  height: 46px;
+  font-size: 20px;
+}
+.react-dropdown-select-dropdown-handle {
+  margin-top: 23px !important;
+}
+.react-dropdown-select-option {
+  height: 39px;
+  align-items: center;
 }
 
 /* .App {
