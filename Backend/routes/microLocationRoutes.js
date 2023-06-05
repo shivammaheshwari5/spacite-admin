@@ -4,11 +4,13 @@ const {
   getMicroLocation,
   postMicroLocation,
   deleteMicroLocation,
+  getMicrolocationByCity,
 } = require("../controllers/microlocationController");
 const router = express.Router();
 
 router
   .get("/microlocations", protect, getMicroLocation)
+  .post("/microbycity", protect, getMicrolocationByCity)
   .post("/microlocations", protect, postMicroLocation)
   .delete("/delete/:microlocationId", protect, deleteMicroLocation);
 

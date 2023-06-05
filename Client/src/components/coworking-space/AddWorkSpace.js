@@ -1,22 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { AiFillDelete } from "react-icons/ai";
 import { useToast } from "@chakra-ui/react";
 import axios from "axios";
-import EditorConvertToHTML from "../SEO/EditorConvertToHTML";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import {
+  EditorState,
+  convertToRaw,
+  convertFromHTML,
+  ContentState,
+} from "draft-js";
 import Multiselect from "multiselect-react-dropdown";
 import AddDays from "./AddDays";
+import { GpState } from "../../context/context";
+import ImageUpload from "../../ImageUpload";
 
-function Addpropertyform() {
-  const [propertyType, setPropertyType] = useState("Select property type");
+function AddWorkSpace() {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [pic, setPic] = useState();
-  // const [showDiffrentDays, setShowDiffrentDays] = useState(false);
-  // const [satOpen, setSatOpen] = useState(false);
-  // const [sunOpen, setSunOpen] = useState(false);
-  // const [fullOpen, setFullOpen] = useState(false);
-  // const [isClose, setIsClose] = useState(false);
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const { user } = GpState();
+  const toast = useToast();
+  const [updateTable, setUpdateTable] = useState(false);
+  const [country, setCountry] = useState([]);
+  const [states, setStates] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [microlocations, setMicrolocations] = useState([]);
+  const [amenities, setAmenities] = useState([]);
+  const [countryId, setCountryId] = useState(null);
+  const [stateId, setStateId] = useState(null);
+  const [cityId, setCityId] = useState(null);
+  const [brandId, setBrandId] = useState(null);
+  const [microlocationId, setMicrolocationId] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [images, setImages] = useState([]);
+  const [coSpace, setCoSpace] = useState({
+    brand: "",
+    name: "",
+    slug: "",
+    title: "",
+    description: "",
+    url: "",
+    keywords: "",
+    robots: "",
+    twitterTitle: "",
+    twitterDescription: "",
+    graphTitle: "",
+    graphDescription: "",
+    address: "",
+    country: "",
+    state: "",
+    city: "",
+    microLocation: "",
+    longitude: "",
+    lattitude: "",
+    postalCode: "",
+    amenity: "",
+    images: [],
+    seats: "",
+  });
+
   const [open, setOpen] = useState({
     satOpen: false,
     sunOpen: false,
@@ -112,12 +159,6 @@ function Addpropertyform() {
     }
   };
 
-  const toast = useToast();
-  const onchangeHandler = (e) => {
-    setPropertyType(e.target.value);
-    // console.log(e.target.value);
-  };
-
   const handleChange = (e) => {
     e.preventDefault();
   };
@@ -133,67 +174,329 @@ function Addpropertyform() {
     setPlans(deletePlan);
   };
 
-  const fileUpload = async (pics) => {
-    setLoading(true);
-    if (pics === undefined) {
-      toast({
-        title: "Please select an image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      return;
-    }
-
-    if (pics.type === "image/jpeg" || pics.type === "image/png") {
-      const data = new FormData();
-      data.append("file", pics);
-      // data.append("upload_preset", "chat-anyone");
-      // data.append("cloud_name", "dnkzjdhja");
-      // fetch("https://api.cloudinary.com/v1_1/dnkzjdhja/image/upload", {
-      //   method: "post",
-      //   body: data,
-      // })
-      axios
-        .post("/upload", { body: data })
-        .then((res) => {
-          setPic(res.Location);
-          console.log(res.Location);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
+  const onEditorStateChange = (editorState) => {
+    setEditorState(editorState);
+  };
+  let footer_descript_value = convertToRaw(editorState.getCurrentContent())
+    .blocks[0].text;
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCoSpace({
+      ...coSpace,
+      [name]: value,
+    });
+  };
+  const getCityByState = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios
+        .post("/api/city/citybystate", { state_id: stateId }, config)
+        .then((result) => {
+          console.log(result.data);
+          setCities(result.data);
         });
-    } else {
-      toast({
-        title: "Please select an image!",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
       setLoading(false);
-      return;
+    } catch (error) {
+      console.log(error);
     }
   };
+  const getStateByCountry = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios
+        .post("/api/state/statesbycountry", { country_id: countryId }, config)
+        .then((result) => {
+          console.log(result.data);
+          setStates(result.data);
+        });
+      setLoading(false);
+      // setStates(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getMicrolocationByCity = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      await axios
+        .post("/api/microlocation/microbycity", { city_id: cityId }, config)
+        .then((result) => {
+          console.log(result.data);
+          setMicrolocations(result.data);
+        });
+      setLoading(false);
+      // setStates(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getCountry = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.get("/api/allCountry/countries", config);
+      setLoading(false);
+      setCountry(data.country);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getBrandsData = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get("/api/brand/brands");
+      setLoading(false);
+      setBrands(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getAmenities = async () => {
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.get("/api/amenity/amenities", config);
+      setLoading(false);
+      setAmenities(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const onChangeHandler = (e) => {
+    const index = e.target.selectedIndex;
+    const el = e.target.childNodes[index];
+    const option = el.getAttribute("id");
+    const option1 = el.getAttribute("id");
+    const option2 = el.getAttribute("id");
+    const option3 = el.getAttribute("id");
+    const { name, value } = e.target;
+    setCoSpace({
+      ...coSpace,
+      [name]: value,
+    });
+    setCountryId(option);
+    setStateId(option1);
+    setCityId(option2);
+    setBrandId(option3);
+  };
+  const previewFile = (data) => {
+    const allimages = images;
+    setImages(allimages.concat(data));
+  };
 
+  const uploadFile = (files) => {
+    const formData = new FormData();
+    setProgress(0);
+    files.forEach((file) => {
+      formData.append("files", file, file.name);
+    });
+    axios
+      .post("/upload-image", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        onUploadProgress: (progressEvent) => {
+          setProgress(
+            parseInt(
+              Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            )
+          );
+        },
+      })
+      .then((res) => {
+        previewFile(res.data);
+        // setTimeout(() => {
+        //   setProgress(0);
+        // }, 3000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("sshiva");
+  };
+  console.log(images);
+  const handleSaveWorkSpace = async (e) => {
+    e.preventDefault();
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.post(
+        "/api/workSpace/workSpaces",
+        {
+          name: coSpace.name,
+          description: footer_descript_value,
+          images: images,
+          // amenties,
+          seo: {
+            title: coSpace.title,
+            description: coSpace.description,
+            robots: coSpace.robots,
+            keywords: coSpace.keywords,
+            url: coSpace.url,
+            // status,
+            twitter: {
+              title: coSpace.twitterTitle,
+              description: coSpace.twitterDescription,
+            },
+            open_graph: {
+              title: coSpace.graphTitle,
+              description: coSpace.graphDescription,
+            },
+          },
+          location: {
+            address: coSpace.address,
+            country: countryId,
+            state: stateId,
+            city: cityId,
+            micro_location: microlocationId,
+            latitude: coSpace.lattitude,
+            longitude: coSpace.longitude,
+          },
+          // hours_of_operation: {
+          //   monday: {
+          //     from,
+          //     to,
+          //   },
+          //   tuesday: {
+          //     from,
+          //     to,
+          //   },
+          //   wednesday: {
+          //     from,
+          //     to,
+          //   },
+          //   thursday: {
+          //     from,
+          //     to,
+          //   },
+          //   friday: {
+          //     from,
+          //     to,
+          //   },
+          //   saturday: {
+          //     from,
+          //     to,
+          //   },
+          //   sunday: {
+          //     from,
+          //     to,
+          //   },
+          // },
+          no_of_seats: coSpace.seats,
+          // plans: [
+          //   {
+          //     duration,
+          //     time_period,
+          //     price,
+          //     number_of_items,
+          //   },
+          // ],
+
+          // status,
+          brand: brandId,
+          slug: coSpace.slug,
+        },
+        config
+      );
+      setCoSpace({
+        brand: "",
+        name: "",
+        slug: "",
+        title: "",
+        description: "",
+        url: "",
+        keywords: "",
+        robots: "",
+        twitterTitle: "",
+        twitterDescription: "",
+        graphTitle: "",
+        graphDescription: "",
+        address: "",
+        country: "",
+        state: "",
+        city: "",
+        microLocation: "",
+        longitude: "",
+        lattitude: "",
+        postalCode: "",
+        amenity: "",
+        images: [],
+        seats: "",
+      });
+      setUpdateTable((prev) => !prev);
+      // navigate("/seo");
+      toast({
+        title: "Saved Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the Search Results",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+  useEffect(() => {
+    getCountry();
+    getBrandsData();
+    getAmenities();
+  }, []);
+  console.log(brandId);
   return (
     <div className="container form-box">
-      <form style={{ textAlign: "left" }}>
+      <form style={{ textAlign: "left" }} onSubmit={handleSaveWorkSpace}>
         <div className="container">
           <div className="row">
             <div className="col-md-6">
               <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
                 <select
                   className="form-select"
+                  name="brand"
                   aria-label="Default select example"
+                  value={coSpace.brand}
+                  onChange={onChangeHandler}
                 >
                   <option>Select a brand</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  {brands?.map((brand) => (
+                    <option id={brand._id} key={brand._id} value={brand.name}>
+                      {brand.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -202,12 +505,23 @@ function Addpropertyform() {
                 className="property-input"
                 type="text"
                 placeholder="Name*"
+                name="name"
+                value={coSpace.name}
+                onChange={handleInputChange}
                 required
               />
             </div>
           </div>
           <div className="row">
-            <div className="col-md-12">{/* <EditorConvertToHTML /> */}</div>
+            <div className="col-md-12">
+              <Editor
+                editorState={editorState}
+                toolbarClassName="toolbarClassName"
+                wrapperClassName="wrapperClassName"
+                editorClassName="editorClassName"
+                onEditorStateChange={onEditorStateChange}
+              />
+            </div>
           </div>
           <h4>Slug Update</h4>
           <div className="row">
@@ -216,6 +530,9 @@ function Addpropertyform() {
                 className="property-input"
                 type="text"
                 placeholder="Slug"
+                value={coSpace.slug}
+                name="slug"
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -226,6 +543,9 @@ function Addpropertyform() {
                 type="text"
                 className="property-input"
                 placeholder="Title"
+                name="title"
+                value={coSpace.title}
+                onChange={handleInputChange}
               />
             </div>
             <div className="col-md-3">
@@ -233,6 +553,9 @@ function Addpropertyform() {
                 type="text"
                 className="property-input"
                 placeholder="Description"
+                name="description"
+                value={coSpace.description}
+                onChange={handleInputChange}
               />
             </div>
             <div className="col-md-3">
@@ -240,6 +563,9 @@ function Addpropertyform() {
                 type="text"
                 className="property-input"
                 placeholder="Robots"
+                name="robots"
+                value={coSpace.robots}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -249,16 +575,29 @@ function Addpropertyform() {
                 type="text"
                 className="property-input"
                 placeholder="Keywords"
+                name="keywords"
+                value={coSpace.keywords}
+                onChange={handleInputChange}
               />
             </div>
             <div className="col-md-3">
-              <input type="text" className="property-input" placeholder="Url" />
+              <input
+                type="text"
+                className="property-input"
+                placeholder="Url"
+                value={coSpace.url}
+                onChange={handleInputChange}
+                name="url"
+              />
             </div>
             <div className="col-md-3">
               <div style={{ borderBottom: "1px solid gray", margin: "20px 0" }}>
                 <select
                   className="form-select"
                   aria-label="Default select example"
+                  value={coSpace.status}
+                  name="status"
+                  onChange={handleInputChange}
                 >
                   <option>Status</option>
                   <option value="active">Active</option>
@@ -273,12 +612,18 @@ function Addpropertyform() {
                 type="text"
                 placeholder="Twitter title"
                 className="property-input"
+                name="twitterTitle"
+                value={coSpace.twitterTitle}
+                onChange={handleInputChange}
               />
             </div>
             <div className="col-md-3">
               <input
                 type="text"
                 placeholder="Twitter description"
+                name="twitterDescription"
+                value={coSpace.twitterDescription}
+                onChange={handleInputChange}
                 className="property-input"
               />
             </div>
@@ -289,6 +634,9 @@ function Addpropertyform() {
                 type="text"
                 placeholder="Open graph title"
                 className="property-input"
+                name="graphTitle"
+                value={coSpace.graphTitle}
+                onChange={handleInputChange}
               />
             </div>
             <div className="col-md-3">
@@ -296,6 +644,9 @@ function Addpropertyform() {
                 type="text"
                 placeholder="Open graph description"
                 className="property-input"
+                value={coSpace.graphDescription}
+                name="graphDescription"
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -307,6 +658,9 @@ function Addpropertyform() {
                 rows="2"
                 className="property-input"
                 placeholder="Address*"
+                name="address"
+                value={coSpace.address}
+                onChange={handleInputChange}
                 required
               ></textarea>
             </div>
@@ -315,11 +669,22 @@ function Addpropertyform() {
                 <select
                   className="form-select"
                   aria-label="Default select example"
+                  value={coSpace.country}
+                  onChange={onChangeHandler}
+                  name="country"
+                  onClick={getStateByCountry}
                   required
                 >
                   <option>Select a country*</option>
-                  <option value="India">India</option>
-                  <option value="Ukraine">Ukraine</option>
+                  {country?.map((countryElem) => (
+                    <option
+                      id={countryElem._id}
+                      key={countryElem._id}
+                      value={countryElem.name}
+                    >
+                      {countryElem.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -328,12 +693,22 @@ function Addpropertyform() {
                 <select
                   className="form-select"
                   aria-label="Default select example"
+                  value={coSpace.state}
+                  name="state"
+                  onChange={onChangeHandler}
+                  onClick={getCityByState}
                   required
                 >
                   <option>Select a state*</option>
-                  <option value="Haryana">Haryana</option>
-                  <option value="Delhi">Delhi</option>
-                  <option value="Uttar Pradesh">Uttar Pradesh</option>
+                  {states?.map((stateElem) => (
+                    <option
+                      id={stateElem._id}
+                      key={stateElem._id}
+                      value={stateElem.name}
+                    >
+                      {stateElem.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -342,12 +717,22 @@ function Addpropertyform() {
                 <select
                   className="form-select"
                   aria-label="Default select example"
+                  value={coSpace.city}
+                  onChange={onChangeHandler}
+                  onClick={getMicrolocationByCity}
+                  name="city"
                   required
                 >
                   <option>Select a city*</option>
-                  <option value="Haryana">Gurugram</option>
-                  <option value="Delhi">Delhi</option>
-                  <option value="Uttar Pradesh">Noida</option>
+                  {cities?.map((cityElem) => (
+                    <option
+                      id={cityElem._id}
+                      key={cityElem._id}
+                      value={cityElem.name}
+                    >
+                      {cityElem.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -358,12 +743,21 @@ function Addpropertyform() {
                 <select
                   className="form-select"
                   aria-label="Default select example"
+                  name="microLocation"
+                  value={coSpace.microLocation}
+                  onChange={onChangeHandler}
                   required
                 >
                   <option>Select a microlocation*</option>
-                  <option value="Haryana">Sector 48</option>
-                  <option value="Delhi">Sector 46</option>
-                  <option value="Uttar Pradesh">Sector 49</option>
+                  {microlocations?.map((microLocation) => (
+                    <option
+                      id={microLocation._id}
+                      key={microLocation._id}
+                      value={microLocation.name}
+                    >
+                      {microLocation.name}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -372,6 +766,9 @@ function Addpropertyform() {
                 type="text"
                 placeholder="Lattitude*"
                 className="property-input"
+                name="lattitude"
+                value={coSpace.lattitude}
+                onChange={handleInputChange}
               />
             </div>
             <div className="col-md-3">
@@ -379,6 +776,9 @@ function Addpropertyform() {
                 type="text"
                 placeholder="Longitude*"
                 className="property-input"
+                value={coSpace.longitude}
+                name="longitude"
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -388,40 +788,43 @@ function Addpropertyform() {
                 type="text"
                 className="property-input"
                 placeholder="Postel code"
+                name="postalCode"
+                value={coSpace.postalCode}
+                onChange={handleInputChange}
               />
             </div>
           </div>
           <h4>Amenities</h4>
           <div className="row">
             <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-              />
-              <label className="form-check-label" htmlFor="flexCheckDefault">
-                Parking
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-              />
-              <label className="form-check-label" htmlFor="flexCheckDefault">
-                Lift
-              </label>
+              {amenities?.map((amenity) => (
+                <div key={amenity._id}>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value={coSpace.amenity}
+                    id="flexCheckDefault"
+                    name="amenity"
+                    onChange={handleInputChange}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    {amenity.name}
+                  </label>
+                </div>
+              ))}
             </div>
           </div>
           <h4>Images</h4>
           <div className="row">
-            <input
-              type="file"
-              onChange={(e) => fileUpload(e.target.files[0])}
-              accept="image/*"
+            <ImageUpload
+              images={images}
+              setImages={setImages}
+              progress={progress}
+              setProgress={setProgress}
+              uploadFile={uploadFile}
             />
           </div>
           <div className="row">
@@ -430,6 +833,9 @@ function Addpropertyform() {
                 type="text"
                 placeholder="No. of seats*"
                 className="property-input"
+                name="seats"
+                value={coSpace.seats}
+                onChange={handleInputChange}
                 required
               />
             </div>
@@ -754,7 +1160,7 @@ function Addpropertyform() {
                 <div className="col-md-3">
                   <input
                     type="text"
-                    onChange={handleChange}
+                    // onChange={handleChange}
                     className="property-input"
                     placeholder="Price*"
                     required
@@ -782,4 +1188,4 @@ function Addpropertyform() {
   );
 }
 
-export default Addpropertyform;
+export default AddWorkSpace;

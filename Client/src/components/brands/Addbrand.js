@@ -13,7 +13,6 @@ import Select from "react-dropdown-select";
 import ImageUpload from "../../ImageUpload";
 
 function Addbrand() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [progress, setProgress] = useState(0);

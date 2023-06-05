@@ -100,9 +100,8 @@ const EditBrand = () => {
     setEditorState(editorState);
   };
 
-  const footer_descrip = draftToHtml(
-    convertToRaw(editorState.getCurrentContent())
-  );
+  const footer_descrip = convertToRaw(editorState.getCurrentContent()).blocks[0]
+    .text;
 
   const handleEditBrands = async (e) => {
     e.preventDefault();
@@ -112,7 +111,23 @@ const EditBrand = () => {
         description,
         order,
         image: images[0],
-        seo,
+        seo: {
+          title: seo.title,
+          description: seo.description,
+          footer_title: seo.footer_title,
+          footer_description: footer_descrip,
+          robots: seo.robots,
+          keywords: seo.keywords,
+          url: seo.url,
+          twitter: {
+            title: seo.twitter.title,
+            description: seo.twitter.description,
+          },
+          open_graph: {
+            title: seo.open_graph.title,
+            description: seo.open_graph.description,
+          },
+        },
         cities: selectedOptions,
         type,
         slug,
@@ -144,7 +159,9 @@ const EditBrand = () => {
     }
   };
   useEffect(() => {
-    const contentState = ContentState.createFromText(seo.footer_description);
+    const contentState = ContentState.createFromText(
+      seo.footer_description || "empty"
+    );
     const initialEditorState = EditorState.createWithContent(contentState);
     setEditorState(initialEditorState);
   }, [brands]);

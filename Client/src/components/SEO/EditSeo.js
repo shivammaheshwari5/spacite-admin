@@ -33,10 +33,8 @@ const initialValue = {
 
 const EditSeo = () => {
   const [loading, setLoading] = useState(false);
-  const [editorState, setEditorState] = useState(
-    EditorState.createWithContent(
-      ContentState.createFromBlockArray(convertFromHTML(""))
-    )
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
   );
   const [seos, setSeos] = useState(initialValue);
   const {
@@ -76,9 +74,8 @@ const EditSeo = () => {
     setEditorState(editorState);
   };
 
-  const footer_descrip = draftToHtml(
-    convertToRaw(editorState.getCurrentContent())
-  );
+  const footer_descrip = convertToRaw(editorState.getCurrentContent()).blocks[0]
+    .text;
 
   const handleEditSeo = async (e) => {
     e.preventDefault();
@@ -93,7 +90,7 @@ const EditSeo = () => {
         keywords,
         path,
         footer_title,
-        footer_description,
+        footer_description: footer_descrip,
         twitter,
         open_graph,
       });
@@ -111,7 +108,13 @@ const EditSeo = () => {
       console.log(error);
     }
   };
-
+  useEffect(() => {
+    const contentState = ContentState.createFromText(
+      footer_description || "Empty"
+    );
+    const initialEditorState = EditorState.createWithContent(contentState);
+    setEditorState(initialEditorState);
+  }, [seos]);
   const getSeoDataById = async () => {
     try {
       setLoading(true);

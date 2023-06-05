@@ -39,5 +39,16 @@ const deleteMicroLocation = asyncHandler(async (req, res) => {
       });
     });
 });
-
-module.exports = { getMicroLocation, postMicroLocation, deleteMicroLocation };
+const getMicrolocationByCity = asyncHandler(async (req, res) => {
+  MicroLocation.find({ city: req.body.city_id })
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => console.log(err));
+});
+module.exports = {
+  getMicroLocation,
+  postMicroLocation,
+  deleteMicroLocation,
+  getMicrolocationByCity,
+};
