@@ -28,6 +28,7 @@ import {
 import axios from "axios";
 import { GpState } from "../../context/context";
 import Delete from "../delete/Delete";
+import { config, postConfig } from "../../services/Services";
 
 function City() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -43,7 +44,7 @@ function City() {
   const [states, setStates] = useState([]);
   const [countryId, setCountryId] = useState(null);
   const [stateId, setStateId] = useState(null);
-  const { user, country, setCountry } = GpState();
+  const { country, setCountry } = GpState();
 
   const [selectItemNum, setSelectItemNum] = useState(10);
   const itemsPerPageHandler = (e) => {
@@ -67,12 +68,6 @@ function City() {
 
   const handleSaveCity = async () => {
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.post(
         "/api/city/cities",
         {
@@ -81,7 +76,7 @@ function City() {
           country: countryId,
           state: stateId,
         },
-        config
+        postConfig
       );
       setCityfield({
         name: "",
@@ -112,7 +107,7 @@ function City() {
   const getCity = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/city/cities");
+      const { data } = await axios.get("/api/city/cities", config);
       setLoading(false);
       setCities(data);
     } catch (error) {
@@ -122,13 +117,13 @@ function City() {
   const getStateByCountry = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
+
       await axios
-        .post("/api/state/statesbycountry", { country_id: countryId }, config)
+        .post(
+          "/api/state/statesbycountry",
+          { country_id: countryId },
+          postConfig
+        )
         .then((result) => {
           console.log(result.data);
           setStates(result.data);
@@ -142,11 +137,7 @@ function City() {
   const getCountry = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
+
       const { data } = await axios.get("/api/allCountry/countries", config);
       setLoading(false);
       setCountry(data.country);
@@ -156,11 +147,6 @@ function City() {
   };
   const handleDeleteCity = async (id) => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.delete(`/api/city/delete/${id}`, config);
       setUpdateTable((prev) => !prev);
       toast({

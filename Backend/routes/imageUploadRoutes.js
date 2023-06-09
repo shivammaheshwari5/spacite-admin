@@ -9,8 +9,8 @@ const {
 const { protect } = require("../middleware/authMiddleware");
 const router = express.Router();
 
-router.route("/upload").post(uploadImage);
-router.route("/multiple-upload").post(multipleUploadImage);
+router.route("/upload").post(protect, uploadImage);
+router.route("/multiple-upload").post(protect, multipleUploadImage);
 router.route("/getimages").get(protect, getImages);
-router.route("/delete/:imageId").delete(deleteImages);
+router.route("/delete/:imageId").delete(protect, deleteImages);
 module.exports = router;

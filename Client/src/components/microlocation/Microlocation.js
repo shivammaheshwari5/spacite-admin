@@ -28,6 +28,7 @@ import {
 import axios from "axios";
 import { GpState } from "../../context/context";
 import Delete from "../delete/Delete";
+import { config, postConfig } from "../../services/Services";
 
 function City() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,7 +47,7 @@ function City() {
   const [stateId, setStateId] = useState(null);
   const [cityId, setCityId] = useState(null);
   const [microlocations, setMicrolocations] = useState([]);
-  const { user, country, setCountry } = GpState();
+  const { country, setCountry } = GpState();
 
   const [selectItemNum, setSelectItemNum] = useState(10);
   const itemsPerPageHandler = (e) => {
@@ -70,12 +71,6 @@ function City() {
 
   const handleSaveMicrolocations = async () => {
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.post(
         "/api/microlocation/microlocations",
         {
@@ -85,7 +80,7 @@ function City() {
           state: stateId,
           city: cityId,
         },
-        config
+        postConfig
       );
       setMicrolocationfield({
         name: "",
@@ -117,13 +112,8 @@ function City() {
   const getCityByState = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       await axios
-        .post("/api/city/citybystate", { state_id: stateId }, config)
+        .post("/api/city/citybystate", { state_id: stateId }, postConfig)
         .then((result) => {
           console.log(result.data);
           setCities(result.data);
@@ -136,19 +126,17 @@ function City() {
   const getStateByCountry = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       await axios
-        .post("/api/state/statesbycountry", { country_id: countryId }, config)
+        .post(
+          "/api/state/statesbycountry",
+          { country_id: countryId },
+          postConfig
+        )
         .then((result) => {
           console.log(result.data);
           setStates(result.data);
         });
       setLoading(false);
-      // setStates(data);
     } catch (error) {
       console.log(error);
     }
@@ -156,11 +144,6 @@ function City() {
   const getCountry = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.get("/api/allCountry/countries", config);
       setLoading(false);
       setCountry(data.country);
@@ -171,11 +154,6 @@ function City() {
   const getMicroLocation = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.get(
         "/api/microlocation/microlocations",
         config
@@ -188,11 +166,6 @@ function City() {
   };
   const handleDeleteMicrolocations = async (id) => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.delete(
         `/api/microlocation/delete/${id}`,
         config

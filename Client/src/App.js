@@ -20,6 +20,7 @@ import AddSeoForm from "./components/SEO/AddSeoForm";
 import EditSeo from "./components/SEO/EditSeo";
 import Addbrand from "./components/brands/Addbrand";
 import EditBrand from "./components/brands/EditBrand";
+import EditWorkSpace from "./components/coworking-space/EditWorkSpace";
 function App() {
   let { isLogin } = GpState();
 
@@ -194,6 +195,16 @@ function App() {
               element={
                 isLogin ? (
                   [<Sidebar key={32} />, <EditBrand key={33} />]
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/editworkspace/:id"
+              element={
+                isLogin ? (
+                  [<Sidebar key={34} />, <EditWorkSpace key={35} />]
                 ) : (
                   <Navigate to="/" />
                 )

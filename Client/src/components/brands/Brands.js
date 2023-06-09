@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import { Link } from "react-router-dom";
 import Addpropertybtn from "../add-new-btn/Addpropertybtn";
-import { useNavigate } from "react-router-dom";
 import {
   Table,
   Thead,
@@ -17,18 +16,18 @@ import {
 import axios from "axios";
 import Delete from "../delete/Delete";
 import { AiFillEdit } from "react-icons/ai";
+import { config } from "../../services/Services";
 
 const Brands = () => {
   const [loading, setLoading] = useState(false);
   const [brands, setBrands] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
   const toast = useToast();
-  const navigate = useNavigate();
 
   const getBrandsData = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/brand/brands");
+      const { data } = await axios.get("/api/brand/brands", config);
       setLoading(false);
       setBrands(data);
     } catch (error) {
@@ -41,7 +40,7 @@ const Brands = () => {
 
   const handleDeleteBrands = async (id) => {
     try {
-      const { data } = await axios.delete(`/api/brand/delete/${id}`);
+      const { data } = await axios.delete(`/api/brand/delete/${id}`, config);
       setUpdateTable((prev) => !prev);
       toast({
         title: "Deleted Successfully!",

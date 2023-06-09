@@ -28,9 +28,9 @@ import {
 import Delete from "../delete/Delete";
 import "./Country.css";
 import EditCountry from "./EditCountry";
-import { Link } from "react-router-dom";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
+import { config, postConfig } from "../../services/Services";
 
 function Country() {
   const { country, setCountry, user } = GpState();
@@ -54,8 +54,6 @@ function Country() {
   const firstIndex = lastIndex - recordsPerPage;
   const records = country?.slice(firstIndex, lastIndex);
   const nPage = Math.ceil(country?.length / recordsPerPage);
-  // console.log(records);
-  // const numbers = [...Array(nPage + 1).keys()].slice(1);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -77,12 +75,6 @@ function Country() {
     }
 
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.post(
         "/api/allCountry/country",
         {
@@ -91,7 +83,7 @@ function Country() {
           dial_code: countryfield.dialCode,
           iso_code: countryfield.isoCode,
         },
-        config
+        postConfig
       );
       setCountryfield({
         name: "",
@@ -123,11 +115,6 @@ function Country() {
   const getCountry = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.get("/api/allCountry/countries", config);
       setLoading(false);
       setCountry(data.country);
@@ -138,11 +125,6 @@ function Country() {
 
   const handleDeleteCountry = async (id) => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.delete(
         `/api/allCountry/delete/${id}`,
         config
@@ -171,21 +153,21 @@ function Country() {
     getCountry();
   }, [updateTable]);
 
-  if(firstIndex > 0){
+  if (firstIndex > 0) {
     var prePage = () => {
       if (curPage !== firstIndex) {
         setCurPage(curPage - 1);
       }
     };
   }
-  
- if(records?.length === selectItemNum){
-  var nextPage = () => {
-    if (curPage !== lastIndex) {
-      setCurPage(curPage + 1);
-    }
-  };
- }
+
+  if (records?.length === selectItemNum) {
+    var nextPage = () => {
+      if (curPage !== lastIndex) {
+        setCurPage(curPage + 1);
+      }
+    };
+  }
 
   const getFirstPage = () => {
     setCurPage(1);
@@ -328,7 +310,8 @@ function Country() {
               </select>
             </div>
             <div style={{ width: "110px" }}>
-              {firstIndex + 1} - {records?.length + firstIndex} of {country?.length}
+              {firstIndex + 1} - {records?.length + firstIndex} of{" "}
+              {country?.length}
             </div>
 
             <div className="page-item">

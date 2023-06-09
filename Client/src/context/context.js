@@ -18,7 +18,7 @@ const AppProvider = ({ children }) => {
     if (!userInfo) {
       navigate("/");
     }
-  }, [navigate]);
+  }, []);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);

@@ -13,7 +13,7 @@ const coworkingSpaceModel = mongoose.Schema(
     amenties: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Amenty",
+        ref: "Amenity",
       },
     ],
     seo: {
@@ -92,76 +92,12 @@ const coworkingSpaceModel = mongoose.Schema(
       },
     },
     hours_of_operation: {
-      monday: {
+      monday_friday: {
         from: String,
         to: String,
         should_show: {
           type: Boolean,
           default: true,
-        },
-        is_closed: {
-          type: Boolean,
-          default: false,
-        },
-        is_open_24: {
-          type: Boolean,
-          default: false,
-        },
-      },
-      tuesday: {
-        from: String,
-        to: String,
-        should_show: {
-          type: Boolean,
-          default: false,
-        },
-        is_closed: {
-          type: Boolean,
-          default: false,
-        },
-        is_open_24: {
-          type: Boolean,
-          default: false,
-        },
-      },
-      wednesday: {
-        from: String,
-        to: String,
-        should_show: {
-          type: Boolean,
-          default: false,
-        },
-        is_closed: {
-          type: Boolean,
-          default: false,
-        },
-        is_open_24: {
-          type: Boolean,
-          default: false,
-        },
-      },
-      thursday: {
-        from: String,
-        to: String,
-        should_show: {
-          type: Boolean,
-          default: false,
-        },
-        is_closed: {
-          type: Boolean,
-          default: false,
-        },
-        is_open_24: {
-          type: Boolean,
-          default: false,
-        },
-      },
-      friday: {
-        from: String,
-        to: String,
-        should_show: {
-          type: Boolean,
-          default: false,
         },
         is_closed: {
           type: Boolean,
@@ -208,17 +144,13 @@ const coworkingSpaceModel = mongoose.Schema(
     no_of_seats: Number,
     plans: [
       {
-        duration: {
-          type: String,
-          enum: ["month", "year", "week", "day", "hour"],
-          default: "hour",
+        id: Number,
+        category: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "PropertyType",
         },
-        time_period: Number,
+        duration: String,
         price: Number,
-        number_of_items: {
-          type: Number,
-          default: 1,
-        },
         should_show: {
           type: Boolean,
           default: true,

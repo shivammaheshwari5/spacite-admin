@@ -28,6 +28,7 @@ import {
 import axios from "axios";
 import { GpState } from "../../context/context";
 import Delete from "../delete/Delete";
+import { postConfig, config } from "../../services/Services";
 
 function State() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -40,7 +41,7 @@ function State() {
     description: "",
   });
   const [countryId, setCountryId] = useState(null);
-  const { user, country, setCountry } = GpState();
+  const { country, setCountry } = GpState();
 
   const [selectItemNum, setSelectItemNum] = useState(10);
   const itemsPerPageHandler = (e) => {
@@ -64,12 +65,6 @@ function State() {
 
   const handleSaveStates = async () => {
     try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.post(
         "/api/state/states",
         {
@@ -77,7 +72,7 @@ function State() {
           description: statefield.description,
           country: countryId,
         },
-        config
+        postConfig
       );
       setStatefield({
         name: "",
@@ -108,11 +103,6 @@ function State() {
   const getState = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.get("/api/state/states", config);
       setLoading(false);
       setStates(data);
@@ -123,11 +113,6 @@ function State() {
   const getCountry = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.get("/api/allCountry/countries", config);
       setLoading(false);
       setCountry(data.country);
@@ -137,11 +122,6 @@ function State() {
   };
   const handleDeleteStates = async (id) => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.delete(`/api/state/delete/${id}`, config);
       setUpdateTable((prev) => !prev);
       toast({
@@ -179,29 +159,29 @@ function State() {
     setCountryId(option);
   };
 
-  if(firstIndex > 0){
+  if (firstIndex > 0) {
     var prePage = () => {
       if (curPage !== firstIndex) {
         setCurPage(curPage - 1);
       }
     };
   }
-  
- if(records?.length === selectItemNum){
-  var nextPage = () => {
-    if (curPage !== lastIndex) {
-      setCurPage(curPage + 1);
-    }
+
+  if (records?.length === selectItemNum) {
+    var nextPage = () => {
+      if (curPage !== lastIndex) {
+        setCurPage(curPage + 1);
+      }
+    };
+  }
+
+  const getFirstPage = () => {
+    setCurPage(1);
   };
- }
 
- const getFirstPage = () => {
-  setCurPage(1);
-};
-
-const getLastPage = () => {
-  setCurPage(nPage);
-};
+  const getLastPage = () => {
+    setCurPage(nPage);
+  };
 
   return (
     <>
@@ -220,22 +200,22 @@ const getLastPage = () => {
               <ModalBody>
                 <div className="d-flex justify-content-between">
                   <div className="select-box">
-                  <select
-                  name="country"
-                  value={statefield.country}
-                  onChange={onChangeHandler}
-                >
-                  <option>Select Country</option>
-                  {country?.map((countryElem) => (
-                    <option
-                      id={countryElem._id}
-                      key={countryElem._id}
-                      value={countryElem.name}
+                    <select
+                      name="country"
+                      value={statefield.country}
+                      onChange={onChangeHandler}
                     >
-                      {countryElem.name}
-                    </option>
-                  ))}
-                </select>
+                      <option>Select Country</option>
+                      {country?.map((countryElem) => (
+                        <option
+                          id={countryElem._id}
+                          key={countryElem._id}
+                          value={countryElem.name}
+                        >
+                          {countryElem.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <input
@@ -268,47 +248,47 @@ const getLastPage = () => {
         </div>
       </div>
       <div className="table-box">
-      <div className="table-top-box">State Table</div>
-      <TableContainer marginTop="60px" variant="striped" color="teal">
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Country</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {loading ? (
+        <div className="table-top-box">State Table</div>
+        <TableContainer marginTop="60px" variant="striped" color="teal">
+          <Table variant="simple">
+            <Thead>
               <Tr>
-                <Td>
-                  <Spinner
-                    size="xl"
-                    w={20}
-                    h={20}
-                    marginLeft="180px"
-                    alignSelf="center"
-                    margin="auto"
-                  />
-                </Td>
+                <Th>Name</Th>
+                <Th>Country</Th>
+                <Th>Delete</Th>
               </Tr>
-            ) : (
-              records?.map((state) => (
-                <Tr key={state._id} id={state._id}>
-                  <Td>{state.name}</Td>
-                  <Td>{state.country?.name}</Td>
+            </Thead>
+            <Tbody>
+              {loading ? (
+                <Tr>
                   <Td>
-                    <Delete
-                      handleFunction={() => handleDeleteStates(state._id)}
+                    <Spinner
+                      size="xl"
+                      w={20}
+                      h={20}
+                      marginLeft="180px"
+                      alignSelf="center"
+                      margin="auto"
                     />
                   </Td>
                 </Tr>
-              ))
-            )}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <nav className="mt-5">
+              ) : (
+                records?.map((state) => (
+                  <Tr key={state._id} id={state._id}>
+                    <Td>{state.name}</Td>
+                    <Td>{state.country?.name}</Td>
+                    <Td>
+                      <Delete
+                        handleFunction={() => handleDeleteStates(state._id)}
+                      />
+                    </Td>
+                  </Tr>
+                ))
+              )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <nav className="mt-5">
           <div
             className="d-flex align-items-center justify-content-between"
             style={{ width: "51%" }}
@@ -330,7 +310,8 @@ const getLastPage = () => {
               </select>
             </div>
             <div style={{ width: "110px" }}>
-              {firstIndex + 1} - {records?.length + firstIndex} of {states?.length}
+              {firstIndex + 1} - {records?.length + firstIndex} of{" "}
+              {states?.length}
             </div>
 
             <div className="page-item">
