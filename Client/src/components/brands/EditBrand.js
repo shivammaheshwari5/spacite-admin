@@ -5,15 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import {
-  EditorState,
-  convertToRaw,
-  convertFromHTML,
-  ContentState,
-} from "draft-js";
-import draftToHtml from "draftjs-to-html";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
 import Select from "react-dropdown-select";
 import ImageUpload from "../../ImageUpload";
+import { config, postConfig } from "../../services/Services";
 
 const initialValue = {
   name: "",
@@ -106,33 +101,37 @@ const EditBrand = () => {
   const handleEditBrands = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`/api/brand/brands/${id}`, {
-        name,
-        description,
-        order,
-        image: images[0],
-        seo: {
-          title: seo.title,
-          description: seo.description,
-          footer_title: seo.footer_title,
-          footer_description: footer_descrip,
-          robots: seo.robots,
-          keywords: seo.keywords,
-          url: seo.url,
-          twitter: {
-            title: seo.twitter.title,
-            description: seo.twitter.description,
+      const { data } = await axios.put(
+        `/api/brand/brands/${id}`,
+        {
+          name,
+          description,
+          order,
+          image: images[0],
+          seo: {
+            title: seo.title,
+            description: seo.description,
+            footer_title: seo.footer_title,
+            footer_description: footer_descrip,
+            robots: seo.robots,
+            keywords: seo.keywords,
+            url: seo.url,
+            twitter: {
+              title: seo.twitter.title,
+              description: seo.twitter.description,
+            },
+            open_graph: {
+              title: seo.open_graph.title,
+              description: seo.open_graph.description,
+            },
           },
-          open_graph: {
-            title: seo.open_graph.title,
-            description: seo.open_graph.description,
-          },
+          cities: selectedOptions,
+          type,
+          slug,
+          should_show_on_home,
         },
-        cities: selectedOptions,
-        type,
-        slug,
-        should_show_on_home,
-      });
+        postConfig
+      );
       setBrands(data);
       setUpdateTable((prev) => !prev);
       navigate("/brands");
@@ -151,7 +150,7 @@ const EditBrand = () => {
   const getBrandsDataById = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/brand/brands/${id}`);
+      const { data } = await axios.get(`/api/brand/brands/${id}`, config);
       setLoading(false);
       setBrands(data);
     } catch (error) {
@@ -168,7 +167,7 @@ const EditBrand = () => {
   const getCity = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/city/cities");
+      const { data } = await axios.get("/api/city/cities", config);
       setLoading(false);
       setAllCity(data);
     } catch (error) {
@@ -216,7 +215,6 @@ const EditBrand = () => {
     console.log("sshiva");
   };
 
-  console.log(footer_descrip);
   return (
     <>
       <div className="container form-box">

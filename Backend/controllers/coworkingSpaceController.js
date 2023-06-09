@@ -11,7 +11,6 @@ const postWorkSpaces = asyncHandler(async (req, res) => {
     amenties,
     location,
     hours_of_operation,
-    facilities,
     plans,
     slug,
     seo,
@@ -29,7 +28,6 @@ const postWorkSpaces = asyncHandler(async (req, res) => {
       amenties,
       location,
       hours_of_operation,
-      facilities,
       plans,
       slug,
       seo,
@@ -43,11 +41,25 @@ const postWorkSpaces = asyncHandler(async (req, res) => {
 });
 
 const getWorkSpaces = asyncHandler(async (req, res) => {
-  await CoworkingSpace.find({})
-    .then((result) => {
-      res.send(result);
-    })
-    .catch((err) => console.log(err));
+  try {
+    const coworkingSpace = await CoworkingSpace.find()
+      .populate("location.country", "name")
+      .populate("location.state", "name")
+      .populate("location.city", "name")
+      .populate("location.micro_location", "name")
+      .populate("plans.category", "name")
+      .populate("brand", "name")
+      .populate("amenties", "name")
+      .exec();
+
+    if (!coworkingSpace) {
+      return res.status(404).json({ message: "Coworking space not found" });
+    }
+
+    res.json(coworkingSpace);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 const editWorkSpaces = asyncHandler(async (req, res) => {
   const {
@@ -59,7 +71,6 @@ const editWorkSpaces = asyncHandler(async (req, res) => {
     amenties,
     location,
     hours_of_operation,
-    facilities,
     plans,
     slug,
     seo,
@@ -67,7 +78,7 @@ const editWorkSpaces = asyncHandler(async (req, res) => {
     is_popular,
   } = req.body;
   const { workSpaceId } = req.params;
-  CoworkingSpace.findByIdAndUpdate(
+  await CoworkingSpace.findByIdAndUpdate(
     workSpaceId,
     {
       name,
@@ -78,7 +89,6 @@ const editWorkSpaces = asyncHandler(async (req, res) => {
       amenties,
       location,
       hours_of_operation,
-      facilities,
       plans,
       slug,
       seo,
@@ -108,9 +118,27 @@ const deleteWorkSpaces = asyncHandler(async (req, res) => {
     });
 });
 
+const getWorkSpacesById = asyncHandler(async (req, res) => {
+  try {
+    const workSpace = await CoworkingSpace.findById(req.params.workSpaceId)
+      // .populate("location.country", "name")
+      // .populate("location.state", "name")
+      // .populate("location.city", "name")
+      // .populate("location.micro_location", "name")
+      // .populate("plans.category", "name")
+      // .populate("brand", "name")
+      // .populate("amenties", "name")
+      .exec();
+    res.status(200).json(workSpace);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
 module.exports = {
   postWorkSpaces,
   editWorkSpaces,
   deleteWorkSpaces,
   getWorkSpaces,
+  getWorkSpacesById,
 };

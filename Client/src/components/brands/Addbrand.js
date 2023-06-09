@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
-// import EditorConvertToHTML from "../SEO/EditorConvertToHTML";
 import { EditorState, convertToRaw } from "draft-js";
-// import draftToHtml from "draftjs-to-html";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useDisclosure, Spinner, useToast } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { GpState } from "../../context/context";
 import Select from "react-dropdown-select";
 import ImageUpload from "../../ImageUpload";
+import { config, postConfig } from "../../services/Services";
 
 function Addbrand() {
-  // const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [progress, setProgress] = useState(0);
   const [images, setImages] = useState([]);
-  // const { user } = GpState();
   const [brand, setBrand] = useState({
     name: "",
     description: "",
@@ -42,7 +38,6 @@ function Addbrand() {
   const [cities, setCities] = useState([]);
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const navigate = useNavigate();
-  console.log(images[0]);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setBrand({
@@ -54,30 +49,34 @@ function Addbrand() {
   const handleSaveBrand = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/brand/brands", {
-        name: brand.name,
-        description: brand.description,
-        order: brand.order,
-        image: images[0],
-        seo: {
-          title: brand.title,
-          description: brand.descriptionSeo,
-          footer_title: brand.footerTitle,
-          footer_description: footer_descript_value,
-          robots: brand.robots,
-          keywords: brand.keywords,
-          url: brand.path,
-          twitter: {
-            title: brand.twitterTitle,
-            description: brand.twitterDescription,
+      const { data } = await axios.post(
+        "/api/brand/brands",
+        {
+          name: brand.name,
+          description: brand.description,
+          order: brand.order,
+          image: images[0],
+          seo: {
+            title: brand.title,
+            description: brand.descriptionSeo,
+            footer_title: brand.footerTitle,
+            footer_description: footer_descript_value,
+            robots: brand.robots,
+            keywords: brand.keywords,
+            url: brand.path,
+            twitter: {
+              title: brand.twitterTitle,
+              description: brand.twitterDescription,
+            },
+            open_graph: {
+              title: brand.graphTitle,
+              description: brand.graphDescription,
+            },
           },
-          open_graph: {
-            title: brand.graphTitle,
-            description: brand.graphDescription,
-          },
+          cities: selectedOptions,
         },
-        cities: selectedOptions,
-      });
+        postConfig
+      );
       setBrand({
         name: "",
         description: "",
@@ -118,7 +117,7 @@ function Addbrand() {
   const getCity = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/city/cities");
+      const { data } = await axios.get("/api/city/cities", config);
       setLoading(false);
       setCities(data);
     } catch (error) {

@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
-import { AiFillEdit } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
-import Mainpanelnav from "../mainpanel-header/Mainpanelnav"
+import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import {
-  EditorState,
-  convertToRaw,
-  convertFromHTML,
-  ContentState,
-} from "draft-js";
-import draftToHtml from "draftjs-to-html";
+import { EditorState, convertToRaw, ContentState } from "draft-js";
+import { config, postConfig } from "../../services/Services";
 
 const initialValue = {
   page_title: "",
@@ -52,7 +46,6 @@ const EditSeo = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const handleInputChange = (e) => {
-    console.log(e.target.value);
     setSeos({ ...seos, [e.target.name]: e.target.value });
   };
   const handleInputChangeObject = (event, section, property) => {
@@ -77,20 +70,24 @@ const EditSeo = () => {
   const handleEditSeo = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.put(`/api/seo/seos/${id}`, {
-        id,
-        title,
-        page_title,
-        script,
-        description,
-        robots,
-        keywords,
-        path,
-        footer_title,
-        footer_description: footer_descrip,
-        twitter,
-        open_graph,
-      });
+      const { data } = await axios.put(
+        `/api/seo/seos/${id}`,
+        {
+          id,
+          title,
+          page_title,
+          script,
+          description,
+          robots,
+          keywords,
+          path,
+          footer_title,
+          footer_description: footer_descrip,
+          twitter,
+          open_graph,
+        },
+        postConfig
+      );
       setSeos(data);
       setUpdateTable((prev) => !prev);
       navigate("/seo");
@@ -115,7 +112,7 @@ const EditSeo = () => {
   const getSeoDataById = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/seo/seos/${id}`);
+      const { data } = await axios.get(`/api/seo/seos/${id}`, config);
       setLoading(false);
       setSeos(data);
     } catch (error) {
@@ -125,8 +122,6 @@ const EditSeo = () => {
   useEffect(() => {
     getSeoDataById();
   }, [updateTable]);
-  console.log(footer_description);
-  console.log(twitter.title);
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />

@@ -39,7 +39,7 @@ const deleteCity = asyncHandler(async (req, res) => {
 });
 
 const getCityByState = asyncHandler(async (req, res) => {
-  City.find({ state: req.body.state_id })
+  await City.find({ state: req.body.state_id })
     .then((result) => {
       res.send(result);
     })

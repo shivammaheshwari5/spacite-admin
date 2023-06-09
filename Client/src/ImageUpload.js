@@ -12,11 +12,6 @@ const ImageUpload = ({
   setProgress,
   uploadFile,
 }) => {
-  const preventDefaults = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
   const removePreviewImage = (e) => {
     const index = e.target.getAttribute("index");
     const allimages = [];
@@ -57,7 +52,6 @@ const ImageUpload = ({
       input.click();
     });
   }, []);
-  console.log(images);
 
   return (
     <div className="App">

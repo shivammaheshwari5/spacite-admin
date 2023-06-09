@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import Addpropertybtn from "../add-new-btn/Addpropertybtn";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,18 +17,18 @@ import {
 import axios from "axios";
 import Delete from "../delete/Delete";
 import { AiFillEdit } from "react-icons/ai";
+import { config } from "../../services/Services";
 
 function Seo() {
   const [loading, setLoading] = useState(false);
   const [seos, setSeos] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
   const toast = useToast();
-  const navigate = useNavigate();
 
   const getSeoData = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get("/api/seo/seos");
+      const { data } = await axios.get("/api/seo/seos", config);
       setLoading(false);
       setSeos(data);
     } catch (error) {
@@ -41,7 +41,7 @@ function Seo() {
 
   const handleDeleteSeo = async (id) => {
     try {
-      const { data } = await axios.delete(`/api/seo/delete/${id}`);
+      const { data } = await axios.delete(`/api/seo/delete/${id}`, config);
       setUpdateTable((prev) => !prev);
       toast({
         title: "Deleted Successfully!",
@@ -61,7 +61,6 @@ function Seo() {
       });
     }
   };
-  console.log(seos);
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />

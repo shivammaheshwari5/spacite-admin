@@ -13,7 +13,7 @@ router
   .get("/states", protect, getState)
   .post("/statesbycountry", protect, getStateByCountry)
   .post("/states", protect, postState)
-  .put("/states/:stateId", addOrEditState)
+  .put("/states/:stateId", protect, addOrEditState)
   .delete("/delete/:stateId", protect, deleteState);
 
 module.exports = router;

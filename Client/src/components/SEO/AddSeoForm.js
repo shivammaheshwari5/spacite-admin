@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
 import axios from "axios";
 import { useDisclosure, Spinner, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { postConfig } from "../../services/Services";
 
 function AddSeoForm() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -42,25 +41,29 @@ function AddSeoForm() {
   const handleSaveSeo = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post("/api/seo/seos", {
-        title: seo.heading,
-        page_title: seo.title,
-        script: seo.script,
-        description: seo.description,
-        robots: seo.robots,
-        keywords: seo.keywords,
-        path: seo.path,
-        footer_title: seo.footerTitle,
-        footer_description: footer_descript_value,
-        twitter: {
-          title: seo.twitterTitle,
-          description: seo.twitterDescription,
+      const { data } = await axios.post(
+        "/api/seo/seos",
+        {
+          title: seo.heading,
+          page_title: seo.title,
+          script: seo.script,
+          description: seo.description,
+          robots: seo.robots,
+          keywords: seo.keywords,
+          path: seo.path,
+          footer_title: seo.footerTitle,
+          footer_description: footer_descript_value,
+          twitter: {
+            title: seo.twitterTitle,
+            description: seo.twitterDescription,
+          },
+          open_graph: {
+            title: seo.graphTitle,
+            description: seo.graphDescription,
+          },
         },
-        open_graph: {
-          title: seo.graphTitle,
-          description: seo.graphDescription,
-        },
-      });
+        postConfig
+      );
       setSeo({
         heading: "",
         title: "",

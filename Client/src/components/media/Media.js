@@ -27,8 +27,8 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import ImageUpload from "../../ImageUpload";
-import { GpState } from "../../context/context";
 import Delete from "../delete/Delete";
+import { config, postConfig } from "../../services/Services";
 
 function Media() {
   const [updateTable, setUpdateTable] = useState(false);
@@ -51,7 +51,6 @@ function Media() {
   const nPage = Math.ceil(imagedata?.length / recordsPerPage);
 
   const toast = useToast();
-  const { user } = GpState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const previewFile = (data) => {
     const allimages = images;
@@ -101,10 +100,14 @@ function Media() {
     }
 
     try {
-      const { data } = await axios.post("/api/image/multiple-upload", {
-        name: images[0],
-        real_name: name,
-      });
+      const { data } = await axios.post(
+        "/api/image/multiple-upload",
+        {
+          name: images[0],
+          real_name: name,
+        },
+        postConfig
+      );
       setName("");
       setImages([]);
       setProgress(0);
@@ -132,11 +135,6 @@ function Media() {
   const getImages = async () => {
     try {
       setLoading(true);
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.get("/api/image/getimages", config);
       setLoading(false);
       setImagedata(data);
@@ -147,18 +145,24 @@ function Media() {
 
   const deleteImages = async (id) => {
     try {
-      await axios.delete(`/api/image/delete/${id}`).then((res) => {
-        setUpdateTable((prev) => !prev);
-        toast({
-          title: "Deleted Successfully!",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "bottom",
-        });
+      const { data } = await axios.delete(`/api/image/delete/${id}`, config);
+      setUpdateTable((prev) => !prev);
+      toast({
+        title: "Deleted Successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
       });
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });
     }
   };
 
@@ -166,21 +170,21 @@ function Media() {
     getImages();
   }, [updateTable]);
 
-  if(firstIndex > 0){
+  if (firstIndex > 0) {
     var prePage = () => {
       if (curPage !== firstIndex) {
         setCurPage(curPage - 1);
       }
     };
   }
-  
- if(records?.length === selectItemNum){
-  var nextPage = () => {
-    if (curPage !== lastIndex) {
-      setCurPage(curPage + 1);
-    }
-  };
- }
+
+  if (records?.length === selectItemNum) {
+    var nextPage = () => {
+      if (curPage !== lastIndex) {
+        setCurPage(curPage + 1);
+      }
+    };
+  }
 
   const getFirstPage = () => {
     setCurPage(1);
@@ -194,7 +198,7 @@ function Media() {
     setImages([]);
     setProgress(0);
     onClose();
-  }
+  };
 
   return (
     <>
@@ -300,7 +304,8 @@ function Media() {
               </select>
             </div>
             <div style={{ width: "110px" }}>
-              {firstIndex + 1} - {records?.length + firstIndex} of {imagedata?.length}
+              {firstIndex + 1} - {records?.length + firstIndex} of{" "}
+              {imagedata?.length}
             </div>
 
             <div className="page-item">

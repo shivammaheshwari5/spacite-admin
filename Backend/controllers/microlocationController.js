@@ -40,7 +40,7 @@ const deleteMicroLocation = asyncHandler(async (req, res) => {
     });
 });
 const getMicrolocationByCity = asyncHandler(async (req, res) => {
-  MicroLocation.find({ city: req.body.city_id })
+  await MicroLocation.find({ city: req.body.city_id })
     .then((result) => {
       res.send(result);
     })

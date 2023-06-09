@@ -33,7 +33,13 @@ const deleteState = asyncHandler(async (req, res) => {
 });
 
 const getStateByCountry = asyncHandler(async (req, res) => {
-  State.find({ country: req.body.country_id })
+  const countryId = req.body.country_id;
+
+  if (!countryId) {
+    return res.status(400).json({ message: "Missing country ID" });
+  }
+
+  await State.find({ country: countryId })
     .then((result) => {
       res.send(result);
     })

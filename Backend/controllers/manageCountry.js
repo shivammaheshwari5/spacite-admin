@@ -65,7 +65,7 @@ const getCountryById = asyncHandler(() => {});
 const toggleCountryStatus = asyncHandler(() => {});
 const deleteCountry = asyncHandler(async (req, res) => {
   const { countryId } = req.params;
-  Country.findByIdAndDelete(countryId)
+  await Country.findByIdAndDelete(countryId)
     .then(() => {
       res.send("delete successfully");
     })

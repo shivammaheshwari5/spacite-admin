@@ -13,7 +13,8 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { GpState } from "../../context/context";
-import { AiFillEdit } from 'react-icons/ai';
+import { AiFillEdit } from "react-icons/ai";
+import { postConfig } from "../../services/Services";
 
 const EditCountry = ({ countries, setUpdateTable }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -22,16 +23,11 @@ const EditCountry = ({ countries, setUpdateTable }) => {
   const [dialCode, setDialCode] = useState(countries.dial_code);
   const [countryId, setCountryId] = useState(countries._id);
   const [description, setDiscription] = useState(countries.description);
-  const { country, setCountry, user } = GpState();
+  const { country, setCountry } = GpState();
   const toast = useToast();
 
   const handleEditCountry = async () => {
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
       const { data } = await axios.put(
         `/api/allCountry/country/${countryId}`,
         {
@@ -39,7 +35,7 @@ const EditCountry = ({ countries, setUpdateTable }) => {
           name: name,
           dial_code: dialCode,
         },
-        config
+        postConfig
       );
       setCountry(data.country);
       setUpdateTable((prev) => !prev);
@@ -57,7 +53,10 @@ const EditCountry = ({ countries, setUpdateTable }) => {
   };
   return (
     <>
-      <AiFillEdit onClick={onOpen} style={{fontSize: "22px", cursor:"pointer"}}/>
+      <AiFillEdit
+        onClick={onOpen}
+        style={{ fontSize: "22px", cursor: "pointer" }}
+      />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

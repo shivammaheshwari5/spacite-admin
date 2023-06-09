@@ -74,7 +74,6 @@ function Login() {
       localStorage.setItem("userInfo", JSON.stringify(data));
       localStorage.setItem("token", user.token);
       setLoading(false);
-      // props.onLogin(true);
       navigate("/listing-space", { replace: true });
     } catch (error) {
       toast({

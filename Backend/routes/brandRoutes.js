@@ -1,5 +1,5 @@
 const express = require("express");
-// const { protect } = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 const {
   getBrand,
   postBrand,
@@ -10,10 +10,10 @@ const {
 const router = express.Router();
 
 router
-  .get("/brands", getBrand)
-  .get("/brands/:brandId", getBrandById)
-  .post("/brands", postBrand)
-  .put("/brands/:brandId", addOrEditBrand)
-  .delete("/delete/:brandId", deleteBrand);
+  .get("/brands", protect, getBrand)
+  .get("/brands/:brandId", protect, getBrandById)
+  .post("/brands", protect, postBrand)
+  .put("/brands/:brandId", protect, addOrEditBrand)
+  .delete("/delete/:brandId", protect, deleteBrand);
 
 module.exports = router;
