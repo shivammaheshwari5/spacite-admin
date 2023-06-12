@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +12,27 @@ import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import Multiselect from "multiselect-react-dropdown";
 import { AiFillDelete } from "react-icons/ai";
 import { postConfig, config } from "../../services/Services";
+import Loader from "../loader/Loader";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Spinner,
+} from "@chakra-ui/react";
+import {
+  uploadFile,
+  getCityByState,
+  getStateByCountry,
+  getCountry,
+  getMicrolocationByCity,
+  getAmenities,
+  getBrandsData,
+  getCategory,
+} from "./WorkSpaceService";
 const initialValue = {
   name: "",
   description: "",
@@ -75,7 +96,8 @@ const EditWorkSpace = () => {
     EditorState.createEmpty()
   );
   const [updateTable, setUpdateTable] = useState(false);
-  const [image, setImage] = useState([]);
+  const [allimage, setAllImage] = useState([]);
+  const [isUploaded, setIsUploaded] = useState(false);
   const [progress, setProgress] = useState(0);
   const [country, setCountry] = useState([]);
   const [states, setStates] = useState([]);
@@ -86,6 +108,7 @@ const EditWorkSpace = () => {
   const [allAmenities, setAllAmenities] = useState([]);
   const [workSpaces, setWorkSpaces] = useState(initialValue);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  const [fileName, setFileName] = useState([]);
   const {
     name,
     description,
@@ -125,36 +148,70 @@ const EditWorkSpace = () => {
     { name: "03:30 AM" },
   ]);
   const [checkedAmenities, setCheckedAmenities] = useState([]);
-
+  const [formData, setFormData] = useState({
+    montofriFrom: "",
+    montofriTo: "",
+    satFrom: "",
+    satTo: "",
+    sunFrom: "",
+    sunTo: "",
+  });
   const openFullHoursHandler = (e) => {
-    if (e.target.checked && e.target.value === "mon-fri") {
-      setOpen({ ...open, fullOpen1: true });
-    } else if (!e.target.checked && e.target.value === "mon-fri") {
-      setOpen({ ...open, fullOpen1: false });
-    } else if (e.target.checked && e.target.value === "sat") {
-      setOpen({ ...open, fullOpen2: true });
-    } else if (!e.target.checked && e.target.value === "sat") {
-      setOpen({ ...open, fullOpen2: false });
-    } else if (e.target.checked && e.target.value === "sun") {
-      setOpen({ ...open, fullOpen3: true });
-    } else if (!e.target.checked && e.target.value === "sun") {
-      setOpen({ ...open, fullOpen3: false });
+    const value = e.target.value;
+
+    if (value === "mon-fri" || value === "mon-fri-close") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        montofriFrom: value === "mon-fri" ? "" : prevFormData.montofriFrom,
+        montofriTo: value === "mon-fri" ? "" : prevFormData.montofriTo,
+      }));
+    } else if (value === "sat") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        satFrom: prevFormData.satFrom === value ? "" : prevFormData.satFrom,
+        satTo: prevFormData.satTo === value ? "" : prevFormData.satTo,
+      }));
+    } else if (value === "sun") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        sunFrom: prevFormData.sunFrom === value ? "" : prevFormData.sunFrom,
+        sunTo: prevFormData.sunTo === value ? "" : prevFormData.sunTo,
+      }));
+    }
+
+    if (value === "mon-fri") {
+      setOpen({ ...open, fullOpen1: !open.fullOpen1 });
+    } else if (value === "sat") {
+      setOpen({ ...open, fullOpen2: !open.fullOpen2 });
+    } else if (value === "sun") {
+      setOpen({ ...open, fullOpen3: !open.fullOpen3 });
     }
   };
 
   const closeHandler = (e) => {
-    if (e.target.checked && e.target.value === "mon-fri-close") {
-      setOpen({ ...open, isClose1: true });
-    } else if (!e.target.checked && e.target.value === "mon-fri-close") {
-      setOpen({ ...open, isClose1: false });
-    } else if (e.target.checked && e.target.value === "sat") {
-      setOpen({ ...open, isClose2: true });
-    } else if (!e.target.checked && e.target.value === "sat") {
-      setOpen({ ...open, isClose2: false });
-    } else if (e.target.checked && e.target.value === "sun") {
-      setOpen({ ...open, isClose3: true });
-    } else if (!e.target.checked && e.target.value === "sun") {
-      setOpen({ ...open, isClose3: false });
+    const value = e.target.value;
+
+    if (value === "mon-fri-close") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        montofriFrom: "",
+        montofriTo: "",
+      }));
+      setOpen({ ...open, isClose1: !open.isClose1 });
+    } else if (value === "sat") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        satFrom: "",
+        satTo: "",
+      }));
+      setOpen({ ...open, isClose2: !open.isClose2 });
+    } else if (value === "sun") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        sunFrom: "",
+        sunTo: "",
+      }));
+      setOpen({ ...open, isClose3: !open.isClose3 });
     }
   };
   useEffect(() => {
@@ -235,7 +292,7 @@ const EditWorkSpace = () => {
         {
           name: name,
           description: footer_descrip,
-          // images: images,
+          images: mergedArray,
           amenties: checkedAmenities,
           seo: {
             title: seo.title,
@@ -321,115 +378,38 @@ const EditWorkSpace = () => {
 
       setWorkSpaces(data);
 
-      getStateByCountry(data.location.country);
-      getCityByState(data.location.state);
-      getMicrolocationByCity(data.location.city);
+      handleFetchStates(data.location.country);
+      handleFetchCity(data.location.state);
+      handleFetchMicrolocation(data.location.city);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getCityByState = async (id) => {
-    try {
-      setLoading(true);
-      location.state = id;
-
-      await axios
-        .post("/api/city/citybystate", { state_id: location.state }, config)
-        .then((result) => {
-          setCities(result.data);
-        });
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchCity = async (id) => {
+    location.state = id;
+    await getCityByState(location.state, setLoading, setCities);
   };
-  const getStateByCountry = async (id) => {
-    try {
-      setLoading(true);
-      location.country = id;
-
-      await axios
-        .post(
-          "/api/state/statesbycountry",
-          { country_id: location.country },
-          config
-        )
-        .then((result) => {
-          setStates(result.data);
-        });
-      setLoading(false);
-      // setStates(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchStates = async (id) => {
+    location.country = id;
+    await getStateByCountry(location.country, setLoading, setStates);
   };
-  const getMicrolocationByCity = async (id) => {
-    try {
-      setLoading(true);
-      location.city = id;
-
-      await axios
-        .post(
-          "/api/microlocation/microbycity",
-          { city_id: location.city },
-          config
-        )
-        .then((result) => {
-          setMicrolocations(result.data);
-        });
-      setLoading(false);
-      // setStates(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchMicrolocation = async (id) => {
+    location.city = id;
+    await getMicrolocationByCity(location.city, setLoading, setMicrolocations);
   };
-  const getCountry = async () => {
-    try {
-      setLoading(true);
-
-      const { data } = await axios.get("/api/allCountry/countries", config);
-      setLoading(false);
-      setCountry(data.country);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchCountry = async () => {
+    await getCountry(setLoading, setCountry);
   };
-  const getBrandsData = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get("/api/brand/brands", config);
-      setLoading(false);
-      setBrands(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchBrands = async () => {
+    await getBrandsData(setLoading, setBrands);
   };
-  const getAmenities = async () => {
-    try {
-      setLoading(true);
-
-      const { data } = await axios.get("/api/amenity/amenities", config);
-      setLoading(false);
-      setAllAmenities(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchAmenity = async () => {
+    await getAmenities(setLoading, setAllAmenities);
   };
-  const getCategory = async () => {
-    try {
-      setLoading(true);
-
-      const { data } = await axios.get(
-        "/api/propertyType/propertyTypes",
-        config
-      );
-      setLoading(false);
-      setCategories(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchCategory = async () => {
+    await getCategory(setLoading, setCategories);
   };
 
   useEffect(() => {
@@ -455,45 +435,80 @@ const EditWorkSpace = () => {
       );
     }
   };
+  // const handleInputChange2 = (event) => {
+  //   const { name, value } = event.target;
+  //   const [category, subCategory, property] = name.split(".");
+
+  //   setWorkSpaces((prevState) => ({
+  //     ...prevState,
+  //     [category]: {
+  //       ...prevState[category],
+  //       [subCategory]: {
+  //         ...prevState[category][subCategory],
+  //         [property]: value,
+  //       },
+  //     },
+  //   }));
+  // };
 
   useEffect(() => {
-    getCountry();
-    getBrandsData();
-    getAmenities();
-    getCategory();
+    handleFetchCountry();
+    handleFetchBrands();
+    handleFetchAmenity();
+    handleFetchCategory();
     getWorkSpacesDataById();
   }, [updateTable]);
   const previewFile = (data) => {
-    const allimages = image;
-    setImage(allimages.concat(data));
+    setAllImage((prevImages) => [...prevImages, ...data]);
   };
+  const handleUploadFile = async (files) => {
+    await uploadFile(files, setProgress, setIsUploaded, previewFile);
+  };
+  const [mergedArray, setMergedArray] = useState([]);
+  const handleInputByClick = (e) => {
+    const files = Array.from(e.target.files);
+    handleUploadFile(files);
+    const fileNames = files.map((file) => file.name);
+    setFileName((prev) => [...prev, ...fileNames]);
+  };
+  useEffect(() => {
+    const combinedArray = allimage.map((image, index) => ({
+      image,
+      name: fileName[index],
+      alt: fileName[index],
+    }));
+    setMergedArray([...images, ...combinedArray]);
+  }, [allimage, fileName, images]);
 
-  const uploadFile = (files) => {
-    const formData = new FormData();
-    setProgress(0);
-    files.forEach((file) => {
-      formData.append("files", file, file.name);
-    });
-    axios
-      .post("/upload-image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        onUploadProgress: (progressEvent) => {
-          setProgress(
-            parseInt(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            )
-          );
-        },
-      })
-      .then((res) => {
-        previewFile(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const removePreviewImage = (index) => {
+    const updatedArray = [...mergedArray]; // Create a copy of the mergedArray
+    updatedArray.splice(index, 1); // Remove the element at the specified index
+
+    setMergedArray(updatedArray);
   };
+  const handleAltChange = (event, index) => {
+    const updatedArray = [...mergedArray]; // Create a copy of the mergedArray
+    updatedArray[index].alt = event.target.value; // Update the alt value at the specified index
+
+    setMergedArray(updatedArray);
+  };
+  const handleSelect = (selectedOption, field) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [field]: selectedOption.value,
+    }));
+  };
+  if (loading) {
+    return (
+      <div>
+        <Loader />
+      </div>
+    ); // Render a loading state while fetching data
+  }
+
+  console.log(hours_of_operation.monday_friday.from);
+  console.log(workSpaces);
+  console.log(open.isClose2);
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
@@ -706,7 +721,8 @@ const EditWorkSpace = () => {
                     onChange={(event) =>
                       handleInputChangeObject(event, "location", "country")
                     }
-                    name="location.country"
+                    onClick={(event) => handleFetchStates(event.target.value)}
+                    name="location"
                     required
                   >
                     <option>Select a country*</option>
@@ -730,10 +746,11 @@ const EditWorkSpace = () => {
                     className="form-select"
                     aria-label="Default select example"
                     value={location.state}
-                    name="location.state"
+                    name="location"
                     onChange={(event) =>
                       handleInputChangeObject(event, "location", "state")
                     }
+                    onClick={(event) => handleFetchCity(event.target.value)}
                     required
                   >
                     <option>Select a state*</option>
@@ -757,9 +774,12 @@ const EditWorkSpace = () => {
                     className="form-select"
                     aria-label="Default select example"
                     value={location.city}
-                    name="location.city"
+                    name="location"
                     onChange={(event) =>
                       handleInputChangeObject(event, "location", "city")
+                    }
+                    onClick={(event) =>
+                      handleFetchMicrolocation(event.target.value)
                     }
                     required
                   >
@@ -785,7 +805,7 @@ const EditWorkSpace = () => {
                   <select
                     className="form-select"
                     aria-label="Default select example"
-                    name="location.micro_location"
+                    name="location"
                     value={location.micro_location}
                     onChange={(event) =>
                       handleInputChangeObject(
@@ -875,14 +895,102 @@ const EditWorkSpace = () => {
               </div>
             </div>
             <h4>Images</h4>
-            <div className="row">
+            {/* <div className="row">
               <ImageUpload
                 images={image}
                 setImages={setImage}
                 progress={progress}
                 setProgress={setProgress}
-                uploadFile={uploadFile}
+                uploadFile={handleUploadFile}
+                isUploaded={isUploaded}
               />
+            </div> */}
+            <div className="row">
+              <div className="container">
+                <div>
+                  <input
+                    id="file-input"
+                    type="file"
+                    multiple
+                    onChange={handleInputByClick}
+                  />
+                </div>
+
+                {progress ? (
+                  <div>
+                    <p className="mx-auto">
+                      <strong>Uploading Progress</strong>
+                    </p>
+                    <div className="progress mx-auto">
+                      <div
+                        id="progress-bar"
+                        className="progress-bar progress-bar-striped bg-info"
+                        role="progressbar"
+                        aria-valuenow="40"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        style={{ width: `${progress}%` }}
+                      >
+                        {progress}%
+                      </div>
+                    </div>
+                  </div>
+                ) : isUploaded ? (
+                  <h5>Uploaded</h5>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div id="preview" className="mt-3 d-flex align-items-center">
+                <div className="table-box" style={{ width: "100%" }}>
+                  <h3>Images</h3>
+                  <TableContainer variant="striped" color="teal">
+                    <Table variant="simple">
+                      <Thead>
+                        <Tr>
+                          <Th>Order No.</Th>
+                          <Th>Image</Th>
+                          <Th>Name</Th>
+                          <Th>Alt1</Th>
+
+                          <Th>Delete</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {mergedArray?.map((img, index) => (
+                          <Fragment key={index}>
+                            <Tr>
+                              <Td>{index + 1}</Td>
+                              <Td>
+                                <img src={img.image} alt="media" width="80px" />
+                              </Td>
+                              <Td>{img.name}</Td>
+                              <Td>
+                                <input
+                                  type="text"
+                                  style={{ color: "#000" }}
+                                  value={img.alt}
+                                  onChange={(event) =>
+                                    handleAltChange(event, index)
+                                  }
+                                />
+                              </Td>
+
+                              <Td>
+                                <AiFillDelete
+                                  onClick={() => removePreviewImage(index)}
+                                  className="icon"
+                                  style={{ color: "red" }}
+                                />
+                              </Td>
+                            </Tr>
+                          </Fragment>
+                        ))}
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </div>
+              </div>
             </div>
             <div className="row">
               <div className="col-md-3">
@@ -904,28 +1012,36 @@ const EditWorkSpace = () => {
               {fullOpen1 === false && isClose1 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                      //   onSelect={handleSelect1}
-                      //   onRemove={handleSelect1}
-                    />
+                    <select
+                      value={hours_of_operation.monday_friday.from}
+                      name="hours_of_operation.monday_friday.from"
+                      onChange={handleInputChange2}
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
               {fullOpen1 === false && isClose1 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="To*"
-                      //   onSelect={handleSelect2}
-                      //   onRemove={handleSelect2}
-                    />
+                    <select
+                      value={hours_of_operation.monday_friday.to}
+                      onChange={handleInputChange2}
+                      name="hours_of_operation.monday_friday.to"
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
@@ -974,28 +1090,36 @@ const EditWorkSpace = () => {
               {fullOpen2 === false && isClose2 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      //   onSelect={handleSelect3}
-                      //   onRemove={handleSelect3}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                    />
+                    <select
+                      value={hours_of_operation.saturday.from}
+                      onChange={handleInputChange2}
+                      name="hours_of_operation.saturday.from"
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
               {fullOpen2 === false && isClose2 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      //   onSelect={handleSelect4}
-                      //   onRemove={handleSelect4}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="To*"
-                    />
+                    <select
+                      value={hours_of_operation.saturday.to}
+                      onChange={handleInputChange2}
+                      name="hours_of_operation.saturday.to"
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
@@ -1044,28 +1168,36 @@ const EditWorkSpace = () => {
               {fullOpen3 === false && isClose3 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      //   onSelect={handleSelect5}
-                      //   onRemove={handleSelect5}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                    />
+                    <select
+                      value={hours_of_operation.sunday.from}
+                      onChange={handleInputChange2}
+                      name="hours_of_operation.sunday.from"
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
               {fullOpen3 === false && isClose3 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      displayValue="name"
-                      //   onSelect={handleSelect6}
-                      //   onRemove={handleSelect6}
-                      singleSelect
-                      placeholder="To*"
-                    />
+                    <select
+                      value={hours_of_operation.sunday.to}
+                      onChange={handleInputChange2}
+                      name="hours_of_operation.sunday.to"
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
@@ -1075,7 +1207,7 @@ const EditWorkSpace = () => {
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      value="Open 24 Hours"
+                      value="sun"
                       id="flexCheckDefault"
                       onChange={openFullHoursHandler}
                     />
@@ -1094,7 +1226,7 @@ const EditWorkSpace = () => {
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      value="Closed"
+                      value="sun"
                       id="flexCheckDefault"
                       onChange={closeHandler}
                     />

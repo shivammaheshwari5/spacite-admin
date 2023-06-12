@@ -3,7 +3,18 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { AiFillDelete } from "react-icons/ai";
-import { BiUpload } from "react-icons/bi";
+import { FaUpload } from "react-icons/fa";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Spinner,
+  useToast,
+} from "@chakra-ui/react";
 
 const ImageUpload = ({
   images,
@@ -11,12 +22,13 @@ const ImageUpload = ({
   progress,
   setProgress,
   uploadFile,
+  isUploaded,
 }) => {
-  const removePreviewImage = (e) => {
-    const index = e.target.getAttribute("index");
-    const allimages = [];
-    allimages.splice(index, 1);
-    setImages(allimages);
+  const [fileName, setFileName] = useState([]);
+  const removePreviewImage = (index) => {
+    const updatedImages = [...images];
+    updatedImages.splice(index, 1);
+    setImages(updatedImages);
   };
   const handleDrop = (e) => {
     e.preventDefault();
@@ -28,7 +40,10 @@ const ImageUpload = ({
     e.preventDefault();
   };
   const handleInputByClick = (e) => {
-    uploadFile(Array.from(e.target.files));
+    const files = Array.from(e.target.files);
+    uploadFile(files);
+    const fileNames = files.map((file) => file.name);
+    setFileName(fileNames);
   };
 
   useEffect(() => {
@@ -52,7 +67,7 @@ const ImageUpload = ({
       input.click();
     });
   }, []);
-
+  console.log(images);
   return (
     <div className="App">
       <div className="container">
@@ -65,10 +80,16 @@ const ImageUpload = ({
           <div id="drop-region" className="drop-region text-center">
             <img id="download-btn" src="/Download.png" width="80" alt="" />
             <div>
-              {/* <BiUpload /> */}
+              <label htmlFor="file-upload" className="file-upload-label">
+                <FaUpload
+                  style={{ color: "red", width: "30px", height: "30px" }}
+                />
+                Drag and Drop
+              </label>
               <input
                 id="file-input"
                 type="file"
+                style={{ display: "none" }}
                 multiple
                 onChange={handleInputByClick}
               />
@@ -95,6 +116,8 @@ const ImageUpload = ({
               </div>
             </div>
           </div>
+        ) : isUploaded ? (
+          <h5>Uploaded</h5>
         ) : (
           ""
         )}

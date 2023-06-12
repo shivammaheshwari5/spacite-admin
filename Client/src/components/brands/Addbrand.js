@@ -260,7 +260,6 @@ function Addbrand() {
                     labelField="name"
                     valueField="_id"
                     placeholder="Select Cities"
-                    // values={selectedOptions}
                   />
                 </div>
               </div>
