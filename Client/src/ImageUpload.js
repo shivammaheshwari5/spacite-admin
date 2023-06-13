@@ -79,10 +79,18 @@ const ImageUpload = ({
         >
           <div id="drop-region" className="drop-region text-center">
             <img id="download-btn" src="/Download.png" width="80" alt="" />
-            <div>
-              <label htmlFor="file-upload" className="file-upload-label">
+            <div className="d-flex">
+              <label
+                htmlFor="file-upload"
+                className="file-upload-label d-inline-block"
+              >
                 <FaUpload
-                  style={{ color: "red", width: "30px", height: "30px" }}
+                  style={{
+                    color: "red",
+                    width: "30px",
+                    height: "30px",
+                    display: "inline-block",
+                  }}
                 />
                 Drag and Drop
               </label>

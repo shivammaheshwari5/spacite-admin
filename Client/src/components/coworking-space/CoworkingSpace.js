@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import Addpropertybtn from "../add-new-btn/Addpropertybtn";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import {
   Table,
   Thead,
@@ -62,10 +64,46 @@ function CoworkingSpace() {
     }
   };
 
+  const [selectItemNum, setSelectItemNum] = useState(10);
+  const itemsPerPageHandler = (e) => {
+    setSelectItemNum(e.target.value);
+  };
+  const [curPage, setCurPage] = useState(1);
+  const recordsPerPage = selectItemNum;
+  const lastIndex = curPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const records = workSpaces?.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(workSpaces?.length / selectItemNum);
+  if (firstIndex > 0) {
+    var prePage = () => {
+      if (curPage !== firstIndex) {
+        setCurPage(curPage - 1);
+      }
+    };
+  }
+
+  // console.log(selectItemNum);
+  // if (records?.length === selectItemNum) {
+  var nextPage = () => {
+    if (curPage !== lastIndex) {
+      setCurPage(curPage + 1);
+    }
+  };
+  // console.log(records.length);
+  // }
+
+  const getFirstPage = () => {
+    setCurPage(1);
+  };
+
+  const getLastPage = () => {
+    setCurPage(nPage);
+  };
+
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
-      <Link to="/coworking-space/add-coworking-space">
+      <Link to="/coworking-space/add-coworking-space" className="btnLink">
         <Addpropertybtn />
       </Link>
       <div className="table-box">
@@ -98,9 +136,13 @@ function CoworkingSpace() {
                   </Td>
                 </Tr>
               ) : (
-                workSpaces?.map((workSpace) => (
+                records?.map((workSpace) => (
                   <Tr key={workSpace._id} id={workSpace._id}>
-                    <Td>{workSpace.name}</Td>
+                    <Td>
+                      {workSpace.name.length > 16
+                        ? workSpace.name.substring(0, 16) + ".."
+                        : workSpace.name}
+                    </Td>
                     <Td>{workSpace.location.city?.name || "city"}</Td>
                     <Td>
                       {workSpace.location.micro_location?.name ||
@@ -129,6 +171,46 @@ function CoworkingSpace() {
             </Tbody>
           </Table>
         </TableContainer>
+        <nav className="mt-5">
+          <div
+            className="d-flex align-items-center justify-content-between"
+            style={{ width: "51%" }}
+          >
+            <p className="mb-0">Items per page: </p>
+            <div style={{ borderBottom: "1px solid gray" }}>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                required
+                value={selectItemNum}
+                onChange={itemsPerPageHandler}
+                style={{ paddingLeft: "0" }}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+            </div>
+            <div style={{ width: "110px" }}>
+              {firstIndex + 1} - {records?.length + firstIndex} of{" "}
+              {workSpaces?.length}
+            </div>
+
+            <div className="page-item">
+              <BiSkipPrevious onClick={getFirstPage} />
+            </div>
+            <div className="page-item">
+              <GrFormPrevious onClick={prePage} />
+            </div>
+            <div className="page-item">
+              <GrFormNext onClick={nextPage} />
+            </div>
+            <div className="page-item">
+              <BiSkipNext onClick={getLastPage} />
+            </div>
+          </div>
+        </nav>
       </div>
     </div>
   );

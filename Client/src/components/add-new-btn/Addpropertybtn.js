@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { BsBookmarkPlus } from "react-icons/bs";
 import "./Addnewbtn.css";
 import { Button } from "react-bootstrap";
@@ -6,14 +6,12 @@ import { Button } from "react-bootstrap";
 function Addpropertybtn() {
   return (
     <>
-        <div style={{float: "right"}}>
-        <Button variant="primary" className='addProperty-btn'>
-          <BsBookmarkPlus />
-          ADD NEW
-        </Button>
-      </div>
+      <Button variant="primary" className="addProperty-btn">
+        <BsBookmarkPlus />
+        ADD NEW
+      </Button>
     </>
-  )
+  );
 }
 
-export default Addpropertybtn
+export default Addpropertybtn;

@@ -181,10 +181,12 @@ function Country() {
     <>
       <div className="mx-5 mt-3">
         <Mainpanelnav />
-        <Button className="addnew-btn" onClick={onOpen}>
-          <BsBookmarkPlus />
-          ADD NEW
-        </Button>
+        <div className="d-flex justify-content-end w-100">
+          <Button className="addnew-btn" onClick={onOpen}>
+            <BsBookmarkPlus />
+            ADD NEW
+          </Button>
+        </div>
         <div>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -236,98 +238,98 @@ function Country() {
             </ModalContent>
           </Modal>
         </div>
-      </div>
-      <div className="table-box">
-        <div className="table-top-box">Country Table</div>
-        <TableContainer marginTop="60px" variant="striped" color="teal">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Dial Code</Th>
-                <Th>Edit</Th>
-                <Th>Delete</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {loading ? (
+        <div className="table-box">
+          <div className="table-top-box">Country Table</div>
+          <TableContainer marginTop="60px" variant="striped" color="teal">
+            <Table variant="simple">
+              <Thead>
                 <Tr>
-                  <Td align="center" style={{ width: "50px" }}>
-                    <Spinner
-                      size="xl"
-                      w={20}
-                      h={20}
-                      alignSelf="center"
-                      style={{ position: "absolute", left: "482px" }}
-                    />
-                  </Td>
+                  <Th>Name</Th>
+                  <Th>Dial Code</Th>
+                  <Th>Edit</Th>
+                  <Th>Delete</Th>
                 </Tr>
-              ) : (
-                records?.map((countries) => (
-                  <Tr key={countries._id} id={countries._id}>
-                    <Td>{countries.name}</Td>
-                    <Td>{countries.dial_code}</Td>
-                    <Td>
-                      <EditCountry
-                        id={countries._id}
-                        countries={countries}
-                        setUpdateTable={setUpdateTable}
-                        // handleFunction={() => handleEditCountry(countries._id)}
-                      />
-                    </Td>
-                    <Td>
-                      <Delete
-                        handleFunction={() =>
-                          handleDeleteCountry(countries._id)
-                        }
+              </Thead>
+              <Tbody>
+                {loading ? (
+                  <Tr>
+                    <Td align="center" style={{ width: "50px" }}>
+                      <Spinner
+                        size="xl"
+                        w={20}
+                        h={20}
+                        alignSelf="center"
+                        style={{ position: "absolute", left: "482px" }}
                       />
                     </Td>
                   </Tr>
-                ))
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-        <nav className="mt-5">
-          <div
-            className="d-flex align-items-center justify-content-between"
-            style={{ width: "51%" }}
-          >
-            <p className="mb-0">Items per page: </p>
-            <div style={{ borderBottom: "1px solid gray" }}>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                required
-                value={selectItemNum}
-                onChange={itemsPerPageHandler}
-                style={{ paddingLeft: "0" }}
-              >
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div style={{ width: "110px" }}>
-              {firstIndex + 1} - {records?.length + firstIndex} of{" "}
-              {country?.length}
-            </div>
+                ) : (
+                  records?.map((countries) => (
+                    <Tr key={countries._id} id={countries._id}>
+                      <Td>{countries.name}</Td>
+                      <Td>{countries.dial_code}</Td>
+                      <Td>
+                        <EditCountry
+                          id={countries._id}
+                          countries={countries}
+                          setUpdateTable={setUpdateTable}
+                          // handleFunction={() => handleEditCountry(countries._id)}
+                        />
+                      </Td>
+                      <Td>
+                        <Delete
+                          handleFunction={() =>
+                            handleDeleteCountry(countries._id)
+                          }
+                        />
+                      </Td>
+                    </Tr>
+                  ))
+                )}
+              </Tbody>
+            </Table>
+          </TableContainer>
+          <nav className="mt-5">
+            <div
+              className="d-flex align-items-center justify-content-between"
+              style={{ width: "51%" }}
+            >
+              <p className="mb-0">Items per page: </p>
+              <div style={{ borderBottom: "1px solid gray" }}>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  required
+                  value={selectItemNum}
+                  onChange={itemsPerPageHandler}
+                  style={{ paddingLeft: "0" }}
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div style={{ width: "110px" }}>
+                {firstIndex + 1} - {records?.length + firstIndex} of{" "}
+                {country?.length}
+              </div>
 
-            <div className="page-item">
-              <BiSkipPrevious onClick={getFirstPage} />
+              <div className="page-item">
+                <BiSkipPrevious onClick={getFirstPage} />
+              </div>
+              <div className="page-item">
+                <GrFormPrevious onClick={prePage} />
+              </div>
+              <div className="page-item">
+                <GrFormNext onClick={nextPage} />
+              </div>
+              <div className="page-item">
+                <BiSkipNext onClick={getLastPage} />
+              </div>
             </div>
-            <div className="page-item">
-              <GrFormPrevious onClick={prePage} />
-            </div>
-            <div className="page-item">
-              <GrFormNext onClick={nextPage} />
-            </div>
-            <div className="page-item">
-              <BiSkipNext onClick={getLastPage} />
-            </div>
-          </div>
-        </nav>
+          </nav>
+        </div>
       </div>
     </>
   );
