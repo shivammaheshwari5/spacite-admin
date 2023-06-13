@@ -64,7 +64,7 @@ function Seo() {
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
-      <Link to="/seo/add-seo">
+      <Link to="/seo/add-seo" className="btnLink">
         <Addpropertybtn />
       </Link>
       <div className="table-box">
@@ -98,7 +98,11 @@ function Seo() {
                   <Tr key={seo._id} id={seo._id}>
                     <Td>{seo.path}</Td>
                     <Td>{seo.title}</Td>
-                    <Td className="tableDescription">{seo.description}</Td>
+                    <Td className="tableDescription">
+                      {seo.description.length > 200
+                        ? seo.description.substring(0, 200) + "..."
+                        : seo.description}
+                    </Td>
                     <Td>
                       <Link to={`/seo/editseo/${seo._id}`}>
                         <AiFillEdit
