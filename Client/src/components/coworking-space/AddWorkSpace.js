@@ -465,7 +465,31 @@ function AddWorkSpace() {
         <form style={{ textAlign: "left" }} onSubmit={handleSaveWorkSpace}>
           <div className="container">
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-12">
+                <h4>Coworking Details</h4>
+              </div>
+              <div className="col-md-4">
+                <input
+                  className="property-input"
+                  type="text"
+                  placeholder="Name*"
+                  name="name"
+                  value={coSpace.name}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="col-md-4">
+                <input
+                  className="property-input"
+                  type="text"
+                  placeholder="Slug"
+                  value={coSpace.slug}
+                  name="slug"
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div className="col-md-4">
                 <div
                   style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
                 >
@@ -485,19 +509,11 @@ function AddWorkSpace() {
                   </select>
                 </div>
               </div>
-              <div className="col-md-6">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Name*"
-                  name="name"
-                  value={coSpace.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
             </div>
             <div className="row">
+              <div className="col-md-12">
+                <h4>About Property</h4>
+              </div>
               <div className="col-md-12">
                 <Editor
                   editorState={editorState}
@@ -508,19 +524,11 @@ function AddWorkSpace() {
                 />
               </div>
             </div>
-            <h4>Slug Update</h4>
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-12">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Slug"
-                  value={coSpace.slug}
-                  name="slug"
-                  onChange={handleInputChange}
-                />
+                <h4>Slug</h4>
               </div>
-            </div>
+            </div> */}
             <h4>SEO Details</h4>
             <div className="row">
               <div className="col-md-3">
