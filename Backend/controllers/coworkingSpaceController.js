@@ -120,25 +120,29 @@ const deleteWorkSpaces = asyncHandler(async (req, res) => {
 
 const getWorkSpacesById = asyncHandler(async (req, res) => {
   try {
-    const workSpace = await CoworkingSpace.findById(req.params.workSpaceId)
-      // .populate("location.country", "name")
-      // .populate("location.state", "name")
-      // .populate("location.city", "name")
-      // .populate("location.micro_location", "name")
-      // .populate("plans.category", "name")
-      // .populate("brand", "name")
-      // .populate("amenties", "name")
-      .exec();
+    const workSpace = await CoworkingSpace.findById(
+      req.params.workSpaceId
+    ).exec();
     res.status(200).json(workSpace);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 });
 
+const searchByName = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [{ name: { $regex: req.query.search, $options: "i" } }],
+      }
+    : {};
+  const workSpace = await CoworkingSpace.find(keyword);
+  res.send(workSpace);
+});
 module.exports = {
   postWorkSpaces,
   editWorkSpaces,
   deleteWorkSpaces,
   getWorkSpaces,
   getWorkSpacesById,
+  searchByName,
 };
