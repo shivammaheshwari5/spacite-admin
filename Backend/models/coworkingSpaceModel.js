@@ -7,7 +7,9 @@ const coworkingSpaceModel = mongoose.Schema(
     website_Url: String,
     images: [
       {
-        type: String,
+        image: String,
+        name: String,
+        alt: String,
       },
     ],
     amenties: [

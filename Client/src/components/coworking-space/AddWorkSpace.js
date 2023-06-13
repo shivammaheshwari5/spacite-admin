@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 import { AiFillDelete } from "react-icons/ai";
 import { useToast } from "@chakra-ui/react";
@@ -6,12 +6,31 @@ import axios from "axios";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw } from "draft-js";
-import Multiselect from "multiselect-react-dropdown";
-import { GpState } from "../../context/context";
-import ImageUpload from "../../ImageUpload";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import { useNavigate } from "react-router-dom";
-import { config, postConfig } from "../../services/Services";
+import { postConfig } from "../../services/Services";
+import Select from "react-dropdown-select";
+import {
+  getAmenities,
+  getBrandsData,
+  getCategory,
+  getCityByState,
+  getCountry,
+  getMicrolocationByCity,
+  getStateByCountry,
+  uploadFile,
+} from "./WorkSpaceService";
+import { FaUpload } from "react-icons/fa";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
+  Spinner,
+} from "@chakra-ui/react";
 
 function AddWorkSpace() {
   const [plans, setPlans] = useState([]);
@@ -34,18 +53,22 @@ function AddWorkSpace() {
   const [categoryId, setCategoryId] = useState(null);
   const [brandId, setBrandId] = useState(null);
   const [duration, setDuration] = useState("");
-  const [selectedval1, setSelectedval1] = useState([]);
-  const [selectedval2, setSelectedval2] = useState([]);
-  const [selectedval3, setSelectedval3] = useState([]);
-  const [selectedval4, setSelectedval4] = useState([]);
-  const [selectedval5, setSelectedval5] = useState([]);
-  const [selectedval6, setSelectedval6] = useState([]);
+  const [isUploaded, setIsUploaded] = useState(false);
+  const [formData, setFormData] = useState({
+    montofriFrom: "",
+    montofriTo: "",
+    satFrom: "",
+    satTo: "",
+    sunFrom: "",
+    sunTo: "",
+  });
 
   const navigate = useNavigate();
 
   const [checkedAmenities, setCheckedAmenities] = useState([]);
 
   const [microlocationId, setMicrolocationId] = useState(null);
+  const [fileName, setFileName] = useState([]);
   const [progress, setProgress] = useState(0);
   const [images, setImages] = useState([]);
   const [coSpace, setCoSpace] = useState({
@@ -86,49 +109,76 @@ function AddWorkSpace() {
   });
   const { fullOpen1, isClose1, fullOpen2, isClose2, fullOpen3, isClose3 } =
     open;
-  const [options, setOptions] = useState([
-    { name: "01:00 AM" },
-    { name: "01:15 AM" },
-    { name: "01:30 AM" },
-    { name: "01:45 AM" },
-    { name: "02:00 AM" },
-    { name: "02:15 AM" },
-    { name: "02:30 AM" },
-    { name: "02:45 AM" },
-    { name: "03:00 AM" },
-    { name: "03:15 AM" },
-    { name: "03:30 AM" },
-  ]);
+  const options = [
+    { id: 1, name: "01:00 AM" },
+    { id: 2, name: "01:15 AM" },
+    { id: 3, name: "01:30 AM" },
+    { id: 4, name: "01:45 AM" },
+    { id: 5, name: "02:00 AM" },
+    { id: 6, name: "02:15 AM" },
+    { id: 7, name: "02:30 AM" },
+    { id: 8, name: "02:45 AM" },
+    { id: 9, name: "03:00 AM" },
+    { id: 10, name: "03:15 AM" },
+    { id: 11, name: "03:30 AM" },
+  ];
 
   const openFullHoursHandler = (e) => {
-    if (e.target.checked && e.target.value === "mon-fri") {
-      setOpen({ ...open, fullOpen1: true });
-    } else if (!e.target.checked && e.target.value === "mon-fri") {
-      setOpen({ ...open, fullOpen1: false });
-    } else if (e.target.checked && e.target.value === "sat") {
-      setOpen({ ...open, fullOpen2: true });
-    } else if (!e.target.checked && e.target.value === "sat") {
-      setOpen({ ...open, fullOpen2: false });
-    } else if (e.target.checked && e.target.value === "sun") {
-      setOpen({ ...open, fullOpen3: true });
-    } else if (!e.target.checked && e.target.value === "sun") {
-      setOpen({ ...open, fullOpen3: false });
+    const value = e.target.value;
+
+    if (value === "mon-fri" || value === "mon-fri-close") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        montofriFrom: value === "mon-fri" ? "" : prevFormData.montofriFrom,
+        montofriTo: value === "mon-fri" ? "" : prevFormData.montofriTo,
+      }));
+    } else if (value === "sat") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        satFrom: prevFormData.satFrom === value ? "" : prevFormData.satFrom,
+        satTo: prevFormData.satTo === value ? "" : prevFormData.satTo,
+      }));
+    } else if (value === "sun") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        sunFrom: prevFormData.sunFrom === value ? "" : prevFormData.sunFrom,
+        sunTo: prevFormData.sunTo === value ? "" : prevFormData.sunTo,
+      }));
+    }
+
+    if (value === "mon-fri") {
+      setOpen({ ...open, fullOpen1: !open.fullOpen1 });
+    } else if (value === "sat") {
+      setOpen({ ...open, fullOpen2: !open.fullOpen2 });
+    } else if (value === "sun") {
+      setOpen({ ...open, fullOpen3: !open.fullOpen3 });
     }
   };
 
   const closeHandler = (e) => {
-    if (e.target.checked && e.target.value === "mon-fri-close") {
-      setOpen({ ...open, isClose1: true });
-    } else if (!e.target.checked && e.target.value === "mon-fri-close") {
-      setOpen({ ...open, isClose1: false });
-    } else if (e.target.checked && e.target.value === "sat") {
-      setOpen({ ...open, isClose2: true });
-    } else if (!e.target.checked && e.target.value === "sat") {
-      setOpen({ ...open, isClose2: false });
-    } else if (e.target.checked && e.target.value === "sun") {
-      setOpen({ ...open, isClose3: true });
-    } else if (!e.target.checked && e.target.value === "sun") {
-      setOpen({ ...open, isClose3: false });
+    const value = e.target.value;
+
+    if (value === "mon-fri-close") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        montofriFrom: "",
+        montofriTo: "",
+      }));
+      setOpen({ ...open, isClose1: !open.isClose1 });
+    } else if (value === "sat") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        satFrom: "",
+        satTo: "",
+      }));
+      setOpen({ ...open, isClose2: !open.isClose2 });
+    } else if (value === "sun") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        sunFrom: "",
+        sunTo: "",
+      }));
+      setOpen({ ...open, isClose3: !open.isClose3 });
     }
   };
 
@@ -178,188 +228,72 @@ function AddWorkSpace() {
       [name]: value,
     });
   };
-  const getCityByState = async () => {
-    try {
-      setLoading(true);
-
-      await axios
-        .post("/api/city/citybystate", { state_id: stateId }, config)
-        .then((result) => {
-          console.log(result.data);
-          setCities(result.data);
-        });
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchCity = async () => {
+    await getCityByState(stateId, setLoading, setCities);
   };
-  const getStateByCountry = async () => {
-    try {
-      setLoading(true);
-
-      await axios
-        .post("/api/state/statesbycountry", { country_id: countryId }, config)
-        .then((result) => {
-          console.log(result.data);
-          setStates(result.data);
-        });
-      setLoading(false);
-      // setStates(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchStates = async () => {
+    await getStateByCountry(countryId, setLoading, setStates);
   };
-  const getMicrolocationByCity = async () => {
-    try {
-      setLoading(true);
-
-      await axios
-        .post("/api/microlocation/microbycity", { city_id: cityId }, config)
-        .then((result) => {
-          console.log(result.data);
-          setMicrolocations(result.data);
-        });
-      setLoading(false);
-      // setStates(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchMicrolocation = async () => {
+    await getMicrolocationByCity(cityId, setLoading, setMicrolocations);
   };
-  const getCountry = async () => {
-    try {
-      setLoading(true);
 
-      const { data } = await axios.get("/api/allCountry/countries", config);
-      setLoading(false);
-      setCountry(data.country);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchCountry = async () => {
+    await getCountry(setLoading, setCountry);
   };
-  const getBrandsData = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get("/api/brand/brands", config);
-      setLoading(false);
-      setBrands(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getAmenities = async () => {
-    try {
-      setLoading(true);
 
-      const { data } = await axios.get("/api/amenity/amenities", config);
-      setLoading(false);
-      setAmenities(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchBrands = async () => {
+    await getBrandsData(setLoading, setBrands);
   };
-  const getCategory = async () => {
-    try {
-      setLoading(true);
-
-      const { data } = await axios.get(
-        "/api/propertyType/propertyTypes",
-        config
-      );
-      setLoading(false);
-      setCategories(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchAmenity = async () => {
+    await getAmenities(setLoading, setAmenities);
+  };
+  const handleFetchCategory = async () => {
+    await getCategory(setLoading, setCategories);
   };
   const onChangeHandler = (e) => {
     const index = e.target.selectedIndex;
     const el = e.target.childNodes[index];
     const option = el.getAttribute("id");
     const { name, value } = e.target;
-    setCoSpace({
+
+    let updatedCoSpace = {
       ...coSpace,
       [name]: value,
-    });
-    setCountryId(option);
-  };
-  const onChangeHandler1 = (e) => {
-    const index = e.target.selectedIndex;
-    const el = e.target.childNodes[index];
-    const option1 = el.getAttribute("id");
-    const { name, value } = e.target;
-    setCoSpace({
-      ...coSpace,
-      [name]: value,
-    });
-    setStateId(option1);
-  };
-  const onChangeHandler2 = (e) => {
-    const index = e.target.selectedIndex;
-    const el = e.target.childNodes[index];
-    const option2 = el.getAttribute("id");
-    const { name, value } = e.target;
-    setCoSpace({
-      ...coSpace,
-      [name]: value,
-    });
-    setCityId(option2);
-  };
-  const onChangeHandler3 = (e) => {
-    const index = e.target.selectedIndex;
-    const el = e.target.childNodes[index];
-    const option3 = el.getAttribute("id");
-    const { name, value } = e.target;
-    setCoSpace({
-      ...coSpace,
-      [name]: value,
-    });
-    setMicrolocationId(option3);
-  };
-  const onChangeHandler4 = (e) => {
-    const index = e.target.selectedIndex;
-    const el = e.target.childNodes[index];
-    const option4 = el.getAttribute("id");
-    const { name, value } = e.target;
-    setCoSpace({
-      ...coSpace,
-      [name]: value,
-    });
-    setBrandId(option4);
-  };
-  const previewFile = (data) => {
-    const allimages = images;
-    setImages(allimages.concat(data));
+    };
+
+    if (name === "country") {
+      setCountryId(option);
+    } else if (name === "state") {
+      setStateId(option);
+      setCoSpace({
+        ...updatedCoSpace,
+      });
+    } else if (name === "city") {
+      setCityId(option);
+      setCoSpace({
+        ...updatedCoSpace,
+      });
+    } else if (name === "microLocation") {
+      setMicrolocationId(option);
+      setCoSpace({
+        ...updatedCoSpace,
+      });
+    } else if (name === "brand") {
+      setBrandId(option);
+      setCoSpace({
+        ...updatedCoSpace,
+      });
+    }
+
+    setCoSpace(updatedCoSpace);
   };
 
-  const uploadFile = (files) => {
-    const formData = new FormData();
-    setProgress(0);
-    files.forEach((file) => {
-      formData.append("files", file, file.name);
-    });
-    axios
-      .post("/upload-image", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        onUploadProgress: (progressEvent) => {
-          setProgress(
-            parseInt(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            )
-          );
-        },
-      })
-      .then((res) => {
-        previewFile(res.data);
-        // setTimeout(() => {
-        //   setProgress(0);
-        // }, 3000);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log("sshiva");
+  const previewFile = (data) => {
+    setImages((prevImages) => [...prevImages, ...data]);
+  };
+  const handleUploadFile = async (files) => {
+    await uploadFile(files, setProgress, setIsUploaded, previewFile);
   };
   const handleSaveWorkSpace = async (e) => {
     e.preventDefault();
@@ -369,7 +303,7 @@ function AddWorkSpace() {
         {
           name: coSpace.name,
           description: footer_descript_value,
-          images: images,
+          images: imageData,
           amenties: checkedAmenities,
           seo: {
             title: coSpace.title,
@@ -399,21 +333,21 @@ function AddWorkSpace() {
           no_of_seats: coSpace.seats,
           hours_of_operation: {
             monday_friday: {
-              // from: selectedval1[0].name || "",
-              // to: selectedval2[0].name || "",
-              // is_closed: open.isClose1,
+              from: formData.montofriFrom,
+              to: formData.montofriTo,
+              is_closed: open.isClose1,
               is_open_24: open.fullOpen1,
             },
             saturday: {
-              // from: selectedval3[0].name || "",
-              // to: selectedval4[0].name || "",
-              // is_closed: open.isClose2,
+              from: formData.satFrom,
+              to: formData.satTo,
+              is_closed: open.isClose2,
               is_open_24: open.fullOpen2,
             },
             sunday: {
-              // from: selectedval5[0].name || "",
-              // to: selectedval6[0].name || "",
-              // is_closed: open.isClose3,
+              from: formData.sunFrom,
+              to: formData.sunTo,
+              is_closed: open.isClose3,
               is_open_24: open.fullOpen3,
             },
           },
@@ -473,8 +407,6 @@ function AddWorkSpace() {
   const handleCheckboxChange = (event) => {
     const checkedAmenityId = event.target.value;
     const isChecked = event.target.checked;
-
-    // Update the array of checked checkbox IDs
     if (isChecked) {
       setCheckedAmenities((prevCheckedAmenities) => [
         ...prevCheckedAmenities,
@@ -486,32 +418,45 @@ function AddWorkSpace() {
       );
     }
   };
-  const handleSelect1 = (selectedList, selectedItem) => {
-    setSelectedval1(selectedList);
+  const handleSelect = (selectedOption, field) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [field]: selectedOption.value,
+    }));
   };
-  const handleSelect2 = (selectedList, selectedItem) => {
-    setSelectedval2(selectedList);
+  const removePreviewImage = (index) => {
+    const updatedImages = [...images];
+    updatedImages.splice(index, 1);
+    setImages(updatedImages);
   };
-  const handleSelect3 = (selectedList, selectedItem) => {
-    setSelectedval3(selectedList);
+  const handleInputByClick = (e) => {
+    const files = Array.from(e.target.files);
+    handleUploadFile(files);
+    const fileNames = files.map((file) => file.name);
+    setFileName(fileNames);
   };
-  const handleSelect4 = (selectedList, selectedItem) => {
-    setSelectedval4(selectedList);
-  };
-  const handleSelect5 = (selectedList, selectedItem) => {
-    setSelectedval5(selectedList);
-  };
-  const handleSelect6 = (selectedList, selectedItem) => {
-    setSelectedval6(selectedList);
-  };
-
   useEffect(() => {
-    getCountry();
-    getBrandsData();
-    getAmenities();
-    getCategory();
+    handleFetchCountry();
+    handleFetchBrands();
+    handleFetchAmenity();
+    handleFetchCategory();
   }, []);
+  const [imageData, setImageData] = useState([]);
+  useEffect(() => {
+    const combinedArray = images.map((image, index) => ({
+      image,
+      name: fileName[index],
+      alt: fileName[index],
+    }));
+    setImageData([...combinedArray]);
+  }, [images, fileName]);
+  const handleAltChange = (event, index) => {
+    const updatedArray = [...imageData]; // Create a copy of the mergedArray
+    updatedArray[index].alt = event.target.value; // Update the alt value at the specified index
 
+    setImageData(updatedArray);
+  };
+  console.log(formData);
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
@@ -528,7 +473,7 @@ function AddWorkSpace() {
                     name="brand"
                     aria-label="Default select example"
                     value={coSpace.brand}
-                    onChange={onChangeHandler4}
+                    onChange={onChangeHandler}
                   >
                     <option>Select a brand</option>
                     {brands?.map((brand) => (
@@ -715,7 +660,7 @@ function AddWorkSpace() {
                     value={coSpace.country}
                     onChange={onChangeHandler}
                     name="country"
-                    onClick={getStateByCountry}
+                    onClick={handleFetchStates}
                     required
                   >
                     <option>Select a country*</option>
@@ -740,8 +685,8 @@ function AddWorkSpace() {
                     aria-label="Default select example"
                     value={coSpace.state}
                     name="state"
-                    onChange={onChangeHandler1}
-                    onClick={getCityByState}
+                    onChange={onChangeHandler}
+                    onClick={handleFetchCity}
                     required
                   >
                     <option>Select a state*</option>
@@ -765,8 +710,8 @@ function AddWorkSpace() {
                     className="form-select"
                     aria-label="Default select example"
                     value={coSpace.city}
-                    onChange={onChangeHandler2}
-                    onClick={getMicrolocationByCity}
+                    onChange={onChangeHandler}
+                    onClick={handleFetchMicrolocation}
                     name="city"
                     required
                   >
@@ -794,7 +739,7 @@ function AddWorkSpace() {
                     aria-label="Default select example"
                     name="microLocation"
                     value={coSpace.microLocation}
-                    onChange={onChangeHandler3}
+                    onChange={onChangeHandler}
                     required
                   >
                     <option>Select a microlocation*</option>
@@ -868,13 +813,91 @@ function AddWorkSpace() {
             </div>
             <h4>Images</h4>
             <div className="row">
-              <ImageUpload
-                images={images}
-                setImages={setImages}
-                progress={progress}
-                setProgress={setProgress}
-                uploadFile={uploadFile}
-              />
+              <div className="container">
+                <div>
+                  <input
+                    id="file-input"
+                    type="file"
+                    multiple
+                    onChange={handleInputByClick}
+                  />
+                </div>
+
+                {progress ? (
+                  <div>
+                    <p className="mx-auto">
+                      <strong>Uploading Progress</strong>
+                    </p>
+                    <div className="progress mx-auto">
+                      <div
+                        id="progress-bar"
+                        className="progress-bar progress-bar-striped bg-info"
+                        role="progressbar"
+                        aria-valuenow="40"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        style={{ width: `${progress}%` }}
+                      >
+                        {progress}%
+                      </div>
+                    </div>
+                  </div>
+                ) : isUploaded ? (
+                  <h5>Uploaded</h5>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div id="preview" className="mt-3 d-flex align-items-center">
+                <div className="table-box" style={{ width: "100%" }}>
+                  <h3>Images</h3>
+                  <TableContainer variant="striped" color="teal">
+                    <Table variant="simple">
+                      <Thead>
+                        <Tr>
+                          <Th>Order No.</Th>
+                          <Th>Image</Th>
+                          <Th>Name</Th>
+                          <Th>Alt1</Th>
+
+                          <Th>Delete</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {imageData?.map((img, index) => (
+                          <Fragment key={index}>
+                            <Tr>
+                              <Td>{index + 1}</Td>
+                              <Td>
+                                <img src={img.image} alt="media" width="80px" />
+                              </Td>
+                              <Td>{img.name}</Td>
+                              <Td>
+                                <input
+                                  type="text"
+                                  style={{ color: "#000" }}
+                                  value={img.alt}
+                                  onChange={(event) =>
+                                    handleAltChange(event, index)
+                                  }
+                                />
+                              </Td>
+
+                              <Td>
+                                <AiFillDelete
+                                  onClick={() => removePreviewImage(index)}
+                                  className="icon"
+                                  style={{ color: "red" }}
+                                />
+                              </Td>
+                            </Tr>
+                          </Fragment>
+                        ))}
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </div>
+              </div>
             </div>
             <div className="row">
               <div className="col-md-3">
@@ -896,28 +919,34 @@ function AddWorkSpace() {
               {fullOpen1 === false && isClose1 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                      onSelect={handleSelect1}
-                      onRemove={handleSelect1}
-                    />
+                    <select
+                      value={formData.montofriFrom}
+                      onChange={(e) => handleSelect(e.target, "montofriFrom")}
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
               {fullOpen1 === false && isClose1 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="To*"
-                      onSelect={handleSelect2}
-                      onRemove={handleSelect2}
-                    />
+                    <select
+                      value={formData.montofriTo}
+                      onChange={(e) => handleSelect(e.target, "montofriTo")}
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
@@ -966,28 +995,34 @@ function AddWorkSpace() {
               {fullOpen2 === false && isClose2 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      onSelect={handleSelect3}
-                      onRemove={handleSelect3}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                    />
+                    <select
+                      value={formData.satFrom}
+                      onChange={(e) => handleSelect(e.target, "satFrom")}
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
               {fullOpen2 === false && isClose2 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      onSelect={handleSelect4}
-                      onRemove={handleSelect4}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="To*"
-                    />
+                    <select
+                      value={formData.satTo}
+                      onChange={(e) => handleSelect(e.target, "satTo")}
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
@@ -1036,28 +1071,34 @@ function AddWorkSpace() {
               {fullOpen3 === false && isClose3 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      onSelect={handleSelect5}
-                      onRemove={handleSelect5}
-                      displayValue="name"
-                      singleSelect
-                      placeholder="From*"
-                    />
+                    <select
+                      value={formData.sunFrom}
+                      onChange={(e) => handleSelect(e.target, "sunFrom")}
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
               {fullOpen3 === false && isClose3 === false && (
                 <div className="col-md-2">
                   <div style={{ borderBottom: "1px solid gray" }}>
-                    <Multiselect
-                      options={options}
-                      displayValue="name"
-                      onSelect={handleSelect6}
-                      onRemove={handleSelect6}
-                      singleSelect
-                      placeholder="To*"
-                    />
+                    <select
+                      value={formData.sunTo}
+                      onChange={(e) => handleSelect(e.target, "sunTo")}
+                    >
+                      <option value="">From*</option>
+                      {options.map((option) => (
+                        <option key={option.id} value={option.name}>
+                          {option.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               )}
