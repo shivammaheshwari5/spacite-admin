@@ -85,6 +85,14 @@ const initialValue = {
       duration: "",
     },
   ],
+  contact_details: [
+    {
+      user: "",
+      email: "",
+      phone: "",
+      designation: "",
+    },
+  ],
   brand: {},
   slug: "",
 };
@@ -109,6 +117,7 @@ const EditWorkSpace = () => {
   const [workSpaces, setWorkSpaces] = useState(initialValue);
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [fileName, setFileName] = useState([]);
+  const [allContact, setAllContact] = useState([]);
   const {
     name,
     description,
@@ -119,6 +128,7 @@ const EditWorkSpace = () => {
     location,
     hours_of_operation,
     plans,
+    contact_details,
     slug,
     seo,
     brand,
@@ -166,7 +176,10 @@ const EditWorkSpace = () => {
     if (plans) {
       setAllPlans(plans);
     }
-  }, [plans]);
+    if (contact_details) {
+      setAllContact(contact_details);
+    }
+  }, [plans, contact_details]);
   const createPlans = () => {
     const newRow = {
       id: allplans.length + 1,
@@ -179,6 +192,19 @@ const EditWorkSpace = () => {
 
   const removePlan = (id) => {
     setAllPlans((prevRows) => prevRows.filter((row) => row.id !== id));
+  };
+  const createContact = () => {
+    const newRow = {
+      id: allContact.length + 1,
+      user: "",
+      email: "",
+      phone: "",
+      designation: "",
+    };
+    setAllContact((prevRows) => [...prevRows, newRow]);
+  };
+  const removeContact = (id) => {
+    setAllContact((prevRows) => prevRows.filter((row) => row.id !== id));
   };
   const onChangePlanHandler = (e, id) => {
     const { name, value } = e.target;
@@ -197,6 +223,12 @@ const EditWorkSpace = () => {
   const handleInputPlanChange = (e, id) => {
     const { name, value } = e.target;
     setAllPlans((prevRows) =>
+      prevRows.map((row) => (row.id === id ? { ...row, [name]: value } : row))
+    );
+  };
+  const handleInputContactChange = (e, id) => {
+    const { name, value } = e.target;
+    setAllContact((prevRows) =>
       prevRows.map((row) => (row.id === id ? { ...row, [name]: value } : row))
     );
   };
@@ -285,8 +317,7 @@ const EditWorkSpace = () => {
             },
           },
           plans: allplans,
-
-          // status,
+          contact_details: allContact,
           brand,
           slug,
         },
@@ -433,14 +464,6 @@ const EditWorkSpace = () => {
     setMergedArray(updatedArray);
   };
 
-  // if (loading) {
-  //   return (
-  //     <div>
-  //       <Loader />
-  //     </div>
-  //   ); // Render a loading state while fetching data
-  // }
-
   console.log(workSpaces);
   console.log(
     hours_of_operation.monday_friday.from,
@@ -452,6 +475,93 @@ const EditWorkSpace = () => {
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleEditWorkSpace}>
           <div className="container">
+            <div className="row pt-4 d-flex w-50 justify-content-between align-items-center">
+              <h4 className="property_form_h4">Other Contact Details</h4>
+              <IoIosAddCircle
+                onClick={createContact}
+                className="icon"
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            {allContact?.map((row, id) => (
+              <div className="row pt-3" key={row.id}>
+                <div className="col-md-3">
+                  <div
+                    className="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInput"
+                      placeholder="User*"
+                      name="user"
+                      value={row.user}
+                      onChange={(e) => handleInputContactChange(e, row.id)}
+                    />
+                    <label htmlFor="floatingInput">Name</label>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div
+                    className="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInputSlug"
+                      placeholder="Email*"
+                      name="email"
+                      value={row.email}
+                      onChange={(e) => handleInputContactChange(e, row.id)}
+                    />
+                    <label htmlFor="floatingInputSlug">Email</label>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div
+                    className="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInputSlug"
+                      placeholder="Phone"
+                      name="phone"
+                      value={row.phone}
+                      onChange={(e) => handleInputContactChange(e, row.id)}
+                    />
+                    <label htmlFor="floatingInputSlug">Phone</label>
+                  </div>
+                </div>
+                <div className="col-md-3 d-flex justify-content-between align-items-center">
+                  <div
+                    className="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInputSlug"
+                      placeholder="Designation"
+                      name="designation"
+                      value={row.designation}
+                      onChange={(e) => handleInputContactChange(e, row.id)}
+                    />
+                    <label htmlFor="floatingInputSlug">Designation</label>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <AiFillDelete
+                      className="icon"
+                      style={{ cursor: "pointer", marginTop: "14px" }}
+                      onClick={() => removeContact(row.id)}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
             <div className="row">
               <div className="col-md-6">
                 <input
@@ -1112,89 +1222,6 @@ const EditWorkSpace = () => {
                 </>
               )}
             </div>
-
-            {/* <div className="row">
-              <div className="col-md-3">Sunday</div>
-              {!apiValues.isSunClosed && (
-                <>
-                  <div className="col-md-2">
-                    {!apiValues.isOpen24Sun && (
-                      <div style={{ borderBottom: "1px solid gray" }}>
-                        <select
-                          value={hours_of_operation.sunday.from}
-                          name="hours_of_operation.sunday.from"
-                          onChange={handleInputChange2}
-                        >
-                          <option value="">From*</option>
-                          {options.map((option) => (
-                            <option key={option.id} value={option.name}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="col-md-2">
-                    {!apiValues.isOpen24Sun && (
-                      <div style={{ borderBottom: "1px solid gray" }}>
-                        <select
-                          value={hours_of_operation.sunday.to}
-                          onChange={handleInputChange2}
-                          name="hours_of_operation.sunday.to"
-                        >
-                          <option value="">To*</option>
-                          {options.map((option) => (
-                            <option key={option.id} value={option.name}>
-                              {option.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-
-              <div className="col-md-3" style={{ paddingTop: "8px" }}>
-                {!apiValues.isSunClosed && (
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="sun"
-                      id="flexCheckSun"
-                      onChange={(event) =>
-                        toggleHoursHandler(event, "isOpen24Sun")
-                      }
-                      checked={apiValues.isOpen24Sun}
-                    />
-                    <label className="form-check-label" htmlFor="flexCheckSun">
-                      Open 24 Hours
-                    </label>
-                  </div>
-                )}
-              </div>
-
-              <div className="col-md-2" style={{ paddingTop: "8px" }}>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value="sun-close"
-                    id="flexCheckSun"
-                    onChange={(event) =>
-                      toggleHoursHandler(event, "isSunClosed")
-                    }
-                    checked={apiValues.isSunClosed}
-                  />
-                  <label className="form-check-label" htmlFor="flexCheckSun">
-                    Closed
-                  </label>
-                </div>
-              </div>
-            </div> */}
 
             <div className="d-flex w-50 justify-content-between align-items-center">
               <h4>Plans</h4>
