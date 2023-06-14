@@ -23,6 +23,13 @@ function CoworkingSpace() {
   const [loading, setLoading] = useState(false);
   const [workSpaces, setWorkSpaces] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
+  const [searchWorkSpaces, setSearchWorkSpaces] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [citySearchTerm, setCitySearchTerm] = useState("");
+  const [microLocationSearchTerm, setMicroLocationSearchTerm] = useState("");
+  const [searchedWorkSpaces, setSearchedWorkSpaces] = useState([]);
+  const [showAll, setShowAll] = useState(true);
+
   const toast = useToast();
   const getWorkSpaceData = async () => {
     try {
@@ -34,10 +41,66 @@ function CoworkingSpace() {
       console.log(error);
     }
   };
+  // const searchWorkSpaceData = async (query) => {
+  //   try {
+  //     setLoading(true);
+  //     setSearch(query);
+  //     if (!query) {
+  //       return;
+  //     }
+
+  //     const { data } = await axios.get(
+  //       `/api/workSpace/workSpaces/search?name=${search}`,
+  //       config
+  //     );
+  //     setLoading(false);
+  //     setSearchWorkSpaces(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const handleSearch = () => {
+    const filteredWorkSpaces = workSpaces.filter((workSpace) => {
+      const cityName = workSpace.location.city?.name || "city";
+      const microLocationName =
+        workSpace.location.micro_location?.name || "microlocation";
+
+      const matchName =
+        workSpace.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        searchTerm.toLowerCase().includes(workSpace.name.toLowerCase());
+
+      const matchCity =
+        cityName.toLowerCase().includes(citySearchTerm.toLowerCase()) ||
+        citySearchTerm.toLowerCase().includes(cityName.toLowerCase());
+
+      const matchMicroLocation =
+        microLocationName
+          .toLowerCase()
+          .includes(microLocationSearchTerm.toLowerCase()) ||
+        microLocationSearchTerm
+          .toLowerCase()
+          .includes(microLocationName.toLowerCase());
+
+      return matchName && matchCity && matchMicroLocation;
+    });
+
+    setSearchedWorkSpaces(filteredWorkSpaces);
+    setCurPage(1);
+  };
+
   useEffect(() => {
     getWorkSpaceData();
   }, [updateTable]);
 
+  useEffect(() => {
+    handleSearch();
+    setShowAll(
+      searchTerm === "" &&
+        citySearchTerm === "" &&
+        microLocationSearchTerm === ""
+    );
+  }, [updateTable, searchTerm, citySearchTerm, microLocationSearchTerm]);
   const handleDeleteWorkSpaces = async (id) => {
     try {
       const { data } = await axios.delete(
@@ -63,8 +126,9 @@ function CoworkingSpace() {
       });
     }
   };
+  console.log(searchWorkSpaces);
 
-  const [selectItemNum, setSelectItemNum] = useState(10);
+  const [selectItemNum, setSelectItemNum] = useState(5);
   const itemsPerPageHandler = (e) => {
     setSelectItemNum(e.target.value);
   };
@@ -72,8 +136,7 @@ function CoworkingSpace() {
   const recordsPerPage = selectItemNum;
   const lastIndex = curPage * recordsPerPage;
   const firstIndex = lastIndex - recordsPerPage;
-  const records = workSpaces?.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(workSpaces?.length / selectItemNum);
+  const nPage = Math.ceil(searchedWorkSpaces?.length / selectItemNum);
   if (firstIndex > 0) {
     var prePage = () => {
       if (curPage !== firstIndex) {
@@ -82,15 +145,11 @@ function CoworkingSpace() {
     };
   }
 
-  // console.log(selectItemNum);
-  // if (records?.length === selectItemNum) {
   var nextPage = () => {
     if (curPage !== lastIndex) {
       setCurPage(curPage + 1);
     }
   };
-  // console.log(records.length);
-  // }
 
   const getFirstPage = () => {
     setCurPage(1);
@@ -103,12 +162,36 @@ function CoworkingSpace() {
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
-      <Link to="/coworking-space/add-coworking-space" className="btnLink">
-        <Addpropertybtn />
-      </Link>
+      <Addpropertybtn />
       <div className="table-box">
-        <div className="table-top-box">Coworking Space Table</div>
-        <TableContainer marginTop="60px" variant="striped" color="teal">
+        <div className="table-top-box">Country Table</div>
+        <TableContainer>
+          <div className="row">
+            <div className="col-md-3">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search by name"
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                value={citySearchTerm}
+                onChange={(e) => setCitySearchTerm(e.target.value)}
+                placeholder="Search by city"
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                value={microLocationSearchTerm}
+                onChange={(e) => setMicroLocationSearchTerm(e.target.value)}
+                placeholder="Search by microlocation"
+              />
+            </div>
+          </div>
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -125,48 +208,81 @@ function CoworkingSpace() {
             <Tbody>
               {loading ? (
                 <Tr>
-                  <Td align="center" style={{ width: "50px" }}>
-                    <Spinner
-                      size="xl"
-                      w={20}
-                      h={20}
-                      alignSelf="center"
-                      style={{ position: "absolute", left: "482px" }}
-                    />
+                  <Td colSpan={8} textAlign="center">
+                    <Spinner size="lg" />
                   </Td>
                 </Tr>
-              ) : (
-                records?.map((workSpace) => (
-                  <Tr key={workSpace._id} id={workSpace._id}>
-                    <Td>
-                      {workSpace.name.length > 16
-                        ? workSpace.name.substring(0, 16) + ".."
-                        : workSpace.name}
-                    </Td>
-                    <Td>{workSpace.location.city?.name || "city"}</Td>
-                    <Td>
-                      {workSpace.location.micro_location?.name ||
-                        "microlocation"}
-                    </Td>
-                    <Td>{workSpace.createdAt.split("T")[0]}</Td>
-                    <Td>{workSpace.status}</Td>
-                    <Td>
-                      <Link to={`/editworkspace/${workSpace._id}`}>
-                        <AiFillEdit
-                          style={{ fontSize: "22px", cursor: "pointer" }}
+              ) : showAll ? (
+                workSpaces
+                  ?.slice(
+                    (curPage - 1) * selectItemNum,
+                    curPage * selectItemNum
+                  )
+                  .map((workSpace) => (
+                    <Tr key={workSpace._id}>
+                      <Td>{workSpace.name}</Td>
+                      <Td>
+                        {workSpace.location.city
+                          ? workSpace.location.city.name
+                          : ""}
+                      </Td>
+                      <Td>
+                        {workSpace.location.micro_location
+                          ? workSpace.location.micro_location.name
+                          : ""}
+                      </Td>
+
+                      <Td>{workSpace.createdAt.split("T")[0]}</Td>
+                      <Td>{workSpace.status}</Td>
+                      <Td>
+                        <Link to={`/editworkspace/${workSpace._id}`}>
+                          <AiFillEdit style={{ marginLeft: "0.5rem" }} />
+                        </Link>
+                      </Td>
+                      <Td>Preview</Td>
+                      <Td>
+                        <Delete
+                          onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
                         />
-                      </Link>
-                    </Td>
-                    <Td>Preview</Td>
-                    <Td>
-                      <Delete
-                        handleFunction={() =>
-                          handleDeleteWorkSpaces(workSpace._id)
-                        }
-                      />
-                    </Td>
-                  </Tr>
-                ))
+                      </Td>
+                    </Tr>
+                  ))
+              ) : searchedWorkSpaces.length > 0 ? (
+                searchedWorkSpaces
+                  .slice((curPage - 1) * selectItemNum, curPage * selectItemNum)
+                  .map((workSpace, index) => (
+                    <Tr key={workSpace._id}>
+                      <Td>{workSpace.name}</Td>
+                      <Td>
+                        {workSpace.location.city
+                          ? workSpace.location.city.name
+                          : ""}
+                      </Td>
+                      <Td>
+                        {workSpace.location.micro_location
+                          ? workSpace.location.micro_location.name
+                          : ""}
+                      </Td>
+
+                      <Td>{workSpace.createdAt.split("T")[0]}</Td>
+                      <Td>{workSpace.status}</Td>
+                      <Td>
+                        <Link to={`/editworkspace/${workSpace._id}`}>
+                          <AiFillEdit style={{ marginLeft: "0.5rem" }} />
+                        </Link>
+                      </Td>
+                      <Td>Preview</Td>
+                      <Td>
+                        <Delete
+                          onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
+                        />
+                      </Td>
+                    </Tr>
+                  ))
+              ) : (
+                <Tr>
+                  <Td colSpan={8}>No matching results found.</Td>
+                </Tr>
               )}
             </Tbody>
           </Table>
@@ -181,19 +297,17 @@ function CoworkingSpace() {
               <select
                 className="form-select"
                 aria-label="Default select example"
-                required
                 value={selectItemNum}
                 onChange={itemsPerPageHandler}
-                style={{ paddingLeft: "0" }}
               >
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
               </select>
             </div>
             <div style={{ width: "110px" }}>
-              {firstIndex + 1} - {records?.length + firstIndex} of{" "}
+              {firstIndex + 1} - {searchedWorkSpaces?.length + firstIndex} of{" "}
               {workSpaces?.length}
             </div>
 
