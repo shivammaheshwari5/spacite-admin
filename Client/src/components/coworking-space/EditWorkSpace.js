@@ -124,96 +124,44 @@ const EditWorkSpace = () => {
     brand,
     is_popular,
   } = workSpaces;
-  const [open, setOpen] = useState({
-    fullOpen1: false,
-    isClose1: false,
-    fullOpen2: false,
-    isClose2: false,
-    fullOpen3: false,
-    isClose3: false,
-  });
-  const { fullOpen1, isClose1, fullOpen2, isClose2, fullOpen3, isClose3 } =
-    open;
-  const [options, setOptions] = useState([
-    { name: "01:00 AM" },
-    { name: "01:15 AM" },
-    { name: "01:30 AM" },
-    { name: "01:45 AM" },
-    { name: "02:00 AM" },
-    { name: "02:15 AM" },
-    { name: "02:30 AM" },
-    { name: "02:45 AM" },
-    { name: "03:00 AM" },
-    { name: "03:15 AM" },
-    { name: "03:30 AM" },
-  ]);
+  const options = [
+    { id: 1, name: "09:00 AM" },
+    { id: 2, name: "01:15 AM" },
+    { id: 3, name: "01:30 AM" },
+    { id: 4, name: "01:45 AM" },
+    { id: 5, name: "02:00 AM" },
+    { id: 6, name: "02:15 AM" },
+    { id: 7, name: "02:30 AM" },
+    { id: 8, name: "02:45 AM" },
+    { id: 9, name: "03:00 AM" },
+    { id: 10, name: "03:15 AM" },
+    { id: 11, name: "03:30 AM" },
+    { id: 11, name: "07:00 PM" },
+  ];
   const [checkedAmenities, setCheckedAmenities] = useState([]);
-  const [formData, setFormData] = useState({
-    montofriFrom: "",
-    montofriTo: "",
-    satFrom: "",
-    satTo: "",
-    sunFrom: "",
-    sunTo: "",
+  const [apiValues, setApiValues] = useState({
+    isOpen: true,
+    isOpenSat: false,
+    isOpenSun: false,
   });
-  const openFullHoursHandler = (e) => {
-    const value = e.target.value;
 
-    if (value === "mon-fri" || value === "mon-fri-close") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        montofriFrom: value === "mon-fri" ? "" : prevFormData.montofriFrom,
-        montofriTo: value === "mon-fri" ? "" : prevFormData.montofriTo,
+  const toggleHoursHandler = (event, day, allday) => {
+    const isChecked = event.target.checked;
+    setApiValues((prevState) => ({
+      ...prevState,
+      [day]: isChecked,
+    }));
+    if (isChecked) {
+      setWorkSpaces((prevState) => ({
+        ...prevState,
+        hours_of_operation: {
+          ...prevState.hours_of_operation,
+          [allday]: { from: "", to: "" },
+        },
       }));
-    } else if (value === "sat") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        satFrom: prevFormData.satFrom === value ? "" : prevFormData.satFrom,
-        satTo: prevFormData.satTo === value ? "" : prevFormData.satTo,
-      }));
-    } else if (value === "sun") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        sunFrom: prevFormData.sunFrom === value ? "" : prevFormData.sunFrom,
-        sunTo: prevFormData.sunTo === value ? "" : prevFormData.sunTo,
-      }));
-    }
-
-    if (value === "mon-fri") {
-      setOpen({ ...open, fullOpen1: !open.fullOpen1 });
-    } else if (value === "sat") {
-      setOpen({ ...open, fullOpen2: !open.fullOpen2 });
-    } else if (value === "sun") {
-      setOpen({ ...open, fullOpen3: !open.fullOpen3 });
     }
   };
 
-  const closeHandler = (e) => {
-    const value = e.target.value;
-
-    if (value === "mon-fri-close") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        montofriFrom: "",
-        montofriTo: "",
-      }));
-      setOpen({ ...open, isClose1: !open.isClose1 });
-    } else if (value === "sat") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        satFrom: "",
-        satTo: "",
-      }));
-      setOpen({ ...open, isClose2: !open.isClose2 });
-    } else if (value === "sun") {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        sunFrom: "",
-        sunTo: "",
-      }));
-      setOpen({ ...open, isClose3: !open.isClose3 });
-    }
-  };
   useEffect(() => {
     if (plans) {
       setAllPlans(plans);
@@ -319,20 +267,23 @@ const EditWorkSpace = () => {
             longitude: location.longitude,
           },
           no_of_seats,
-          //    hours_of_operation: {
-          //      monday_friday: {
-          //        from: selectedval1[0].name,
-          //        to: selectedval2[0].name,
-          //      },
-          //      saturday: {
-          //        from: selectedval3[0].name,
-          //        to: selectedval4[0].name,
-          //      },
-          //      sunday: {
-          //        from: selectedval5[0].name,
-          //        to: selectedval6[0].name,
-          //      },
-          //    },
+          hours_of_operation: {
+            monday_friday: {
+              from: hours_of_operation.monday_friday.from,
+              to: hours_of_operation.monday_friday.to,
+              is_open_24: apiValues.isOpen,
+            },
+            saturday: {
+              from: hours_of_operation.saturday.from,
+              to: hours_of_operation.saturday.to,
+              is_open_24: apiValues.isOpenSat,
+            },
+            sunday: {
+              from: hours_of_operation.sunday.from,
+              to: hours_of_operation.sunday.to,
+              is_open_24: apiValues.isOpenSun,
+            },
+          },
           plans: allplans,
 
           // status,
@@ -377,7 +328,11 @@ const EditWorkSpace = () => {
       );
 
       setWorkSpaces(data);
-
+      setApiValues({
+        isOpen: data.hours_of_operation.monday_friday.is_open_24,
+        isOpenSat: data.hours_of_operation.saturday.is_open_24,
+        isOpenSun: data.hours_of_operation.sunday.is_open_24,
+      });
       handleFetchStates(data.location.country);
       handleFetchCity(data.location.state);
       handleFetchMicrolocation(data.location.city);
@@ -435,21 +390,6 @@ const EditWorkSpace = () => {
       );
     }
   };
-  // const handleInputChange2 = (event) => {
-  //   const { name, value } = event.target;
-  //   const [category, subCategory, property] = name.split(".");
-
-  //   setWorkSpaces((prevState) => ({
-  //     ...prevState,
-  //     [category]: {
-  //       ...prevState[category],
-  //       [subCategory]: {
-  //         ...prevState[category][subCategory],
-  //         [property]: value,
-  //       },
-  //     },
-  //   }));
-  // };
 
   useEffect(() => {
     handleFetchCountry();
@@ -492,23 +432,20 @@ const EditWorkSpace = () => {
 
     setMergedArray(updatedArray);
   };
-  const handleSelect = (selectedOption, field) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [field]: selectedOption.value,
-    }));
-  };
-  if (loading) {
-    return (
-      <div>
-        <Loader />
-      </div>
-    ); // Render a loading state while fetching data
-  }
 
-  console.log(hours_of_operation.monday_friday.from);
+  // if (loading) {
+  //   return (
+  //     <div>
+  //       <Loader />
+  //     </div>
+  //   ); // Render a loading state while fetching data
+  // }
+
   console.log(workSpaces);
-  console.log(open.isClose2);
+  console.log(
+    hours_of_operation.monday_friday.from,
+    hours_of_operation.monday_friday.to
+  );
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
@@ -516,6 +453,17 @@ const EditWorkSpace = () => {
         <form style={{ textAlign: "left" }} onSubmit={handleEditWorkSpace}>
           <div className="container">
             <div className="row">
+              <div className="col-md-6">
+                <input
+                  className="property-input"
+                  type="text"
+                  placeholder="Name*"
+                  name="name"
+                  value={name}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
               <div className="col-md-6">
                 <div
                   style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
@@ -536,19 +484,11 @@ const EditWorkSpace = () => {
                   </select>
                 </div>
               </div>
-              <div className="col-md-6">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Name*"
-                  name="name"
-                  value={name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
             </div>
             <div className="row">
+              <div className="col-md-12">
+                <h4>About Property</h4>
+              </div>
               <div className="col-md-12">
                 <Editor
                   editorState={editorState}
@@ -704,9 +644,11 @@ const EditWorkSpace = () => {
                   rows="2"
                   className="property-input"
                   placeholder="Address*"
-                  name="address"
+                  name="location"
+                  onChange={(event) =>
+                    handleInputChangeObject(event, "location", "address")
+                  }
                   value={location.address}
-                  onChange={handleInputChange}
                   required
                 ></textarea>
               </div>
@@ -895,16 +837,6 @@ const EditWorkSpace = () => {
               </div>
             </div>
             <h4>Images</h4>
-            {/* <div className="row">
-              <ImageUpload
-                images={image}
-                setImages={setImage}
-                progress={progress}
-                setProgress={setProgress}
-                uploadFile={handleUploadFile}
-                isUploaded={isUploaded}
-              />
-            </div> */}
             <div className="row">
               <div className="container">
                 <div>
@@ -1006,240 +938,263 @@ const EditWorkSpace = () => {
               </div>
             </div>
             <h4>Hours of operation</h4>
-
             <div className="row">
               <div className="col-md-3">Monday-Friday</div>
-              {fullOpen1 === false && isClose1 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <select
-                      value={hours_of_operation.monday_friday.from}
-                      name="hours_of_operation.monday_friday.from"
-                      onChange={handleInputChange2}
-                    >
-                      <option value="">From*</option>
-                      {options.map((option) => (
-                        <option key={option.id} value={option.name}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+              <div className="col-md-2" style={{ paddingTop: "8px" }}>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value="mon-fri"
+                    id="flexCheckDefault"
+                    onChange={(event) => toggleHoursHandler(event, "isOpen")}
+                    checked={apiValues.isOpen}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Open
+                  </label>
                 </div>
+              </div>
+              {apiValues.isOpen && (
+                <>
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <select
+                        value={hours_of_operation.monday_friday.from}
+                        name="hours_of_operation.monday_friday.from"
+                        onChange={handleInputChange2}
+                      >
+                        <option value="">From*</option>
+                        {options.map((option, i) => (
+                          <option key={i} value={option.name}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <select
+                        value={hours_of_operation.monday_friday.to}
+                        onChange={handleInputChange2}
+                        name="hours_of_operation.monday_friday.to"
+                      >
+                        <option value="">To*</option>
+                        {options.map((option, i) => (
+                          <option key={i} value={option.name}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </>
               )}
-              {fullOpen1 === false && isClose1 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <select
-                      value={hours_of_operation.monday_friday.to}
-                      onChange={handleInputChange2}
-                      name="hours_of_operation.monday_friday.to"
-                    >
-                      <option value="">From*</option>
-                      {options.map((option) => (
-                        <option key={option.id} value={option.name}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+            </div>
+            <div className="row">
+              <div className="col-md-3">Saturday</div>
+              <div className="col-md-2" style={{ paddingTop: "8px" }}>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value="sat"
+                    id="flexCheckDefault"
+                    onChange={(event) => toggleHoursHandler(event, "isOpenSat")}
+                    checked={apiValues.isOpenSat}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Open
+                  </label>
                 </div>
+              </div>
+              {apiValues.isOpenSat && (
+                <>
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <select
+                        value={hours_of_operation.saturday.from}
+                        name="hours_of_operation.saturday.from"
+                        onChange={handleInputChange2}
+                      >
+                        <option value="">From*</option>
+                        {options.map((option, i) => (
+                          <option key={i} value={option.name}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <select
+                        value={hours_of_operation.saturday.to}
+                        onChange={handleInputChange2}
+                        name="hours_of_operation.saturday.to"
+                      >
+                        <option value="">To*</option>
+                        {options.map((option, i) => (
+                          <option key={i} value={option.name}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </>
               )}
-              {isClose1 === false && (
-                <div className="col-md-3" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="mon-fri"
-                      id="flexCheckDefault"
-                      onChange={openFullHoursHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Open 24 Hours
-                    </label>
-                  </div>
+            </div>
+            <div className="row">
+              <div className="col-md-3">Sunday</div>
+              <div className="col-md-2" style={{ paddingTop: "8px" }}>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value="sun"
+                    id="flexCheckDefault"
+                    onChange={(event) => toggleHoursHandler(event, "isOpenSun")}
+                    checked={apiValues.isOpenSun}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexCheckDefault"
+                  >
+                    Open
+                  </label>
                 </div>
-              )}
-              {fullOpen1 === false && (
-                <div className="col-md-2" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="mon-fri-close"
-                      id="flexCheckDefault"
-                      onChange={closeHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Closed
-                    </label>
+              </div>
+              {apiValues.isOpenSun && (
+                <>
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <select
+                        value={hours_of_operation.sunday.from}
+                        name="hours_of_operation.sunday.from"
+                        onChange={handleInputChange2}
+                      >
+                        <option value="">From*</option>
+                        {options.map((option, i) => (
+                          <option key={i} value={option.name}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
-                </div>
+
+                  <div className="col-md-2">
+                    <div style={{ borderBottom: "1px solid gray" }}>
+                      <select
+                        value={hours_of_operation.sunday.to}
+                        onChange={handleInputChange2}
+                        name="hours_of_operation.sunday.to"
+                      >
+                        <option value="">To*</option>
+                        {options.map((option, i) => (
+                          <option key={i} value={option.name}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </>
               )}
             </div>
 
-            <div className="row">
-              <div className="col-md-2">Saturday</div>
-              {fullOpen2 === false && isClose2 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <select
-                      value={hours_of_operation.saturday.from}
-                      onChange={handleInputChange2}
-                      name="hours_of_operation.saturday.from"
-                    >
-                      <option value="">From*</option>
-                      {options.map((option) => (
-                        <option key={option.id} value={option.name}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </select>
+            {/* <div className="row">
+              <div className="col-md-3">Sunday</div>
+              {!apiValues.isSunClosed && (
+                <>
+                  <div className="col-md-2">
+                    {!apiValues.isOpen24Sun && (
+                      <div style={{ borderBottom: "1px solid gray" }}>
+                        <select
+                          value={hours_of_operation.sunday.from}
+                          name="hours_of_operation.sunday.from"
+                          onChange={handleInputChange2}
+                        >
+                          <option value="">From*</option>
+                          {options.map((option) => (
+                            <option key={option.id} value={option.name}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
-              {fullOpen2 === false && isClose2 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <select
-                      value={hours_of_operation.saturday.to}
-                      onChange={handleInputChange2}
-                      name="hours_of_operation.saturday.to"
-                    >
-                      <option value="">From*</option>
-                      {options.map((option) => (
-                        <option key={option.id} value={option.name}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              )}
-              {isClose2 === false && (
-                <div className="col-md-3" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="sat"
-                      id="flexCheckDefault"
-                      onChange={openFullHoursHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Open 24 Hours
-                    </label>
-                  </div>
-                </div>
-              )}
-              {fullOpen2 === false && (
-                <div className="col-md-2" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="sat"
-                      id="flexCheckDefault"
-                      onChange={closeHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Closed
-                    </label>
-                  </div>
-                </div>
-              )}
-            </div>
 
-            <div className="row">
-              <div className="col-md-2">Sunday</div>
-              {fullOpen3 === false && isClose3 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <select
-                      value={hours_of_operation.sunday.from}
-                      onChange={handleInputChange2}
-                      name="hours_of_operation.sunday.from"
-                    >
-                      <option value="">From*</option>
-                      {options.map((option) => (
-                        <option key={option.id} value={option.name}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </select>
+                  <div className="col-md-2">
+                    {!apiValues.isOpen24Sun && (
+                      <div style={{ borderBottom: "1px solid gray" }}>
+                        <select
+                          value={hours_of_operation.sunday.to}
+                          onChange={handleInputChange2}
+                          name="hours_of_operation.sunday.to"
+                        >
+                          <option value="">To*</option>
+                          {options.map((option) => (
+                            <option key={option.id} value={option.name}>
+                              {option.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </div>
-                </div>
+                </>
               )}
-              {fullOpen3 === false && isClose3 === false && (
-                <div className="col-md-2">
-                  <div style={{ borderBottom: "1px solid gray" }}>
-                    <select
-                      value={hours_of_operation.sunday.to}
-                      onChange={handleInputChange2}
-                      name="hours_of_operation.sunday.to"
-                    >
-                      <option value="">From*</option>
-                      {options.map((option) => (
-                        <option key={option.id} value={option.name}>
-                          {option.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              )}
-              {isClose3 === false && (
-                <div className="col-md-3" style={{ paddingTop: "8px" }}>
+
+              <div className="col-md-3" style={{ paddingTop: "8px" }}>
+                {!apiValues.isSunClosed && (
                   <div className="form-check">
                     <input
                       className="form-check-input"
                       type="checkbox"
                       value="sun"
-                      id="flexCheckDefault"
-                      onChange={openFullHoursHandler}
+                      id="flexCheckSun"
+                      onChange={(event) =>
+                        toggleHoursHandler(event, "isOpen24Sun")
+                      }
+                      checked={apiValues.isOpen24Sun}
                     />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
+                    <label className="form-check-label" htmlFor="flexCheckSun">
                       Open 24 Hours
                     </label>
                   </div>
+                )}
+              </div>
+
+              <div className="col-md-2" style={{ paddingTop: "8px" }}>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value="sun-close"
+                    id="flexCheckSun"
+                    onChange={(event) =>
+                      toggleHoursHandler(event, "isSunClosed")
+                    }
+                    checked={apiValues.isSunClosed}
+                  />
+                  <label className="form-check-label" htmlFor="flexCheckSun">
+                    Closed
+                  </label>
                 </div>
-              )}
-              {fullOpen3 === false && (
-                <div className="col-md-2" style={{ paddingTop: "8px" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value="sun"
-                      id="flexCheckDefault"
-                      onChange={closeHandler}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckDefault"
-                    >
-                      Closed
-                    </label>
-                  </div>
-                </div>
-              )}
-            </div>
+              </div>
+            </div> */}
 
             <div className="d-flex w-50 justify-content-between align-items-center">
               <h4>Plans</h4>
