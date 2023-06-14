@@ -450,10 +450,13 @@ function AddWorkSpace() {
               </div>
               <div className="col-md-4">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #8080806b",
+                    margin: "20px 0 5px",
+                  }}
                 >
                   <select
-                    className="form-select"
+                    className="form-select property-input"
                     name="brand"
                     aria-label="Default select example"
                     value={coSpace.brand}
@@ -468,8 +471,27 @@ function AddWorkSpace() {
                   </select>
                 </div>
               </div>
+
+              <div className="col-md-6">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Name*"
+                    name="name"
+                    value={coSpace.name}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Name</label>
+                </div>
+              </div>
             </div>
-            <div className="row">
+            <div className="row mb-5">
+              <h4 className="property_form_h4">Property Description</h4>
               <div className="col-md-12">
                 <h4>About Property</h4>
               </div>
@@ -483,124 +505,168 @@ function AddWorkSpace() {
                 />
               </div>
             </div>
-            <h4>SEO Details</h4>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Title"
-                  name="title"
-                  value={coSpace.title}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Description"
-                  name="description"
-                  value={coSpace.description}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Robots"
-                  name="robots"
-                  value={coSpace.robots}
-                  onChange={handleInputChange}
-                />
+
+            <div className="row mb-5">
+              <h4 className="property_form_h4">Slug Update</h4>
+              <div className="col-md-12">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputSlug"
+                    placeholder="Slug"
+                    name="slug"
+                    value={coSpace.slug}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputSlug">Slug</label>
+                </div>
               </div>
             </div>
+
             <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Keywords"
-                  name="keywords"
-                  value={coSpace.keywords}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Url"
-                  value={coSpace.url}
-                  onChange={handleInputChange}
-                  name="url"
-                />
-              </div>
-              <div className="col-md-3">
-                <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
-                >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={coSpace.status}
-                    name="status"
+              <h4 className="property_form_h4">SEO Details</h4>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputDescription"
+                    placeholder="Description"
+                    name="description"
+                    value={coSpace.description}
                     onChange={handleInputChange}
-                  >
-                    <option>Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
+                  />
+                  <label for="floatingInputDescription">Description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputRobots"
+                    placeholder="Robots"
+                    name="robots"
+                    value={coSpace.robots}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputRobots">Robots</label>
                 </div>
               </div>
             </div>
             <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Twitter title"
-                  className="property-input"
-                  name="twitterTitle"
-                  value={coSpace.twitterTitle}
-                  onChange={handleInputChange}
-                />
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTitle"
+                    placeholder="Title"
+                    name="title"
+                    value={coSpace.title}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Title</label>
+                </div>
               </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Twitter description"
-                  name="twitterDescription"
-                  value={coSpace.twitterDescription}
-                  onChange={handleInputChange}
-                  className="property-input"
-                />
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputKeywords"
+                    placeholder="Keywords"
+                    name="keywords"
+                    value={coSpace.keywords}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Keywords</label>
+                </div>
               </div>
             </div>
             <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Open graph title"
-                  className="property-input"
-                  name="graphTitle"
-                  value={coSpace.graphTitle}
-                  onChange={handleInputChange}
-                />
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTwitter"
+                    placeholder="Twitter Title"
+                    name="twitterTitle"
+                    value={coSpace.twitterTitle}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputTwitter">Twitter Title</label>
+                </div>
               </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Open graph description"
-                  className="property-input"
-                  value={coSpace.graphDescription}
-                  name="graphDescription"
-                  onChange={handleInputChange}
-                />
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputOgTitle"
+                    placeholder="Open Graph Title"
+                    name="graphTitle"
+                    value={coSpace.graphTitle}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputOgTitle">Open Graph Title</label>
+                </div>
               </div>
             </div>
-            <h4>Location</h4>
+            <div className="row mb-5">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTwitDesc"
+                    placeholder="Twitter Description"
+                    name="twitterDescription"
+                    value={coSpace.twitterDescription}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputTwitDesc">Twitter Description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputOgDesc"
+                    placeholder="Open Graph Description"
+                    name="graphDescription"
+                    value={coSpace.graphDescription}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputOgDesc">
+                    Open Graph Description
+                  </label>
+                </div>
+              </div>
+            </div>
             <div className="row">
+
+              <h4 className="property_form_h4">Location</h4>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputAddress"
+                    placeholder="Address*"
+                    name="address"
+                    value={coSpace.address}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputAddress">Address*</label>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+
               <div className="col-md-3">
                 <div
                   style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
@@ -679,8 +745,6 @@ function AddWorkSpace() {
                   </select>
                 </div>
               </div>
-            </div>
-            <div className="row">
               <div className="col-md-3">
                 <div
                   style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
@@ -706,56 +770,54 @@ function AddWorkSpace() {
                   </select>
                 </div>
               </div>
+            </div>
+            <div className="row mb-5">
               <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Lattitude*"
-                  className="property-input"
-                  name="lattitude"
-                  value={coSpace.lattitude}
-                  onChange={handleInputChange}
-                />
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputLatti"
+                    placeholder="Lattitude"
+                    name="lattitude"
+                    value={coSpace.lattitude}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputLatti">Lattitude</label>
+                </div>
               </div>
               <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Longitude*"
-                  className="property-input"
-                  value={coSpace.longitude}
-                  name="longitude"
-                  onChange={handleInputChange}
-                />
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputLongi"
+                    placeholder="Longitude"
+                    name="longitude"
+                    value={coSpace.longitude}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputLongi">Longitude</label>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputPostal"
+                    placeholder="Postal Code"
+                    name="postalCode"
+                    value={coSpace.postalCode}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputPostal">Postal Code</label>
+                </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Postel code"
-                  name="postalCode"
-                  value={coSpace.postalCode}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <textarea
-                  cols="100"
-                  rows="2"
-                  className="property-input"
-                  placeholder="Address*"
-                  name="address"
-                  value={coSpace.address}
-                  onChange={handleInputChange}
-                  required
-                ></textarea>
-              </div>
-            </div>
-            <h4>Amenities</h4>
-            <div className="row">
-              <div className="form-check">
+            <div className="row mb-5">
+              <h4 className="property_form_h4">Amenities</h4>
+              <div className="form-check" style={{ marginLeft: "9px" }}>
                 {amenities?.map((amenity) => (
                   <div key={amenity._id}>
                     <input
@@ -765,6 +827,7 @@ function AddWorkSpace() {
                       id="flexCheckDefault"
                       name="amenity"
                       onChange={handleCheckboxChange}
+                      style={{ marginLeft: "-13px", marginRight: "8px" }}
                     />
                     <label
                       className="form-check-label"
@@ -776,17 +839,26 @@ function AddWorkSpace() {
                 ))}
               </div>
             </div>
-            <h4>Images</h4>
-            <div className="row">
+            <div className="row mb-5">
+              <h4 className="property_form_h4">Images</h4>
               <div className="container">
-                <div>
+                {/* <div>
                   <input
                     id="file-input"
                     type="file"
                     multiple
                     onChange={handleInputByClick}
                   />
-                </div>
+                </div> */}
+                <label class="file">
+                  <input
+                    type="file"
+                    id="file-input"
+                    multiple
+                    aria-label="File browser example"
+                    onChange={handleInputByClick}
+                  />
+                </label>
 
                 {progress ? (
                   <div>
@@ -812,73 +884,87 @@ function AddWorkSpace() {
                 ) : (
                   ""
                 )}
-              </div>
-              <div id="preview" className="mt-3 d-flex align-items-center">
-                <div className="table-box" style={{ width: "100%" }}>
-                  <h3>Images</h3>
-                  <TableContainer variant="striped" color="teal">
-                    <Table variant="simple">
-                      <Thead>
-                        <Tr>
-                          <Th>Order No.</Th>
-                          <Th>Image</Th>
-                          <Th>Name</Th>
-                          <Th>Alt1</Th>
+                <div id="preview" className="mt-3 d-flex align-items-center">
+                  <div
+                    className="table-box"
+                    style={{
+                      width: "100%",
+                      marginTop: "0px",
+                      marginBottom: "0px",
+                    }}
+                  >
+                    <h3>Images</h3>
+                    <TableContainer variant="striped" color="teal">
+                      <Table variant="simple">
+                        <Thead>
+                          <Tr>
+                            <Th>Order No.</Th>
+                            <Th>Image</Th>
+                            <Th>Name</Th>
+                            <Th>Alt1</Th>
 
-                          <Th>Delete</Th>
-                        </Tr>
-                      </Thead>
-                      <Tbody>
-                        {imageData?.map((img, index) => (
-                          <Fragment key={index}>
-                            <Tr>
-                              <Td>{index + 1}</Td>
-                              <Td>
-                                <img src={img.image} alt="media" width="80px" />
-                              </Td>
-                              <Td>{img.name}</Td>
-                              <Td>
-                                <input
-                                  type="text"
-                                  style={{ color: "#000" }}
-                                  value={img.alt}
-                                  onChange={(event) =>
-                                    handleAltChange(event, index)
-                                  }
-                                />
-                              </Td>
+                            <Th>Delete</Th>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {imageData?.map((img, index) => (
+                            <Fragment key={index}>
+                              <Tr>
+                                <Td>{index + 1}</Td>
+                                <Td>
+                                  <img
+                                    src={img.image}
+                                    alt="media"
+                                    width="80px"
+                                  />
+                                </Td>
+                                <Td>{img.name}</Td>
+                                <Td>
+                                  <input
+                                    type="text"
+                                    style={{ color: "#000" }}
+                                    value={img.alt}
+                                    onChange={(event) =>
+                                      handleAltChange(event, index)
+                                    }
+                                  />
+                                </Td>
 
-                              <Td>
-                                <AiFillDelete
-                                  onClick={() => removePreviewImage(index)}
-                                  className="icon"
-                                  style={{ color: "red" }}
-                                />
-                              </Td>
-                            </Tr>
-                          </Fragment>
-                        ))}
-                      </Tbody>
-                    </Table>
-                  </TableContainer>
+                                <Td>
+                                  <AiFillDelete
+                                    onClick={() => removePreviewImage(index)}
+                                    className="icon"
+                                    style={{ color: "red" }}
+                                  />
+                                </Td>
+                              </Tr>
+                            </Fragment>
+                          ))}
+                        </Tbody>
+                      </Table>
+                    </TableContainer>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="row">
+            <div className="row mb-5">
               <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="No. of seats*"
-                  className="property-input"
-                  name="seats"
-                  value={coSpace.seats}
-                  onChange={handleInputChange}
-                  required
-                />
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputSeats"
+                    placeholder="No. Of Seats"
+                    name="seats"
+                    value={coSpace.seats}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputSeats">No. Of Seats</label>
+                </div>
               </div>
             </div>
-            <h4>Hours of operation</h4>
-            <div className="row">
+            <div className="row mb-5">
+              <h4 className="property_form_h4">Hours Of Operation</h4>
               <div className="col-md-3">Monday-Friday</div>
               <div className="col-md-2" style={{ paddingTop: "8px" }}>
                 <div className="form-check">
@@ -1047,9 +1133,8 @@ function AddWorkSpace() {
                 </>
               )}
             </div>
-
             <div className="d-flex w-50 justify-content-between align-items-center">
-              <h4>Plans</h4>
+              <h4 className="property_form_h4">Plans</h4>
               <IoIosAddCircle
                 onClick={createPlans}
                 className="icon"
@@ -1101,15 +1186,19 @@ function AddWorkSpace() {
                   </div>
                 </div>
                 <div className="col-md-3">
-                  <input
-                    type="text"
-                    onChange={(e) => handleInputPlanChange(e, row.id)}
-                    name="price"
-                    value={row.price}
-                    className="property-input"
-                    placeholder="Price*"
-                    required
-                  />
+                  <div class="form-floating border_field">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInputPrice"
+                      placeholder="Price*"
+                      name="price"
+                      value={coSpace.price}
+                      onChange={(e) => handleInputPlanChange(e, row.id)}
+                      required
+                    />
+                    <label for="floatingInputPrice">Price*</label>
+                  </div>
                 </div>
                 <div className="col-md-3 d-flex align-items-center">
                   <AiFillDelete
