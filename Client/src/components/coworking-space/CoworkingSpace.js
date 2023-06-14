@@ -163,9 +163,11 @@ function CoworkingSpace() {
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
-      <Addpropertybtn />
+      <Link to="/coworking-space/add-coworking-space" className="btnLink">
+        <Addpropertybtn />
+      </Link>
       <div className="table-box">
-        <div className="table-top-box">Country Table</div>
+        <div className="table-top-box">Coworking Table</div>
         <TableContainer>
           <div className="row">
             <div className="col-md-3">
@@ -241,16 +243,12 @@ function CoworkingSpace() {
                         </Link>
                       </Td>
                       <Td>
-                      <AiOutlineEye style={{ margin: "auto" }} />
-                    </Td>
+                        <AiOutlineEye style={{ margin: "auto" }} />
+                      </Td>
                       <Td>
                         <Delete
                           onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
                         />
-
-                      </Link>
-                 
-
                       </Td>
                     </Tr>
                   ))
@@ -279,8 +277,8 @@ function CoworkingSpace() {
                         </Link>
                       </Td>
                       <Td>
-                      <AiOutlineEye style={{ margin: "auto" }} />
-                    </Td>
+                        <AiOutlineEye style={{ margin: "auto" }} />
+                      </Td>
                       <Td>
                         <Delete
                           onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
@@ -292,7 +290,6 @@ function CoworkingSpace() {
                 <Tr>
                   <Td colSpan={8}>No matching results found.</Td>
                 </Tr>
-
               )}
             </Tbody>
           </Table>

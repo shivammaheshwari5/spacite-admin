@@ -159,6 +159,15 @@ const coworkingSpaceModel = mongoose.Schema(
         },
       },
     ],
+    contact_details: [
+      {
+        id: Number,
+        user: String,
+        email: String,
+        phone: String,
+        designation: String,
+      },
+    ],
     is_active: {
       type: Boolean,
       default: true,
