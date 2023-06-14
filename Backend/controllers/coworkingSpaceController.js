@@ -129,20 +129,27 @@ const getWorkSpacesById = asyncHandler(async (req, res) => {
   }
 });
 
-const searchByName = asyncHandler(async (req, res) => {
-  const keyword = req.query.search
-    ? {
-        $or: [{ name: { $regex: req.query.search, $options: "i" } }],
-      }
-    : {};
-  const workSpace = await CoworkingSpace.find(keyword);
-  res.send(workSpace);
+const searchWorkSpacesByName = asyncHandler(async (req, res) => {
+  const { name } = req.query;
+
+  try {
+    const workSpaceData = await CoworkingSpace.find({
+      name: { $regex: name, $options: "i" },
+    });
+    res.json(workSpaceData);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: "An error occurred while searching for coworking spaces.",
+    });
+  }
 });
+
 module.exports = {
   postWorkSpaces,
   editWorkSpaces,
   deleteWorkSpaces,
   getWorkSpaces,
   getWorkSpacesById,
-  searchByName,
+  searchWorkSpacesByName,
 };
