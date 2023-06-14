@@ -10,8 +10,9 @@ import City from "./components/city/City";
 import Microlocation from "./components/microlocation/Microlocation";
 import Amenities from "./components/amenities/Amenities";
 import Login from "./components/login-page/Login";
-import { useState, useContext } from "react";
+import React, { useState, useContext, lazy, Suspense } from "react";
 import { GpState } from "./context/context";
+import Loader from "./components/loader/Loader";
 import AddWorkSpace from "./components/coworking-space/AddWorkSpace";
 import CoworkingSpace from "./components/coworking-space/CoworkingSpace";
 import Brands from "./components/brands/Brands";
@@ -21,13 +22,14 @@ import EditSeo from "./components/SEO/EditSeo";
 import Addbrand from "./components/brands/Addbrand";
 import EditBrand from "./components/brands/EditBrand";
 import EditWorkSpace from "./components/coworking-space/EditWorkSpace";
+
 function App() {
   let { isLogin } = GpState();
 
   localStorage.setItem("isLogin", isLogin);
   return (
     <div>
-      <div className="wrapper">
+      <div className={isLogin ? "wrapper" : ""}>
         <div className={isLogin ? "mainpanel" : ""}>
           <Routes>
             <Route

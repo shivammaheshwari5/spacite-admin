@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import Addpropertybtn from "../add-new-btn/Addpropertybtn";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import {
   Table,
   Thead,
@@ -25,7 +27,8 @@ function CoworkingSpace() {
   const [searchTerm, setSearchTerm] = useState("");
   const [citySearchTerm, setCitySearchTerm] = useState("");
   const [microLocationSearchTerm, setMicroLocationSearchTerm] = useState("");
-  const [searchOption, setSearchOption] = useState("name");
+  const [searchedWorkSpaces, setSearchedWorkSpaces] = useState([]);
+  const [showAll, setShowAll] = useState(true);
 
   const toast = useToast();
   const getWorkSpaceData = async () => {
@@ -56,10 +59,48 @@ function CoworkingSpace() {
   //     console.log(error);
   //   }
   // };
+
+  const handleSearch = () => {
+    const filteredWorkSpaces = workSpaces.filter((workSpace) => {
+      const cityName = workSpace.location.city?.name || "city";
+      const microLocationName =
+        workSpace.location.micro_location?.name || "microlocation";
+
+      const matchName =
+        workSpace.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        searchTerm.toLowerCase().includes(workSpace.name.toLowerCase());
+
+      const matchCity =
+        cityName.toLowerCase().includes(citySearchTerm.toLowerCase()) ||
+        citySearchTerm.toLowerCase().includes(cityName.toLowerCase());
+
+      const matchMicroLocation =
+        microLocationName
+          .toLowerCase()
+          .includes(microLocationSearchTerm.toLowerCase()) ||
+        microLocationSearchTerm
+          .toLowerCase()
+          .includes(microLocationName.toLowerCase());
+
+      return matchName && matchCity && matchMicroLocation;
+    });
+
+    setSearchedWorkSpaces(filteredWorkSpaces);
+    setCurPage(1);
+  };
+
   useEffect(() => {
     getWorkSpaceData();
   }, [updateTable]);
 
+  useEffect(() => {
+    handleSearch();
+    setShowAll(
+      searchTerm === "" &&
+        citySearchTerm === "" &&
+        microLocationSearchTerm === ""
+    );
+  }, [updateTable, searchTerm, citySearchTerm, microLocationSearchTerm]);
   const handleDeleteWorkSpaces = async (id) => {
     try {
       const { data } = await axios.delete(
@@ -86,43 +127,71 @@ function CoworkingSpace() {
     }
   };
   console.log(searchWorkSpaces);
+
+  const [selectItemNum, setSelectItemNum] = useState(5);
+  const itemsPerPageHandler = (e) => {
+    setSelectItemNum(e.target.value);
+  };
+  const [curPage, setCurPage] = useState(1);
+  const recordsPerPage = selectItemNum;
+  const lastIndex = curPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const nPage = Math.ceil(searchedWorkSpaces?.length / selectItemNum);
+  if (firstIndex > 0) {
+    var prePage = () => {
+      if (curPage !== firstIndex) {
+        setCurPage(curPage - 1);
+      }
+    };
+  }
+
+  var nextPage = () => {
+    if (curPage !== lastIndex) {
+      setCurPage(curPage + 1);
+    }
+  };
+
+  const getFirstPage = () => {
+    setCurPage(1);
+  };
+
+  const getLastPage = () => {
+    setCurPage(nPage);
+  };
+
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
-      <Link to="/coworking-space/add-coworking-space">
-        <Addpropertybtn />
-      </Link>
+      <Addpropertybtn />
       <div className="table-box">
-        <div className="table-top-box">Coworking Space Table</div>
-
-        <div className="row">
-          <div className="col-md-4">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by name"
-            />
+        <div className="table-top-box">Country Table</div>
+        <TableContainer>
+          <div className="row">
+            <div className="col-md-3">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search by name"
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                value={citySearchTerm}
+                onChange={(e) => setCitySearchTerm(e.target.value)}
+                placeholder="Search by city"
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                value={microLocationSearchTerm}
+                onChange={(e) => setMicroLocationSearchTerm(e.target.value)}
+                placeholder="Search by microlocation"
+              />
+            </div>
           </div>
-          <div className="col-md-4">
-            <input
-              type="text"
-              value={citySearchTerm}
-              onChange={(e) => setCitySearchTerm(e.target.value)}
-              placeholder="Search by city"
-            />
-          </div>
-          <div className="col-md-4">
-            <input
-              type="text"
-              value={microLocationSearchTerm}
-              onChange={(e) => setMicroLocationSearchTerm(e.target.value)}
-              placeholder="Search by microlocation"
-            />
-          </div>
-        </div>
-
-        <TableContainer marginTop="60px" variant="striped" color="teal">
           <Table variant="simple">
             <Thead>
               <Tr>
@@ -139,81 +208,123 @@ function CoworkingSpace() {
             <Tbody>
               {loading ? (
                 <Tr>
-                  <Td align="center" style={{ width: "50px" }}>
-                    <Spinner
-                      size="xl"
-                      w={20}
-                      h={20}
-                      alignSelf="center"
-                      style={{ position: "absolute", left: "482px" }}
-                    />
+                  <Td colSpan={8} textAlign="center">
+                    <Spinner size="lg" />
                   </Td>
                 </Tr>
-              ) : (
+              ) : showAll ? (
                 workSpaces
-                  ?.filter((workSpace) => {
-                    const cityName = workSpace.location.city?.name || "city";
-                    const microLocationName =
-                      workSpace.location.micro_location?.name ||
-                      "microlocation";
-
-                    const matchName =
-                      workSpace.name
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase()) ||
-                      searchTerm
-                        .toLowerCase()
-                        .includes(workSpace.name.toLowerCase());
-
-                    const matchCity =
-                      cityName
-                        .toLowerCase()
-                        .includes(citySearchTerm.toLowerCase()) ||
-                      citySearchTerm
-                        .toLowerCase()
-                        .includes(cityName.toLowerCase());
-
-                    const matchMicroLocation =
-                      microLocationName
-                        .toLowerCase()
-                        .includes(microLocationSearchTerm.toLowerCase()) ||
-                      microLocationSearchTerm
-                        .toLowerCase()
-                        .includes(microLocationName.toLowerCase());
-
-                    return matchName && matchCity && matchMicroLocation;
-                  })
+                  ?.slice(
+                    (curPage - 1) * selectItemNum,
+                    curPage * selectItemNum
+                  )
                   .map((workSpace) => (
-                    <Tr key={workSpace._id} id={workSpace._id}>
+                    <Tr key={workSpace._id}>
                       <Td>{workSpace.name}</Td>
-                      <Td>{workSpace.location.city?.name || "city"}</Td>
                       <Td>
-                        {workSpace.location.micro_location?.name ||
-                          "microlocation"}
+                        {workSpace.location.city
+                          ? workSpace.location.city.name
+                          : ""}
                       </Td>
+                      <Td>
+                        {workSpace.location.micro_location
+                          ? workSpace.location.micro_location.name
+                          : ""}
+                      </Td>
+
                       <Td>{workSpace.createdAt.split("T")[0]}</Td>
                       <Td>{workSpace.status}</Td>
                       <Td>
                         <Link to={`/editworkspace/${workSpace._id}`}>
-                          <AiFillEdit
-                            style={{ fontSize: "22px", cursor: "pointer" }}
-                          />
+                          <AiFillEdit style={{ marginLeft: "0.5rem" }} />
                         </Link>
                       </Td>
                       <Td>Preview</Td>
                       <Td>
                         <Delete
-                          handleFunction={() =>
-                            handleDeleteWorkSpaces(workSpace._id)
-                          }
+                          onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
                         />
                       </Td>
                     </Tr>
                   ))
+              ) : searchedWorkSpaces.length > 0 ? (
+                searchedWorkSpaces
+                  .slice((curPage - 1) * selectItemNum, curPage * selectItemNum)
+                  .map((workSpace, index) => (
+                    <Tr key={workSpace._id}>
+                      <Td>{workSpace.name}</Td>
+                      <Td>
+                        {workSpace.location.city
+                          ? workSpace.location.city.name
+                          : ""}
+                      </Td>
+                      <Td>
+                        {workSpace.location.micro_location
+                          ? workSpace.location.micro_location.name
+                          : ""}
+                      </Td>
+
+                      <Td>{workSpace.createdAt.split("T")[0]}</Td>
+                      <Td>{workSpace.status}</Td>
+                      <Td>
+                        <Link to={`/editworkspace/${workSpace._id}`}>
+                          <AiFillEdit style={{ marginLeft: "0.5rem" }} />
+                        </Link>
+                      </Td>
+                      <Td>Preview</Td>
+                      <Td>
+                        <Delete
+                          onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
+                        />
+                      </Td>
+                    </Tr>
+                  ))
+              ) : (
+                <Tr>
+                  <Td colSpan={8}>No matching results found.</Td>
+                </Tr>
               )}
             </Tbody>
           </Table>
         </TableContainer>
+        <nav className="mt-5">
+          <div
+            className="d-flex align-items-center justify-content-between"
+            style={{ width: "51%" }}
+          >
+            <p className="mb-0">Items per page: </p>
+            <div style={{ borderBottom: "1px solid gray" }}>
+              <select
+                className="form-select"
+                aria-label="Default select example"
+                value={selectItemNum}
+                onChange={itemsPerPageHandler}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+                <option value={20}>20</option>
+              </select>
+            </div>
+            <div style={{ width: "110px" }}>
+              {firstIndex + 1} - {searchedWorkSpaces?.length + firstIndex} of{" "}
+              {workSpaces?.length}
+            </div>
+
+            <div className="page-item">
+              <BiSkipPrevious onClick={getFirstPage} />
+            </div>
+            <div className="page-item">
+              <GrFormPrevious onClick={prePage} />
+            </div>
+            <div className="page-item">
+              <GrFormNext onClick={nextPage} />
+            </div>
+            <div className="page-item">
+              <BiSkipNext onClick={getLastPage} />
+            </div>
+          </div>
+        </nav>
       </div>
     </div>
   );

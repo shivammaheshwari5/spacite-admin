@@ -65,61 +65,65 @@ const Brands = () => {
     <>
       <div className="mx-5 mt-3">
         <Mainpanelnav />
-        <Link to="/brands/add-brand">
+        <Link to="/brands/add-brand" className="btnLink">
           <Addpropertybtn />
         </Link>
-      </div>
-      <div className="table-box">
-        <div className="table-top-box">Brands Table</div>
-        <TableContainer marginTop="60px" variant="striped" color="teal">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Description</Th>
-                {/* <Th>Order</Th> */}
-                <Th>Edit</Th>
-                <Th>Delete</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {loading ? (
+        <div className="table-box">
+          <div className="table-top-box">Brands Table</div>
+          <TableContainer marginTop="60px" variant="striped" color="teal">
+            <Table variant="simple">
+              <Thead>
                 <Tr>
-                  <Td>
-                    <Spinner
-                      size="xl"
-                      w={20}
-                      h={20}
-                      marginLeft="180px"
-                      alignSelf="center"
-                      margin="auto"
-                    />
-                  </Td>
+                  <Th>Name</Th>
+                  <Th>Description</Th>
+                  {/* <Th>Order</Th> */}
+                  <Th>Edit</Th>
+                  <Th>Delete</Th>
                 </Tr>
-              ) : (
-                brands?.map((brand) => (
-                  <Tr key={brand._id} id={brand._id}>
-                    <Td>{brand.name}</Td>
-                    <Td className="tableDescription">{brand.description}</Td>
-                    {/* <Td>{brand.order}</Td> */}
+              </Thead>
+              <Tbody>
+                {loading ? (
+                  <Tr>
                     <Td>
-                      <Link to={`/editbrand/${brand._id}`}>
-                        <AiFillEdit
-                          style={{ fontSize: "22px", cursor: "pointer" }}
-                        />
-                      </Link>
-                    </Td>
-                    <Td>
-                      <Delete
-                        handleFunction={() => handleDeleteBrands(brand._id)}
+                      <Spinner
+                        size="xl"
+                        w={20}
+                        h={20}
+                        marginLeft="180px"
+                        alignSelf="center"
+                        margin="auto"
                       />
                     </Td>
                   </Tr>
-                ))
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
+                ) : (
+                  brands?.map((brand) => (
+                    <Tr key={brand._id} id={brand._id}>
+                      <Td>{brand.name}</Td>
+                      <Td className="tableDescription">
+                        {brand.description.length > 200
+                          ? brand.description.substring(0, 200) + "..."
+                          : brand.description}
+                      </Td>
+                      {/* <Td>{brand.order}</Td> */}
+                      <Td>
+                        <Link to={`/editbrand/${brand._id}`}>
+                          <AiFillEdit
+                            style={{ fontSize: "22px", cursor: "pointer" }}
+                          />
+                        </Link>
+                      </Td>
+                      <Td>
+                        <Delete
+                          handleFunction={() => handleDeleteBrands(brand._id)}
+                        />
+                      </Td>
+                    </Tr>
+                  ))
+                )}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </>
   );

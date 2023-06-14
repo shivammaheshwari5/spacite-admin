@@ -255,10 +255,12 @@ function City() {
     <>
       <div className="mx-5 mt-3">
         <Mainpanelnav />
-        <Button className="addnew-btn" onClick={onOpen}>
-          <BsBookmarkPlus />
-          ADD NEW
-        </Button>
+        <div className="d-flex justify-content-end w-100">
+          <Button className="addnew-btn" onClick={onOpen}>
+            <BsBookmarkPlus />
+            ADD NEW
+          </Button>
+        </div>
         <div>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -352,94 +354,94 @@ function City() {
             </ModalContent>
           </Modal>
         </div>
-      </div>
-      <div className="table-box">
-        <div className="table-top-box">Microlocation Table</div>
-        <TableContainer marginTop="60px" variant="striped" color="teal">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Country</Th>
-                <Th>State</Th>
-                <Th>City</Th>
-                <Th>Delete</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {loading ? (
+        <div className="table-box">
+          <div className="table-top-box">Microlocation Table</div>
+          <TableContainer marginTop="60px" variant="striped" color="teal">
+            <Table variant="simple">
+              <Thead>
                 <Tr>
-                  <Td>
-                    <Spinner
-                      size="xl"
-                      w={20}
-                      h={20}
-                      marginLeft="180px"
-                      alignSelf="center"
-                      margin="auto"
-                    />
-                  </Td>
+                  <Th>Name</Th>
+                  <Th>Country</Th>
+                  <Th>State</Th>
+                  <Th>City</Th>
+                  <Th>Delete</Th>
                 </Tr>
-              ) : (
-                records?.map((micro) => (
-                  <Tr key={micro._id} id={micro._id}>
-                    <Td>{micro.name}</Td>
-                    <Td>{micro.country?.name}</Td>
-                    <Td>{micro.state?.name}</Td>
-                    <Td>{micro.city?.name}</Td>
+              </Thead>
+              <Tbody>
+                {loading ? (
+                  <Tr>
                     <Td>
-                      <Delete
-                        handleFunction={() =>
-                          handleDeleteMicrolocations(micro._id)
-                        }
+                      <Spinner
+                        size="xl"
+                        w={20}
+                        h={20}
+                        marginLeft="180px"
+                        alignSelf="center"
+                        margin="auto"
                       />
                     </Td>
                   </Tr>
-                ))
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-        <nav className="mt-5">
-          <div
-            className="d-flex align-items-center justify-content-between"
-            style={{ width: "51%" }}
-          >
-            <p className="mb-0">Items per page: </p>
-            <div style={{ borderBottom: "1px solid gray" }}>
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                required
-                value={selectItemNum}
-                onChange={itemsPerPageHandler}
-                style={{ paddingLeft: "0" }}
-              >
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-            </div>
-            <div style={{ width: "110px" }}>
-              {firstIndex + 1} - {records?.length + firstIndex} of{" "}
-              {microlocations?.length}
-            </div>
+                ) : (
+                  records?.map((micro) => (
+                    <Tr key={micro._id} id={micro._id}>
+                      <Td>{micro.name}</Td>
+                      <Td>{micro.country?.name}</Td>
+                      <Td>{micro.state?.name}</Td>
+                      <Td>{micro.city?.name}</Td>
+                      <Td>
+                        <Delete
+                          handleFunction={() =>
+                            handleDeleteMicrolocations(micro._id)
+                          }
+                        />
+                      </Td>
+                    </Tr>
+                  ))
+                )}
+              </Tbody>
+            </Table>
+          </TableContainer>
+          <nav className="mt-5">
+            <div
+              className="d-flex align-items-center justify-content-between"
+              style={{ width: "51%" }}
+            >
+              <p className="mb-0">Items per page: </p>
+              <div style={{ borderBottom: "1px solid gray" }}>
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  required
+                  value={selectItemNum}
+                  onChange={itemsPerPageHandler}
+                  style={{ paddingLeft: "0" }}
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+              </div>
+              <div style={{ width: "110px" }}>
+                {firstIndex + 1} - {records?.length + firstIndex} of{" "}
+                {microlocations?.length}
+              </div>
 
-            <div className="page-item">
-              <BiSkipPrevious onClick={getFirstPage} />
+              <div className="page-item">
+                <BiSkipPrevious onClick={getFirstPage} />
+              </div>
+              <div className="page-item">
+                <GrFormPrevious onClick={prePage} />
+              </div>
+              <div className="page-item">
+                <GrFormNext onClick={nextPage} />
+              </div>
+              <div className="page-item">
+                <BiSkipNext onClick={getLastPage} />
+              </div>
             </div>
-            <div className="page-item">
-              <GrFormPrevious onClick={prePage} />
-            </div>
-            <div className="page-item">
-              <GrFormNext onClick={nextPage} />
-            </div>
-            <div className="page-item">
-              <BiSkipNext onClick={getLastPage} />
-            </div>
-          </div>
-        </nav>
+          </nav>
+        </div>
       </div>
     </>
   );

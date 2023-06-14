@@ -129,10 +129,12 @@ function ResPropertyType() {
     <>
       <div className="mx-5 mt-3">
         <Mainpanelnav />
-        <Button className="addnew-btn" onClick={onOpen}>
-          <BsBookmarkPlus />
-          ADD NEW
-        </Button>
+        <div className="d-flex justify-content-end w-100">
+          <Button className="addnew-btn" onClick={onOpen}>
+            <BsBookmarkPlus />
+            ADD NEW
+          </Button>
+        </div>
         <div>
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
@@ -146,6 +148,7 @@ function ResPropertyType() {
                   onChange={(e) => setName(e.target.value)}
                   type="text"
                   placeholder="Name"
+                  className="property-input"
                 />
               </ModalBody>
               <ModalFooter>
@@ -159,48 +162,48 @@ function ResPropertyType() {
             </ModalContent>
           </Modal>
         </div>
-      </div>
-      <div className="table-box">
-        <div className="table-top-box">Coworking Plans Table</div>
-        <TableContainer marginTop="60px" variant="striped" color="teal">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Name</Th>
-                <Th>Delete</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {loading ? (
+        <div className="table-box">
+          <div className="table-top-box">Coworking Plans Table</div>
+          <TableContainer marginTop="60px" variant="striped" color="teal">
+            <Table variant="simple">
+              <Thead>
                 <Tr>
-                  <Td>
-                    <Spinner
-                      size="xl"
-                      w={20}
-                      h={20}
-                      marginLeft="180px"
-                      alignSelf="center"
-                      margin="auto"
-                    />
-                  </Td>
+                  <Th>Name</Th>
+                  <Th>Delete</Th>
                 </Tr>
-              ) : (
-                propertyTypes?.map((types) => (
-                  <Tr key={types._id} id={types._id}>
-                    <Td>{types.name}</Td>
+              </Thead>
+              <Tbody>
+                {loading ? (
+                  <Tr>
                     <Td>
-                      <Delete
-                        handleFunction={() =>
-                          handleDeletePropertyTypes(types._id)
-                        }
+                      <Spinner
+                        size="xl"
+                        w={20}
+                        h={20}
+                        marginLeft="180px"
+                        alignSelf="center"
+                        margin="auto"
                       />
                     </Td>
                   </Tr>
-                ))
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
+                ) : (
+                  propertyTypes?.map((types) => (
+                    <Tr key={types._id} id={types._id}>
+                      <Td>{types.name}</Td>
+                      <Td>
+                        <Delete
+                          handleFunction={() =>
+                            handleDeletePropertyTypes(types._id)
+                          }
+                        />
+                      </Td>
+                    </Tr>
+                  ))
+                )}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </div>
       </div>
     </>
   );
