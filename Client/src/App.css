@@ -3,26 +3,27 @@
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
 }
-.wrapper {
-  position: relative;
-  top: 0;
-  height: 100vh;
-}
 .sidebar {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   z-index: 2;
-  width: 305px;
+  width: 269px;
   background: #ffffff1b;
   box-shadow: 0 16px 38px -12px rgba(66, 43, 43, 0.56),
     0 4px 25px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
 }
+.admin_main .col-md-3 {
+  width: 269px;
+}
+.admin_main .col-md-9 {
+  width: calc(100% - 269px);
+}
 .mainpanel {
   position: relative;
   float: right;
-  width: calc(100% - 305px);
+  width: calc(100% - 269px);
   background-color: #e7d9d938;
 }
 .form-box {
@@ -46,6 +47,10 @@ select {
   border-bottom: 1px solid gray;
   margin: 20px 0;
   width: 31%;
+}
+.sidebar::-webkit-scrollbar {
+  width: 10px;
+  background-color: black;
 }
 .saveproperty-btn {
   background-color: #a55bea;

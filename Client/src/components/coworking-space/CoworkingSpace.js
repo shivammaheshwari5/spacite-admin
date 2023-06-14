@@ -3,6 +3,7 @@ import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import Addpropertybtn from "../add-new-btn/Addpropertybtn";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
+import { AiOutlineEye } from "react-icons/ai";
 import {
   Table,
   Thead,
@@ -157,7 +158,9 @@ function CoworkingSpace() {
                         />
                       </Link>
                     </Td>
-                    <Td>Preview</Td>
+                    <Td>
+                      <AiOutlineEye style={{ margin: "auto" }} />
+                    </Td>
                     <Td>
                       <Delete
                         handleFunction={() =>

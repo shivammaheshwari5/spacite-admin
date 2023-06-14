@@ -423,35 +423,48 @@ function AddWorkSpace() {
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleSaveWorkSpace}>
           <div className="container">
-            <div className="row">
+            <div className="row pt-3">
               <div className="col-md-12">
                 <h4>Coworking Details</h4>
               </div>
               <div className="col-md-4">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Name*"
-                  name="name"
-                  value={coSpace.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="col-md-4">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Slug"
-                  value={coSpace.slug}
-                  name="slug"
-                  onChange={handleInputChange}
-                />
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Name*"
+                    name="name"
+                    value={coSpace.name}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Name</label>
+                </div>
               </div>
               <div className="col-md-4">
                 <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputSlug"
+                    placeholder="Slug"
+                    name="slug"
+                    value={coSpace.slug}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputSlug">Slug</label>
+                </div>
+              </div>
+              <div className="col-md-4 mb-5">
+                <div
                   style={{
-                    borderBottom: "1px solid #8080806b",
+                    borderBottom: "1px solid #cccccc",
                     margin: "20px 0 5px",
                   }}
                 >
@@ -471,29 +484,10 @@ function AddWorkSpace() {
                   </select>
                 </div>
               </div>
-
-              <div className="col-md-6">
-                <div
-                  class="form-floating border_field"
-                  style={{ marginTop: "6px" }}
-                >
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput"
-                    placeholder="Name*"
-                    name="name"
-                    value={coSpace.name}
-                    onChange={handleInputChange}
-                  />
-                  <label for="floatingInput">Name</label>
-                </div>
-              </div>
             </div>
             <div className="row mb-5">
-              <h4 className="property_form_h4">Property Description</h4>
               <div className="col-md-12">
-                <h4>About Property</h4>
+                <h4 className="property_form_h4">About Property</h4>
               </div>
               <div className="col-md-12">
                 <Editor
@@ -505,25 +499,6 @@ function AddWorkSpace() {
                 />
               </div>
             </div>
-
-            <div className="row mb-5">
-              <h4 className="property_form_h4">Slug Update</h4>
-              <div className="col-md-12">
-                <div class="form-floating border_field">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInputSlug"
-                    placeholder="Slug"
-                    name="slug"
-                    value={coSpace.slug}
-                    onChange={handleInputChange}
-                  />
-                  <label for="floatingInputSlug">Slug</label>
-                </div>
-              </div>
-            </div>
-
             <div className="row">
               <h4 className="property_form_h4">SEO Details</h4>
               <div className="col-md-6">
@@ -648,7 +623,6 @@ function AddWorkSpace() {
               </div>
             </div>
             <div className="row">
-
               <h4 className="property_form_h4">Location</h4>
               <div className="col-md-6">
                 <div class="form-floating border_field">
@@ -666,10 +640,12 @@ function AddWorkSpace() {
               </div>
             </div>
             <div className="row">
-
               <div className="col-md-3">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -695,7 +671,10 @@ function AddWorkSpace() {
               </div>
               <div className="col-md-3">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -721,7 +700,10 @@ function AddWorkSpace() {
               </div>
               <div className="col-md-3">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -747,7 +729,10 @@ function AddWorkSpace() {
               </div>
               <div className="col-md-3">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -827,7 +812,6 @@ function AddWorkSpace() {
                       id="flexCheckDefault"
                       name="amenity"
                       onChange={handleCheckboxChange}
-                      style={{ marginLeft: "-13px", marginRight: "8px" }}
                     />
                     <label
                       className="form-check-label"
@@ -842,14 +826,6 @@ function AddWorkSpace() {
             <div className="row mb-5">
               <h4 className="property_form_h4">Images</h4>
               <div className="container">
-                {/* <div>
-                  <input
-                    id="file-input"
-                    type="file"
-                    multiple
-                    onChange={handleInputByClick}
-                  />
-                </div> */}
                 <label class="file">
                   <input
                     type="file"
@@ -963,7 +939,7 @@ function AddWorkSpace() {
                 </div>
               </div>
             </div>
-            <div className="row mb-5">
+            <div className="row">
               <h4 className="property_form_h4">Hours Of Operation</h4>
               <div className="col-md-3">Monday-Friday</div>
               <div className="col-md-2" style={{ paddingTop: "8px" }}>
@@ -987,7 +963,7 @@ function AddWorkSpace() {
               {open.isOpen && (
                 <>
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={formData.montofriFrom}
                         onChange={(e) => handleSelect(e.target, "montofriFrom")}
@@ -1003,7 +979,7 @@ function AddWorkSpace() {
                   </div>
 
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={formData.montofriTo}
                         onChange={(e) => handleSelect(e.target, "montofriTo")}
@@ -1044,7 +1020,7 @@ function AddWorkSpace() {
               {open.isOpenSat && (
                 <>
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={formData.satFrom}
                         onChange={(e) => handleSelect(e.target, "satFrom")}
@@ -1060,7 +1036,7 @@ function AddWorkSpace() {
                   </div>
 
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={formData.satTo}
                         onChange={(e) => handleSelect(e.target, "satTo")}
@@ -1077,7 +1053,7 @@ function AddWorkSpace() {
                 </>
               )}
             </div>
-            <div className="row">
+            <div className="row mb-5">
               <div className="col-md-3">Sunday</div>
               <div className="col-md-2" style={{ paddingTop: "8px" }}>
                 <div className="form-check">
@@ -1100,7 +1076,7 @@ function AddWorkSpace() {
               {open.isOpenSun && (
                 <>
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={formData.sunFrom}
                         onChange={(e) => handleSelect(e.target, "sunFrom")}
@@ -1116,7 +1092,7 @@ function AddWorkSpace() {
                   </div>
 
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={formData.sunTo}
                         onChange={(e) => handleSelect(e.target, "sunTo")}
@@ -1145,7 +1121,10 @@ function AddWorkSpace() {
               <div className="row" key={row.id}>
                 <div className="col-md-3">
                   <div
-                    style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                    style={{
+                      borderBottom: "1px solid #cccccc",
+                      margin: "20px 0",
+                    }}
                   >
                     <select
                       className="form-select"
@@ -1170,7 +1149,10 @@ function AddWorkSpace() {
                 </div>
                 <div className="col-md-3">
                   <div
-                    style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                    style={{
+                      borderBottom: "1px solid #cccccc",
+                      margin: "20px 0",
+                    }}
                   >
                     <select
                       className="form-select"
@@ -1186,7 +1168,10 @@ function AddWorkSpace() {
                   </div>
                 </div>
                 <div className="col-md-3">
-                  <div class="form-floating border_field">
+                  <div
+                    class="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
                     <input
                       type="text"
                       className="form-control"
