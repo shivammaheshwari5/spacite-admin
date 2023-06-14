@@ -29,7 +29,7 @@ function App() {
   localStorage.setItem("isLogin", isLogin);
   return (
     <div>
-      <div className="wrapper">
+      <div className={isLogin ? "wrapper" : ""}>
         <div className={isLogin ? "mainpanel" : ""}>
           <Routes>
             <Route
