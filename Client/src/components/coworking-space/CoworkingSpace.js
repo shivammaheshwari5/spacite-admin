@@ -3,6 +3,7 @@ import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import Addpropertybtn from "../add-new-btn/Addpropertybtn";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
+import { AiOutlineEye } from "react-icons/ai";
 import {
   Table,
   Thead,
@@ -239,11 +240,17 @@ function CoworkingSpace() {
                           <AiFillEdit style={{ marginLeft: "0.5rem" }} />
                         </Link>
                       </Td>
-                      <Td>Preview</Td>
+                      <Td>
+                      <AiOutlineEye style={{ margin: "auto" }} />
+                    </Td>
                       <Td>
                         <Delete
                           onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
                         />
+
+                      </Link>
+                 
+
                       </Td>
                     </Tr>
                   ))
@@ -271,7 +278,9 @@ function CoworkingSpace() {
                           <AiFillEdit style={{ marginLeft: "0.5rem" }} />
                         </Link>
                       </Td>
-                      <Td>Preview</Td>
+                      <Td>
+                      <AiOutlineEye style={{ margin: "auto" }} />
+                    </Td>
                       <Td>
                         <Delete
                           onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
@@ -283,6 +292,7 @@ function CoworkingSpace() {
                 <Tr>
                   <Td colSpan={8}>No matching results found.</Td>
                 </Tr>
+
               )}
             </Tbody>
           </Table>
