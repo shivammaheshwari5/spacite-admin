@@ -7,12 +7,9 @@ import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import { IoIosAddCircle } from "react-icons/io";
-import ImageUpload from "../../ImageUpload";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
-import Multiselect from "multiselect-react-dropdown";
 import { AiFillDelete } from "react-icons/ai";
 import { postConfig, config } from "../../services/Services";
-import Loader from "../loader/Loader";
 import {
   Table,
   Thead,
@@ -21,7 +18,6 @@ import {
   Th,
   Td,
   TableContainer,
-  Spinner,
 } from "@chakra-ui/react";
 import {
   uploadFile,
@@ -474,7 +470,8 @@ const EditWorkSpace = () => {
       <Mainpanelnav />
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleEditWorkSpace}>
-          <div className="container">
+
+          <div className="container pt-4">
             <div className="row pt-4 d-flex w-50 justify-content-between align-items-center">
               <h4 className="property_form_h4">Other Contact Details</h4>
               <IoIosAddCircle
@@ -563,20 +560,49 @@ const EditWorkSpace = () => {
               </div>
             ))}
             <div className="row">
-              <div className="col-md-6">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Name*"
-                  name="name"
-                  value={name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="col-md-6">
+              <h4 className="property_form_h4">Coworking Details</h4>
+              <div className="col-md-4">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputName"
+                    placeholder="Name*"
+                    name="name"
+                    value={name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <label for="floatingInput">Name*</label>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Slug*"
+                    name="slug"
+                    value={slug}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <label for="floatingInput">Slug*</label>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -595,9 +621,9 @@ const EditWorkSpace = () => {
                 </div>
               </div>
             </div>
-            <div className="row">
+            <div className="row mb-5">
               <div className="col-md-12">
-                <h4>About Property</h4>
+                <h4 className="property_form_h4">About Property</h4>
               </div>
               <div className="col-md-12">
                 <Editor
@@ -609,162 +635,165 @@ const EditWorkSpace = () => {
                 />
               </div>
             </div>
-            <h4>Slug Update</h4>
             <div className="row">
-              <div className="col-md-12">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Slug"
-                  value={slug}
-                  name="slug"
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <h4>SEO Details</h4>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Title*"
-                  className="property-input"
-                  required
-                  name="seo"
-                  value={seo.title}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "title")
-                  }
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Description*"
-                  className="property-input"
-                  required
-                  name="seo"
-                  value={seo.description}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "description")
-                  }
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Keywords*"
-                  name="seo"
-                  className="property-input"
-                  value={seo.keywords}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "keywords")
-                  }
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="URL*"
-                  className="property-input"
-                  name="seo"
-                  value={seo.url}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "url")
-                  }
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-3">
+              <h4 className="property_form_h4">SEO Details</h4>
+              <div className="col-md-6">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
                 >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                  >
-                    <option>Select status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Robots"
+                    name="seo"
+                    value={seo.robots}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "robots")
+                    }
+                  />
+                  <label for="floatingInput">Robots</label>
                 </div>
               </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Robots"
-                  name="seo"
-                  value={seo.robots}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "robots")
-                  }
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Twitter title"
-                  name="seo.twitter.title"
-                  value={seo.twitter.title}
-                  onChange={handleInputChange2}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  name="seo.twitter.description"
-                  placeholder="Twitter description"
-                  value={seo.twitter.description}
-                  onChange={handleInputChange2}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Open graph title"
-                  name="seo.open_graph.title"
-                  value={seo.open_graph.title}
-                  onChange={handleInputChange2}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Open graph description"
-                  name="seo.open_graph.description"
-                  value={seo.open_graph.description}
-                  onChange={handleInputChange2}
-                />
-              </div>
-            </div>
-
-            <h4>Location</h4>
-            <div className="row">
-              <div className="col-md-12">
-                <textarea
-                  cols="100"
-                  rows="2"
-                  className="property-input"
-                  placeholder="Address*"
-                  name="location"
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "location", "address")
-                  }
-                  value={location.address}
-                  required
-                ></textarea>
-              </div>
-              <div className="col-md-3">
+              <div className="col-md-6">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Description"
+                    name="seo"
+                    value={seo.description}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "description")
+                    }
+                  />
+                  <label for="floatingInput">Description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Title"
+                    name="seo"
+                    value={seo.title}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "title")
+                    }
+                  />
+                  <label for="floatingInput">Title</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Keywords"
+                    name="seo"
+                    value={seo.keywords}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "keywords")
+                    }
+                  />
+                  <label for="floatingInput">Keywords</label>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Twitter Title"
+                    name="seo.twitter.title"
+                    value={seo.twitter.title}
+                    onChange={handleInputChange2}
+                  />
+                  <label for="floatingInput">Twitter Title</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Open Graph Title"
+                    name="seo.open_graph.title"
+                    value={seo.open_graph.title}
+                    onChange={handleInputChange2}
+                  />
+                  <label for="floatingInput">Open Garph Title</label>
+                </div>
+              </div>
+            </div>
+            <div className="row mb-5">
+              <div className="col-md-6">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Twitter Description"
+                    name="seo.twitter.description"
+                    value={seo.twitter.description}
+                    onChange={handleInputChange2}
+                  />
+                  <label for="floatingInput">Twitter Description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Open Graph Description"
+                    name="seo.open_graph.description"
+                    value={seo.open_graph.description}
+                    onChange={handleInputChange2}
+                  />
+                  <label for="floatingInput">Open Graph Description</label>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <h4 className="propert_form_h4">Location</h4>
+              <div className="col-md-4">
+                <div
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -790,9 +819,12 @@ const EditWorkSpace = () => {
                   </select>
                 </div>
               </div>
-              <div className="col-md-3">
+              <div className="col-md-4">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -818,9 +850,12 @@ const EditWorkSpace = () => {
                   </select>
                 </div>
               </div>
-              <div className="col-md-3">
+              <div className="col-md-4">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -850,9 +885,12 @@ const EditWorkSpace = () => {
               </div>
             </div>
             <div className="row">
-              <div className="col-md-3">
+              <div className="col-md-4">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
                 >
                   <select
                     className="form-select"
@@ -881,45 +919,86 @@ const EditWorkSpace = () => {
                   </select>
                 </div>
               </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Lattitude*"
-                  className="property-input"
-                  name="location"
-                  value={location.latitude}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "location", "latitude")
-                  }
-                />
+              <div className="col-md-4">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Lattitude"
+                    name="location"
+                    value={location.latitude}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "location", "latitude")
+                    }
+                  />
+                  <label for="floatingInput">Lattitude</label>
+                </div>
               </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Longitude*"
-                  className="property-input"
-                  value={location.longitude}
-                  name="location"
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "location", "longitude")
-                  }
-                />
+              <div className="col-md-4">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Longitude"
+                    name="location"
+                    value={location.longitude}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "location", "longitude")
+                    }
+                  />
+                  <label for="floatingInput">Longitude</label>
+                </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Postel code"
-                  name="postalCode"
-                  value={location.postalCode}
-                  onChange={handleInputChange}
-                />
+            <div className="row mb-5">
+              <div className="col-md-4">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Postal Code"
+                    name="postalCode"
+                    value={location.postalCode}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Postal Code</label>
+                </div>
+              </div>
+              <div className="col-md-12">
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Address*"
+                    name="location"
+                    value={location.address}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "location", "address")
+                    }
+                    required
+                  />
+                  <label for="floatingInput">Address*</label>
+                </div>
               </div>
             </div>
-            <h4>Amenities</h4>
-            <div className="row">
+            <div className="row mb-5">
+              <h4 className="property_form_h4">Amenities</h4>
               <div className="form-check">
                 <div className="row">
                   <div className="form-check">
@@ -946,8 +1025,8 @@ const EditWorkSpace = () => {
                 </div>
               </div>
             </div>
-            <h4>Images</h4>
             <div className="row">
+              <h4 className="property_form_h4">Images</h4>
               <div className="container">
                 <div>
                   <input
@@ -957,7 +1036,6 @@ const EditWorkSpace = () => {
                     onChange={handleInputByClick}
                   />
                 </div>
-
                 {progress ? (
                   <div>
                     <p className="mx-auto">
@@ -983,8 +1061,11 @@ const EditWorkSpace = () => {
                   ""
                 )}
               </div>
-              <div id="preview" className="mt-3 d-flex align-items-center">
-                <div className="table-box" style={{ width: "100%" }}>
+              <div id="preview" className="d-flex align-items-center">
+                <div
+                  className="table-box"
+                  style={{ width: "100%", marginTop: "0px" }}
+                >
                   <h3>Images</h3>
                   <TableContainer variant="striped" color="teal">
                     <Table variant="simple">
@@ -1034,21 +1115,28 @@ const EditWorkSpace = () => {
                 </div>
               </div>
             </div>
-            <div className="row">
+            <div className="row mb-5">
               <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="No. of seats*"
-                  className="property-input"
-                  name="no_of_seats"
-                  value={no_of_seats}
-                  onChange={handleInputChange}
-                  required
-                />
+                <div
+                  class="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="No. of seats*"
+                    name="no_of_seats"
+                    value={no_of_seats}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <label for="floatingInput">No. of seats*</label>
+                </div>
               </div>
             </div>
-            <h4>Hours of operation</h4>
             <div className="row">
+              <h4 className="property_form_h4">Hours Of Operation</h4>
               <div className="col-md-3">Monday-Friday</div>
               <div className="col-md-2" style={{ paddingTop: "8px" }}>
                 <div className="form-check">
@@ -1071,7 +1159,7 @@ const EditWorkSpace = () => {
               {apiValues.isOpen && (
                 <>
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={hours_of_operation.monday_friday.from}
                         name="hours_of_operation.monday_friday.from"
@@ -1088,7 +1176,7 @@ const EditWorkSpace = () => {
                   </div>
 
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={hours_of_operation.monday_friday.to}
                         onChange={handleInputChange2}
@@ -1129,7 +1217,7 @@ const EditWorkSpace = () => {
               {apiValues.isOpenSat && (
                 <>
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={hours_of_operation.saturday.from}
                         name="hours_of_operation.saturday.from"
@@ -1146,7 +1234,7 @@ const EditWorkSpace = () => {
                   </div>
 
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={hours_of_operation.saturday.to}
                         onChange={handleInputChange2}
@@ -1164,7 +1252,7 @@ const EditWorkSpace = () => {
                 </>
               )}
             </div>
-            <div className="row">
+            <div className="row mb-5">
               <div className="col-md-3">Sunday</div>
               <div className="col-md-2" style={{ paddingTop: "8px" }}>
                 <div className="form-check">
@@ -1187,7 +1275,7 @@ const EditWorkSpace = () => {
               {apiValues.isOpenSun && (
                 <>
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={hours_of_operation.sunday.from}
                         name="hours_of_operation.sunday.from"
@@ -1204,7 +1292,7 @@ const EditWorkSpace = () => {
                   </div>
 
                   <div className="col-md-2">
-                    <div style={{ borderBottom: "1px solid gray" }}>
+                    <div style={{ borderBottom: "1px solid #cccccc" }}>
                       <select
                         value={hours_of_operation.sunday.to}
                         onChange={handleInputChange2}
@@ -1222,9 +1310,8 @@ const EditWorkSpace = () => {
                 </>
               )}
             </div>
-
             <div className="d-flex w-50 justify-content-between align-items-center">
-              <h4>Plans</h4>
+              <h4 className="property_form_h4">Plans</h4>
               <IoIosAddCircle
                 onClick={createPlans}
                 className="icon"
@@ -1235,7 +1322,10 @@ const EditWorkSpace = () => {
               <div className="row" key={row.id}>
                 <div className="col-md-3">
                   <div
-                    style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                    style={{
+                      borderBottom: "1px solid #cccccc",
+                      margin: "20px 0",
+                    }}
                   >
                     <select
                       className="form-select"
@@ -1260,7 +1350,10 @@ const EditWorkSpace = () => {
                 </div>
                 <div className="col-md-3">
                   <div
-                    style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                    style={{
+                      borderBottom: "1px solid #cccccc",
+                      margin: "20px 0",
+                    }}
                   >
                     <select
                       className="form-select"
@@ -1276,15 +1369,22 @@ const EditWorkSpace = () => {
                   </div>
                 </div>
                 <div className="col-md-3">
-                  <input
-                    type="text"
-                    onChange={(e) => handleInputPlanChange(e, row.id)}
-                    name="price"
-                    value={row.price}
-                    className="property-input"
-                    placeholder="Price*"
-                    required
-                  />
+                  <div
+                    class="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInput"
+                      placeholder="Price*"
+                      name="price"
+                      value={row.price}
+                      onChange={(e) => handleInputPlanChange(e, row.id)}
+                      required
+                    />
+                    <label for="floatingInput">Price*</label>
+                  </div>
                 </div>
                 <div className="col-md-3 d-flex align-items-center">
                   <AiFillDelete

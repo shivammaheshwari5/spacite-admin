@@ -1,11 +1,10 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import { FaUserCircle } from "react-icons/fa";
 import "./Mainpanelnav.css";
 import { useNavigate } from "react-router-dom";
 import { GpState } from "../../context/context";
 
 function Mainpanelnav() {
-  const [showLogoutBtn, setShowLogoutBtn] = useState(false);
   const navigate = useNavigate();
   let { isLogin } = GpState();
   let url = window.location.href;
@@ -14,28 +13,16 @@ function Mainpanelnav() {
   let title2 = splitUrl[splitUrl.length - 2];
   if (title === "") {
     title = "Commercial Properties";
-  }else if(title2.startsWith("edit")){
+  } else if (title2.startsWith("edit")) {
     title = title2;
-  }else {
-    title = title
+  } else {
+    title = title;
   }
   const logoutHandle = () => {
     localStorage.removeItem("token");
     isLogin = false;
     navigate("/", { replace: true });
   };
-  const showLogoutButton = () => {
-    if (showLogoutBtn === false) {
-      setShowLogoutBtn(true);
-    } else {
-      setShowLogoutBtn(false);
-    }
-  };
-
-  // const logoutHandler = () => {
-  //   localStorage.setItem('isLoggedin', false)
-  //   loginApp.setIsLogin(false);
-  // }
 
   return (
     <div>
@@ -43,16 +30,23 @@ function Mainpanelnav() {
         <p style={{ fontSize: "21px", textTransform: "capitalize" }}>
           {title.replace("-", " ")}
         </p>
-        <FaUserCircle className="mainpanel-icon" onClick={showLogoutButton} />
-      </div>
-      <div
-        className="logoutbtn"
-        onClick={logoutHandle}
-        style={
-          showLogoutBtn ? { visibility: "visible" } : { visibility: "hidden" }
-        }
-      >
-        Logout
+        <div class="dropdown">
+          <button
+            class="dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <FaUserCircle className="mainpanel-icon" />
+          </button>
+          <ul class="dropdown-menu p-0">
+            <li>
+              <a class="dropdown-item" href="#" onClick={logoutHandle}>
+                Logout
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );
