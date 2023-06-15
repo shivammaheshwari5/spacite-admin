@@ -180,77 +180,28 @@ function Addbrand() {
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleSaveBrand}>
           <div className="container">
-            <div className="row">
+            <div className="row pt-4">
+              <h4 className="property_form_h4">Brand Details</h4>
               <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Name*"
-                  name="name"
-                  value={brand.name}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Description*"
-                  name="description"
-                  value={brand.description}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="col-md-6">
-                <div className="row">
-                  <div className="col-md-4">
-                    <h5 style={{ marginTop: "25px" }}>Logo Upload</h5>
-                  </div>
-                  <div className="col-md-8">
-                    <ImageUpload
-                      images={images}
-                      setImages={setImages}
-                      progress={progress}
-                      setProgress={setProgress}
-                      uploadFile={uploadFile}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              {/* <div className="col-md-3">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Order*"
-                  name="order"
-                  value={brand.order}
-                  onChange={handleInputChange}
-                />
-              </div> */}
-              {/* <div className="col-md-3">
-                <div className="form-check mt-4">
+                <div class="form-floating border_field">
                   <input
-                    className="form-check-input"
-                    style={{ cursor: "pointer" }}
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Name*"
+                    name="name"
+                    value={brand.name}
+                    onChange={handleInputChange}
+                    required
                   />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexCheckDefault"
-                  >
-                    Should Show on Home
-                  </label>
+                  <label for="floatingInput">Name*</label>
                 </div>
-              </div> */}
-              <div className="col-md-6">
+              </div>
+              <div className="col-md-3">
                 <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                  }}
                 >
                   <Select
                     options={cities}
@@ -263,137 +214,177 @@ function Addbrand() {
                   />
                 </div>
               </div>
-            </div>
-            <h4>SEO Details</h4>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Title*"
-                  className="property-input"
-                  required
-                  name="title"
-                  value={brand.title}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Description*"
-                  className="property-input"
-                  required
-                  name="descriptionSeo"
-                  value={brand.descriptionSeo}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Keywords*"
-                  name="keywords"
-                  className="property-input"
-                  value={brand.keywords}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="URL*"
-                  className="property-input"
-                  name="path"
-                  value={brand.path}
-                  onChange={handleInputChange}
+              <div className="col-md-6 d-flex justify-content-evenly align-items-end">
+                <h5 style={{ marginTop: "25px" }}>Logo Upload</h5>
+                <ImageUpload
+                  images={images}
+                  setImages={setImages}
+                  progress={progress}
+                  setProgress={setProgress}
+                  uploadFile={uploadFile}
                 />
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-3">
-                <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
-                >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                  >
-                    <option>Select status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
+            <div className="row mb-5">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Description*"
+                    name="description"
+                    value={brand.description}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Description</label>
                 </div>
               </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Robots"
-                  name="robots"
-                  value={brand.robots}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Twitter title"
-                  name="twitterTitle"
-                  value={brand.twitterTitle}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  name="twitterDescription"
-                  placeholder="Twitter description"
-                  value={brand.twitterDescription}
-                  onChange={handleInputChange}
-                />
-              </div>
             </div>
             <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Open graph title"
-                  name="graphTitle"
-                  value={brand.graphTitle}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Open graph description"
-                  name="graphDescription"
-                  value={brand.graphDescription}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
-            <div className="row">
+              <h4 className="property_form_h4">SEO Details</h4>
               <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Footer title"
-                  value={brand.footerTitle}
-                  name="footerTitle"
-                  onChange={handleInputChange}
-                />
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Description"
+                    name="descriptionSeo"
+                    value={brand.descriptionSeo}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputRobots"
+                    placeholder="Robots"
+                    name="robots"
+                    value={brand.robots}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputRobots">Robots</label>
+                </div>
               </div>
             </div>
-            <h6>Footer description</h6>
+            <div className="row my-2">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Title"
+                    name="title"
+                    value={brand.title}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Title</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Keywords"
+                    name="keywords"
+                    value={brand.keywords}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInput">Keywords</label>
+                </div>
+              </div>
+            </div>
+            <div className="row my-2">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTwitter"
+                    placeholder="Twitter title"
+                    name="twitterTitle"
+                    value={brand.twitterTitle}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputTwitter">Twitter Title</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputOgTitle"
+                    placeholder="Open Graph Title"
+                    name="graphTitle"
+                    value={brand.graphTitle}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputOgTitle">Open Graph Title</label>
+                </div>
+              </div>
+            </div>
+            <div className="row mb-5">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTwitDesc"
+                    name="twitterDescription"
+                    placeholder="Twitter Description"
+                    value={brand.twitterDescription}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputTwitDesc">Twitter Description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputOgDesc"
+                    placeholder="Open Graph Description"
+                    name="graphDescription"
+                    value={brand.graphDescription}
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputOgDesc">
+                    Open Graph Description
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <h4 className="property_form_h4">Footer Details</h4>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTwitter"
+                    placeholder="Footer Title"
+                    value={brand.footerTitle}
+                    name="footerTitle"
+                    onChange={handleInputChange}
+                  />
+                  <label for="floatingInputTwitter">Footer Title</label>
+                </div>
+              </div>
+            </div>
+            <h6 className="mt-4">Footer description</h6>
             <div className="row">
               <div className="col-md-12">
                 <Editor
-                  // editorState={editorState}
                   toolbarClassName="toolbarClassName"
                   wrapperClassName="wrapperClassName"
                   editorClassName="editorClassName"

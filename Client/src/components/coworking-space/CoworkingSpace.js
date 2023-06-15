@@ -103,7 +103,7 @@ function CoworkingSpace() {
     }
   };
 
-  const [selectItemNum, setSelectItemNum] = useState(5);
+  const [selectItemNum, setSelectItemNum] = useState(10);
   const itemsPerPageHandler = (e) => {
     setSelectItemNum(e.target.value);
   };
@@ -145,32 +145,48 @@ function CoworkingSpace() {
         <Addpropertybtn />
       </Link>
       <div className="table-box">
-        <div className="table-top-box">Coworking Table</div>
-        <TableContainer>
-          <div className="row">
+        <div className="table-top-box">Country Table</div>
+        <TableContainer style={{ overflowX: "hidden" }}>
+          <div className="row my-5">
+
             <div className="col-md-3">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search by name"
-              />
+              <div class="form-floating border_field">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="floatingInput"
+                  placeholder="Search by name"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <label for="floatingInput">Search by name</label>
+              </div>
             </div>
             <div className="col-md-3">
-              <input
-                type="text"
-                value={citySearchTerm}
-                onChange={(e) => setCitySearchTerm(e.target.value)}
-                placeholder="Search by city"
-              />
+              <div class="form-floating border_field">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="floatingInput"
+                  placeholder="Search by city"
+                  value={citySearchTerm}
+                  onChange={(e) => setCitySearchTerm(e.target.value)}
+                />
+                <label for="floatingInput">Search by city</label>
+              </div>
             </div>
             <div className="col-md-3">
-              <input
-                type="text"
-                value={microLocationSearchTerm}
-                onChange={(e) => setMicroLocationSearchTerm(e.target.value)}
-                placeholder="Search by microlocation"
-              />
+              <div class="form-floating border_field">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="floatingInput"
+                  placeholder="Search by microlocation"
+                  value={microLocationSearchTerm}
+                  onChange={(e) => setMicroLocationSearchTerm(e.target.value)}
+                />
+                <label for="floatingInput">Search by microlocation</label>
+              </div>
             </div>
           </div>
           <Table variant="simple">
@@ -216,7 +232,9 @@ function CoworkingSpace() {
                       <Td>{workSpace.createdAt.split("T")[0]}</Td>
                       <Td>{workSpace.status}</Td>
                       <Td>
-                        <Link to={`/editworkspace/${workSpace._id}`}>
+                        <Link
+                          to={`/coworking-space/edit-workspace/${workSpace._id}`}
+                        >
                           <AiFillEdit style={{ marginLeft: "0.5rem" }} />
                         </Link>
                       </Td>
@@ -250,7 +268,9 @@ function CoworkingSpace() {
                       <Td>{workSpace.createdAt.split("T")[0]}</Td>
                       <Td>{workSpace.status}</Td>
                       <Td>
-                        <Link to={`/editworkspace/${workSpace._id}`}>
+                        <Link
+                          to={`/coworking-space/edit-workspace/${workSpace._id}`}
+                        >
                           <AiFillEdit style={{ marginLeft: "0.5rem" }} />
                         </Link>
                       </Td>
@@ -285,10 +305,10 @@ function CoworkingSpace() {
                 value={selectItemNum}
                 onChange={itemsPerPageHandler}
               >
-                <option value={5}>5</option>
                 <option value={10}>10</option>
-                <option value={15}>15</option>
-                <option value={20}>20</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
               </select>
             </div>
             <div style={{ width: "110px" }}>

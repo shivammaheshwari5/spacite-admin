@@ -9,8 +9,12 @@ import { EditorState, convertToRaw, ContentState } from "draft-js";
 import Select from "react-dropdown-select";
 import ImageUpload from "../../ImageUpload";
 import { config, postConfig } from "../../services/Services";
+
 import { getBrandsDataById, getCity } from "./BrandService";
 import Loader from "../loader/Loader";
+
+import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
+
 
 const initialValue = {
   name: "",
@@ -208,34 +212,46 @@ const EditBrand = () => {
   }
 
   return (
-    <>
+    <div className="mx-5 mt-3">
+      <Mainpanelnav />
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleEditBrands}>
           <div className="container">
-            <div className="row">
+            <div className="row pt-4">
+              <h4 className="property_form_h4">Brand Details</h4>
               <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Name*"
-                  name="name"
-                  value={name}
-                  onChange={handleInputChange}
-                  required
-                />
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Name*"
+                    name="name"
+                    value={name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                  <label for="floatingInput">Name*</label>
+                </div>
               </div>
               <div className="col-md-3">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Description*"
-                  name="description"
-                  value={description}
-                  onChange={handleInputChange}
-                  required
-                />
+                <div
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                  }}
+                >
+                  <Select
+                    options={allCity}
+                    multi
+                    onChange={handleDropdownChange}
+                    values={cities}
+                    labelField="name"
+                    valueField="_id"
+                    placeholder="Select Cities"
+                  />
+                </div>
               </div>
-              <div className="col-md-3">
+              <div className="col-md-6 d-flex justify-content-evenly align-items-end">
                 <h5 style={{ marginTop: "25px" }}>Logo Upload</h5>
                 <ImageUpload
                   images={images}
@@ -247,187 +263,173 @@ const EditBrand = () => {
                 <img src={image} alt="image" />
               </div>
             </div>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Order*"
-                  name="order"
-                  value={order}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="col-md-3">
-                <div className="form-check mt-4">
-                  <input
-                    className="form-check-input"
-                    style={{ cursor: "pointer" }}
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
+            <div className="row mb-5">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Description"
+                    name="description"
+                    value={description}
+                    onChange={handleInputChange}
                   />
-                  <label
-                    className="form-check-label"
-                    htmlFor="flexCheckDefault"
-                  >
-                    Should Show on Home
+                  <label for="floatingInput">Description</label>
+                </div>
+              </div>
+            </div>
+            <div className="row">
+              <h4 className="property_form_h4">SEO Details</h4>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Description"
+                    name="seo"
+                    value={seo.description}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "description")
+                    }
+                  />
+                  <label for="floatingInput">Description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputRobots"
+                    placeholder="Robots"
+                    name="seo"
+                    value={seo.robots}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "robots")
+                    }
+                  />
+                  <label for="floatingInputRobots">Robots</label>
+                </div>
+              </div>
+            </div>
+            <div className="row my-2">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Title"
+                    name="seo"
+                    value={seo.title}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "title")
+                    }
+                  />
+                  <label for="floatingInput">Title</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Keywords"
+                    name="seo"
+                    value={seo.keywords}
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "keywords")
+                    }
+                  />
+                  <label for="floatingInput">Keywords</label>
+                </div>
+              </div>
+            </div>
+            <div className="row my-2">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTwitter"
+                    placeholder="Twitter title"
+                    name="seo.twitter.title"
+                    value={seo.twitter.title}
+                    onChange={handleInputChange2}
+                  />
+                  <label for="floatingInputTwitter">Twitter Title</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputOgTitle"
+                    placeholder="Open graph title"
+                    name="seo.open_graph.title"
+                    value={seo.open_graph.title}
+                    onChange={handleInputChange2}
+                  />
+                  <label for="floatingInputOgTitle">Open Graph Title</label>
+                </div>
+              </div>
+            </div>
+            <div className="row mb-5">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTwitDesc"
+                    name="seo.twitter.description"
+                    placeholder="Twitter Description"
+                    value={seo.twitter.description}
+                    onChange={handleInputChange2}
+                  />
+                  <label for="floatingInputTwitDesc">Twitter Description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputOgDesc"
+                    placeholder="Open Graph Description"
+                    name="seo.open_graph.description"
+                    value={seo.open_graph.description}
+                    onChange={handleInputChange2}
+                  />
+                  <label for="floatingInputOgDesc">
+                    Open Graph Description
                   </label>
                 </div>
               </div>
+            </div>
+            <div className="row">
+              <h4 className="property_form_h4">Footer Details</h4>
               <div className="col-md-6">
-                <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
-                >
-                  <Select
-                    options={allCity}
-                    multi
-                    onChange={handleDropdownChange}
-                    values={cities}
-                    labelField="name"
-                    valueField="_id"
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputTwitter"
+                    placeholder="Footer Title"
+                    value={seo.footer_title}
+                    name="seo"
+                    onChange={(event) =>
+                      handleInputChangeObject(event, "seo", "footer_title")
+                    }
                   />
+                  <label for="floatingInputTwitter">Footer Title</label>
                 </div>
               </div>
             </div>
-            <h4>SEO Details</h4>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Title*"
-                  className="property-input"
-                  required
-                  name="seo"
-                  value={seo.title}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "title")
-                  }
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Description*"
-                  className="property-input"
-                  required
-                  name="seo"
-                  value={seo.description}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "description")
-                  }
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="Keywords*"
-                  name="seo"
-                  className="property-input"
-                  value={seo.keywords}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "keywords")
-                  }
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  placeholder="URL*"
-                  className="property-input"
-                  name="seo"
-                  value={seo.url}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "url")
-                  }
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-3">
-                <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
-                >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                  >
-                    <option>Select status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Robots"
-                  name="seo"
-                  value={seo.robots}
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "robots")
-                  }
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Twitter title"
-                  name="seo.twitter.title"
-                  value={seo.twitter.title}
-                  onChange={handleInputChange2}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  name="seo.twitter.description"
-                  placeholder="Twitter description"
-                  value={seo.twitter.description}
-                  onChange={handleInputChange2}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Open graph title"
-                  name="seo.open_graph.title"
-                  value={seo.open_graph.title}
-                  onChange={handleInputChange2}
-                />
-              </div>
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Open graph description"
-                  name="seo.open_graph.description"
-                  value={seo.open_graph.description}
-                  onChange={handleInputChange2}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Footer title"
-                  value={seo.footer_title}
-                  name="seo"
-                  onChange={(event) =>
-                    handleInputChangeObject(event, "seo", "footer_title")
-                  }
-                />
-              </div>
-            </div>
-            <h6>Footer description</h6>
+            <h6 className="mt-4">Footer description</h6>
             <div className="row">
               <div className="col-md-12">
                 <Editor
@@ -448,7 +450,7 @@ const EditBrand = () => {
           </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

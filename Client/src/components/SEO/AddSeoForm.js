@@ -112,156 +112,190 @@ function AddSeoForm() {
           <div className="container">
             <div className="row">
               <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Heading"
-                  name="heading"
-                  onChange={handleInputChange}
-                  value={seo.heading}
-                />
-              </div>
-              <div className="col-md-6">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Title*"
-                  name="title"
-                  required
-                  onChange={handleInputChange}
-                  value={seo.title}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <input
-                  className="property-input"
-                  type="text"
-                  placeholder="Description"
-                  name="description"
-                  onChange={handleInputChange}
-                  value={seo.description}
-                />
-              </div>
-              <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Path*"
-                  name="path"
-                  required
-                  onChange={handleInputChange}
-                  value={seo.path}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <div
-                  style={{ borderBottom: "1px solid gray", margin: "20px 0" }}
-                >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                  >
-                    <option>Select status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Heading*"
+                    required
+                    name="heading"
+                    onChange={handleInputChange}
+                    value={seo.heading}
+                  />
+                  <label for="floatingInput">Heading*</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <input
-                  type="text"
-                  placeholder="Keywords*"
-                  name="keywords"
-                  className="property-input"
-                  onChange={handleInputChange}
-                  value={seo.keywords}
-                />
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Title*"
+                    required
+                    name="title"
+                    onChange={handleInputChange}
+                    value={seo.title}
+                  />
+                  <label for="floatingInput">Title*</label>
+                </div>
+              </div>
+            </div>
+            <div className="row my-2">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Keywords*"
+                    name="keywords"
+                    onChange={handleInputChange}
+                    value={seo.keywords}
+                  />
+                  <label for="floatingInput">Keywords*</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Path*"
+                    name="path"
+                    required
+                    onChange={handleInputChange}
+                    value={seo.path}
+                  />
+                  <label for="floatingInput">Path*</label>
+                </div>
+              </div>
+            </div>
+            <div className="row my-2">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Description*"
+                    required
+                    name="description"
+                    onChange={handleInputChange}
+                    value={seo.description}
+                  />
+                  <label for="floatingInput">Description*</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Robots*"
+                    required
+                    name="robots"
+                    onChange={handleInputChange}
+                    value={seo.robots}
+                  />
+                  <label for="floatingInput">Robots*</label>
+                </div>
+              </div>
+            </div>
+            <div className="row my-2">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Twitter title"
+                    name="twitterTitle"
+                    onChange={handleInputChange}
+                    value={seo.twitterTitle}
+                  />
+                  <label for="floatingInput">Twitter title</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Open graph title"
+                    name="graphTitle"
+                    onChange={handleInputChange}
+                    value={seo.graphTitle}
+                  />
+                  <label for="floatingInput">Open graph title</label>
+                </div>
+              </div>
+            </div>
+            <div className="row my-2">
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Twitter description"
+                    name="twitterDescription"
+                    onChange={handleInputChange}
+                    value={seo.twitterDescription}
+                  />
+                  <label for="floatingInput">Twitter description</label>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Open graph description"
+                    name="graphDescription"
+                    onChange={handleInputChange}
+                    value={seo.graphDescription}
+                  />
+                  <label for="floatingInput">Open graph description</label>
+                </div>
               </div>
             </div>
             <div className="row">
               <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Robots"
-                  name="robots"
-                  onChange={handleInputChange}
-                  value={seo.robots}
-                />
+                <div class="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Script tag*"
+                    name="script"
+                    required
+                    onChange={handleInputChange}
+                    value={seo.script}
+                  />
+                  <label for="floatingInput">Script tag*</label>
+                </div>
               </div>
             </div>
-            <div className="row">
+            <div className="row mt-2 mb-5">
               <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Twitter title"
-                  name="twitterTitle"
-                  onChange={handleInputChange}
-                  value={seo.twitterTitle}
-                />
-              </div>
-              <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Twitter description"
-                  name="twitterDescription"
-                  onChange={handleInputChange}
-                  value={seo.twitterDescription}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Open graph title"
-                  name="graphTitle"
-                  onChange={handleInputChange}
-                  value={seo.graphTitle}
-                />
-              </div>
-              <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Open graph description"
-                  name="graphDescription"
-                  onChange={handleInputChange}
-                  value={seo.graphDescription}
-                />
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-12">
-                <textarea
-                  cols="100"
-                  rows="4"
-                  className="property-input"
-                  placeholder="Script tag"
-                  name="script"
-                  required
-                  onChange={handleInputChange}
-                  value={seo.script}
-                ></textarea>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <input
-                  type="text"
-                  className="property-input"
-                  placeholder="Footer title"
-                  name="footerTitle"
-                  onChange={handleInputChange}
-                  value={seo.footerTitle}
-                />
+                <div class="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    placeholder="Footer title"
+                    name="footerTitle"
+                    onChange={handleInputChange}
+                    value={seo.footerTitle}
+                  />
+                  <label for="floatingInput">Footer title</label>
+                </div>
               </div>
             </div>
             <h6>Footer description</h6>

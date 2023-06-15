@@ -102,11 +102,11 @@ function App() {
                 element={isLogin ? <Addbrand /> : <Navigate to="/" />}
               />
               <Route
-                path="/editbrand/:id"
+                path="/brands/edit-brand/:id"
                 element={isLogin ? <EditBrand /> : <Navigate to="/" />}
               />
               <Route
-                path="/editworkspace/:id"
+                path="/coworking-space/edit-workspace/:id"
                 element={isLogin ? <EditWorkSpace /> : <Navigate to="/" />}
               />
             </Routes>

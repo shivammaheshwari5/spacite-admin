@@ -159,6 +159,7 @@ const Brands = () => {
                       />
                     </Td>
                   </Tr>
+
                 ) : showAll ? (
                   brands
                     .slice(
@@ -184,6 +185,21 @@ const Brands = () => {
                         <Td>
                           <Delete
                             handleFunction={() => handleDeleteBrands(brand._id)}
+
+                ) : (
+                  brands?.map((brand) => (
+                    <Tr key={brand._id} id={brand._id}>
+                      <Td>{brand.name}</Td>
+                      <Td className="tableDescription">
+                        {brand.description.length > 200
+                          ? brand.description.substring(0, 200) + "..."
+                          : brand.description}
+                      </Td>
+                      {/* <Td>{brand.order}</Td> */}
+                      <Td>
+                        <Link to={`/brands/edit-brand/${brand._id}`}>
+                          <AiFillEdit
+                            style={{ fontSize: "22px", cursor: "pointer" }}
                           />
                         </Td>
                       </Tr>

@@ -644,7 +644,7 @@ function AddWorkSpace() {
                 </div>
               </div>
             </div>
-            <div className="row">
+            <div className="row my-2">
               <div className="col-md-6">
                 <div className="form-floating border_field">
                   <input
@@ -674,7 +674,7 @@ function AddWorkSpace() {
                 </div>
               </div>
             </div>
-            <div className="row">
+            <div className="row my-2">
               <div className="col-md-6">
                 <div className="form-floating border_field">
                   <input

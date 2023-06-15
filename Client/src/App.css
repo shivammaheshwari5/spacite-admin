@@ -42,15 +42,21 @@
 select {
   border: none !important;
   color: gray;
+  width: 100%;
 }
 .select-box {
   border-bottom: 1px solid gray;
   margin: 20px 0;
   width: 31%;
 }
-.sidebar::-webkit-scrollbar {
-  width: 10px;
-  background-color: black;
+.css-jznujr-ContentComponent {
+  overflow-x: auto;
+}
+.css-jznujr-ContentComponent::-webkit-scrollbar {
+  display: none;
+}
+tbody {
+  font-size: 15px;
 }
 .saveproperty-btn {
   background-color: #a55bea;
@@ -98,7 +104,6 @@ input[type="file"]::file-selector-button:active {
   border-radius: 4px;
 }
 .btnLink {
-  margin-right: -126px;
   display: block;
   width: 150px;
   float: right;
