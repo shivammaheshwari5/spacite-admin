@@ -8,7 +8,6 @@ const AppProvider = ({ children }) => {
   const [user, setUser] = useState();
   const [country, setCountry] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [seoData, setSeoData] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
   const navigate = useNavigate();
   let isLogin = localStorage.getItem("token") ? true : false;
@@ -22,19 +21,6 @@ const AppProvider = ({ children }) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const getSeoData = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get("/api/seo/seos");
-      setLoading(false);
-      setSeoData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getSeoData();
-  }, [updateTable]);
 
   return (
     <AppContext.Provider
@@ -47,7 +33,7 @@ const AppProvider = ({ children }) => {
         isLogin,
         country,
         setCountry,
-        seoData,
+
         updateTable,
         setUpdateTable,
       }}

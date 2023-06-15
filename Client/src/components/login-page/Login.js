@@ -118,7 +118,7 @@ function Login() {
                         type={show ? "text" : "password"}
                       />
                     </FormControl>
-                    <InputRightElement top="25px" width="4.5rem">
+                    <InputRightElement top="15px" width="4.5rem">
                       <Button h="1.75rem" size="sm" onClick={handleClick}>
                         {show ? "Hide" : "Show"}
                       </Button>

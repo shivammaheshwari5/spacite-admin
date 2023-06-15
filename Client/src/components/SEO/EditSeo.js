@@ -8,6 +8,8 @@ import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import { config, postConfig } from "../../services/Services";
+import Loader from "../loader/Loader";
+import { getSeoDataById } from "./SeoService";
 
 const initialValue = {
   page_title: "",
@@ -109,19 +111,15 @@ const EditSeo = () => {
     const initialEditorState = EditorState.createWithContent(contentState);
     setEditorState(initialEditorState);
   }, [seos]);
-  const getSeoDataById = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`/api/seo/seos/${id}`, config);
-      setLoading(false);
-      setSeos(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchSeobyId = async () => {
+    await getSeoDataById(setLoading, setSeos, id);
   };
   useEffect(() => {
-    getSeoDataById();
+    handleFetchSeobyId();
   }, [updateTable]);
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />

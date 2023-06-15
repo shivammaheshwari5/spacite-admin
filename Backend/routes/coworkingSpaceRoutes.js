@@ -7,6 +7,7 @@ const {
   deleteWorkSpaces,
   getWorkSpacesById,
   searchWorkSpacesByName,
+  changeWorkSpaceStatus,
 } = require("../controllers/coworkingSpaceController");
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router
   .get("/workspaces/search", searchWorkSpacesByName)
   .get("/workSpaces/:workSpaceId", protect, getWorkSpacesById)
   .post("/workSpaces", protect, postWorkSpaces)
+  .put("/workSpaces/changeStatus/:workSpaceId", protect, changeWorkSpaceStatus)
   .put("/workSpaces/:workSpaceId", protect, editWorkSpaces)
   .delete("/delete/:workSpaceId", protect, deleteWorkSpaces);
 

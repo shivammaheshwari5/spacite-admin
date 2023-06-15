@@ -149,6 +149,26 @@ const searchWorkSpacesByName = asyncHandler(async (req, res) => {
   }
 });
 
+const changeWorkSpaceStatus = asyncHandler(async (req, res) => {
+  const { workSpaceId } = req.params;
+  const { status } = req.body;
+  try {
+    const workspace = await CoworkingSpace.findById(workSpaceId);
+
+    if (!workspace) {
+      return res.status(404).json({ error: "Workspace not found" });
+    }
+
+    workspace.status = status;
+    await workspace.save();
+
+    return res.status(200).json({ message: "Status updated successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to update status" });
+  }
+});
+
 module.exports = {
   postWorkSpaces,
   editWorkSpaces,
@@ -156,4 +176,5 @@ module.exports = {
   getWorkSpaces,
   getWorkSpacesById,
   searchWorkSpacesByName,
+  changeWorkSpaceStatus,
 };

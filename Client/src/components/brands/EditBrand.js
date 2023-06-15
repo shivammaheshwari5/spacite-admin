@@ -9,7 +9,12 @@ import { EditorState, convertToRaw, ContentState } from "draft-js";
 import Select from "react-dropdown-select";
 import ImageUpload from "../../ImageUpload";
 import { config, postConfig } from "../../services/Services";
+
+import { getBrandsDataById, getCity } from "./BrandService";
+import Loader from "../loader/Loader";
+
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
+
 
 const initialValue = {
   name: "",
@@ -147,17 +152,13 @@ const EditBrand = () => {
       console.log(error);
     }
   };
-
-  const getBrandsDataById = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`/api/brand/brands/${id}`, config);
-      setLoading(false);
-      setBrands(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchBrandsById = async () => {
+    await getBrandsDataById(setLoading, setBrands, id);
   };
+  const handleFetchCity = async () => {
+    await getCity(setAllCity);
+  };
+
   useEffect(() => {
     const contentState = ContentState.createFromText(
       seo.footer_description || "empty"
@@ -165,19 +166,10 @@ const EditBrand = () => {
     const initialEditorState = EditorState.createWithContent(contentState);
     setEditorState(initialEditorState);
   }, [brands]);
-  const getCity = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get("/api/city/cities", config);
-      setLoading(false);
-      setAllCity(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   useEffect(() => {
-    getCity();
-    getBrandsDataById();
+    handleFetchCity();
+    handleFetchBrandsById();
   }, [updateTable]);
   const handleDropdownChange = (selectedValues) => {
     const ids = selectedValues.map((option) => option._id);
@@ -215,6 +207,9 @@ const EditBrand = () => {
       });
     console.log("sshiva");
   };
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="mx-5 mt-3">

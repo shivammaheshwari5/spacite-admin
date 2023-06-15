@@ -217,8 +217,6 @@ function City() {
   const getLastPage = () => {
     setCurPage(nPage);
   };
-  console.log(countryId);
-  // console.log(states);
 
   return (
     <>
@@ -324,9 +322,8 @@ function City() {
                         size="xl"
                         w={20}
                         h={20}
-                        marginLeft="180px"
                         alignSelf="center"
-                        margin="auto"
+                        style={{ position: "absolute", left: "482px" }}
                       />
                     </Td>
                   </Tr>

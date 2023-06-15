@@ -20,11 +20,11 @@ import { Link } from "react-router-dom";
 import Delete from "../delete/Delete";
 import { AiFillEdit } from "react-icons/ai";
 import { config } from "../../services/Services";
+import { getWorkSpaceData } from "./WorkSpaceService";
 function CoworkingSpace() {
   const [loading, setLoading] = useState(false);
   const [workSpaces, setWorkSpaces] = useState([]);
   const [updateTable, setUpdateTable] = useState(false);
-  const [searchWorkSpaces, setSearchWorkSpaces] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [citySearchTerm, setCitySearchTerm] = useState("");
   const [microLocationSearchTerm, setMicroLocationSearchTerm] = useState("");
@@ -32,34 +32,9 @@ function CoworkingSpace() {
   const [showAll, setShowAll] = useState(true);
 
   const toast = useToast();
-  const getWorkSpaceData = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get("/api/workSpace/workSpaces", config);
-      setLoading(false);
-      setWorkSpaces(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleFetchBrands = async () => {
+    await getWorkSpaceData(setLoading, setWorkSpaces);
   };
-  // const searchWorkSpaceData = async (query) => {
-  //   try {
-  //     setLoading(true);
-  //     setSearch(query);
-  //     if (!query) {
-  //       return;
-  //     }
-
-  //     const { data } = await axios.get(
-  //       `/api/workSpace/workSpaces/search?name=${search}`,
-  //       config
-  //     );
-  //     setLoading(false);
-  //     setSearchWorkSpaces(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const handleSearch = () => {
     const filteredWorkSpaces = workSpaces.filter((workSpace) => {
@@ -91,7 +66,7 @@ function CoworkingSpace() {
   };
 
   useEffect(() => {
-    getWorkSpaceData();
+    handleFetchBrands();
   }, [updateTable]);
 
   useEffect(() => {
@@ -127,7 +102,6 @@ function CoworkingSpace() {
       });
     }
   };
-  console.log(searchWorkSpaces);
 
   const [selectItemNum, setSelectItemNum] = useState(10);
   const itemsPerPageHandler = (e) => {
@@ -147,8 +121,12 @@ function CoworkingSpace() {
   }
 
   var nextPage = () => {
-    if (curPage !== lastIndex) {
-      setCurPage(curPage + 1);
+    // if (curPage !== lastIndex) {
+    //   setCurPage(curPage + 1);
+    // }
+    const lastPage = Math.ceil(searchedWorkSpaces.length / selectItemNum);
+    if (curPage < lastPage) {
+      setCurPage((prev) => prev + 1);
     }
   };
 
