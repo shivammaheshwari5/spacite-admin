@@ -49,6 +49,12 @@ select {
   margin: 20px 0;
   width: 31%;
 }
+.css-jznujr-ContentComponent {
+  overflow-x: auto;
+}
+.css-jznujr-ContentComponent::-webkit-scrollbar {
+  display: none;
+}
 tbody {
   font-size: 15px;
 }

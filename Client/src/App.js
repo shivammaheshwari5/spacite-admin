@@ -110,7 +110,7 @@ function App() {
                 element={isLogin ? <Addbrand /> : <Navigate to="/" />}
               />
               <Route
-                path="/editbrand/:id"
+                path="/brands/edit-brand/:id"
                 element={isLogin ? <EditBrand /> : <Navigate to="/" />}
               />
               <Route

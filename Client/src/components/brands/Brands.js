@@ -106,7 +106,7 @@ const Brands = () => {
                       </Td>
                       {/* <Td>{brand.order}</Td> */}
                       <Td>
-                        <Link to={`/editbrand/${brand._id}`}>
+                        <Link to={`/brands/edit-brand/${brand._id}`}>
                           <AiFillEdit
                             style={{ fontSize: "22px", cursor: "pointer" }}
                           />
