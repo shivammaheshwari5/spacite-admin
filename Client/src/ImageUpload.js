@@ -67,7 +67,6 @@ const ImageUpload = ({
       input.click();
     });
   }, []);
-  console.log(images);
   return (
     <div className="App">
       <div className="container">
@@ -78,7 +77,6 @@ const ImageUpload = ({
           onDragOver={handleDragOver}
         >
           <div id="drop-region" className="drop-region text-center">
-            <img id="download-btn" src="/Download.png" width="80" alt="" />
             <div className="d-flex">
               <label
                 htmlFor="file-upload"

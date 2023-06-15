@@ -37,56 +37,48 @@ function App() {
             <Routes>
               <Route
                 path="/listing-space"
-                element={
-                  isLogin ? [<ListingSpace key={2} />] : <Navigate to="/" />
-                }
+                element={isLogin ? <ListingSpace /> : <Navigate to="/" />}
               />
               <Route
                 path="/coworking-space"
-                key="2"
-                element={
-                  isLogin ? [<CoworkingSpace key={4} />] : <Navigate to="/" />
-                }
+                element={isLogin ? <CoworkingSpace /> : <Navigate to="/" />}
               />
               <Route
                 path="/coworking-plan"
-                key="3"
                 element={isLogin ? <CoworkingPlan /> : <Navigate to="/" />}
               />
               <Route
                 path="/media"
-                key="4"
                 element={isLogin ? <Media /> : <Navigate to="/" />}
               />
-              <Route path="/" key="5" element={<Login key={9} />} />
+              <Route
+                path="/"
+                element={
+                  !isLogin ? <Login /> : <Navigate to="/listing-space" />
+                }
+              />
               <Route
                 path="/country"
-                key="6"
                 element={isLogin ? <Country /> : <Navigate to="/" />}
               />
               <Route
                 path="/state"
-                key="7"
                 element={isLogin ? <State /> : <Navigate to="/" />}
               />
               <Route
                 path="/city"
-                key="8"
                 element={isLogin ? <City /> : <Navigate to="/" />}
               />
               <Route
                 path="/microlocation"
-                key="9"
                 element={isLogin ? <Microlocation /> : <Navigate to="/" />}
               />
               <Route
                 path="/amenities"
-                key="10"
                 element={isLogin ? <Amenities /> : <Navigate to="/" />}
               />
               <Route
                 path="/seo"
-                key="11"
                 element={isLogin ? <Seo /> : <Navigate to="/" />}
               />
               <Route

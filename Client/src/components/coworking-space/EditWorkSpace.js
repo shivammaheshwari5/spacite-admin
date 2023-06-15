@@ -375,27 +375,27 @@ const EditWorkSpace = () => {
 
   const handleFetchCity = async (id) => {
     location.state = id;
-    await getCityByState(location.state, setLoading, setCities);
+    await getCityByState(location.state, setCities);
   };
   const handleFetchStates = async (id) => {
     location.country = id;
-    await getStateByCountry(location.country, setLoading, setStates);
+    await getStateByCountry(location.country, setStates);
   };
   const handleFetchMicrolocation = async (id) => {
     location.city = id;
-    await getMicrolocationByCity(location.city, setLoading, setMicrolocations);
+    await getMicrolocationByCity(location.city, setMicrolocations);
   };
   const handleFetchCountry = async () => {
-    await getCountry(setLoading, setCountry);
+    await getCountry(setCountry);
   };
   const handleFetchBrands = async () => {
     await getBrandsData(setLoading, setBrands);
   };
   const handleFetchAmenity = async () => {
-    await getAmenities(setLoading, setAllAmenities);
+    await getAmenities(setAllAmenities);
   };
   const handleFetchCategory = async () => {
-    await getCategory(setLoading, setCategories);
+    await getCategory(setCategories);
   };
 
   useEffect(() => {
@@ -463,12 +463,9 @@ const EditWorkSpace = () => {
 
     setMergedArray(updatedArray);
   };
-
-  console.log(workSpaces);
-  console.log(
-    hours_of_operation.monday_friday.from,
-    hours_of_operation.monday_friday.to
-  );
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
@@ -1231,7 +1228,7 @@ const EditWorkSpace = () => {
                 style={{ cursor: "pointer" }}
               />
             </div>
-            {allplans.map((row) => (
+            {allplans.map((row, id) => (
               <div className="row" key={row.id}>
                 <div className="col-md-3">
                   <div
