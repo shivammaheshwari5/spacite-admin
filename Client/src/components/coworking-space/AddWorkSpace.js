@@ -70,6 +70,7 @@ function AddWorkSpace() {
   const [fileName, setFileName] = useState([]);
   const [progress, setProgress] = useState(0);
   const [images, setImages] = useState([]);
+  const [contacts, setContacts] = useState([]);
   const [coSpace, setCoSpace] = useState({
     brand: "",
     name: "",
@@ -94,8 +95,6 @@ function AddWorkSpace() {
     amenity: "",
     images: [],
     seats: "",
-    price: "",
-    category: "",
   });
 
   const [open, setOpen] = useState({
@@ -151,6 +150,21 @@ function AddWorkSpace() {
   const removePlan = (id) => {
     setPlans((prevRows) => prevRows.filter((row) => row.id !== id));
   };
+  const createContact = () => {
+    const newRow = {
+      id: contacts.length + 1,
+      user: "",
+      email: "",
+      phone: "",
+      designation: "",
+    };
+
+    setContacts((prevRows) => [...prevRows, newRow]);
+  };
+
+  const removeContact = (id) => {
+    setContacts((prevRows) => prevRows.filter((row) => row.id !== id));
+  };
   const onChangePlanHandler = (e, id) => {
     const { name, value } = e.target;
     setPlans((prevRows) =>
@@ -168,6 +182,18 @@ function AddWorkSpace() {
   const handleInputPlanChange = (e, id) => {
     const { name, value } = e.target;
     setPlans((prevRows) =>
+      prevRows.map((row) => {
+        if (row.id === id) {
+          return { ...row, [name]: value };
+        }
+        return row;
+      })
+    );
+  };
+
+  const handleInputContactChange = (e, id) => {
+    const { name, value } = e.target;
+    setContacts((prevRows) =>
       prevRows.map((row) => (row.id === id ? { ...row, [name]: value } : row))
     );
   };
@@ -305,7 +331,7 @@ function AddWorkSpace() {
             },
           },
           plans,
-
+          contact_details: contacts,
           // status,
           brand: brandId,
           slug: coSpace.slug,
@@ -416,6 +442,7 @@ function AddWorkSpace() {
       [day]: isChecked,
     }));
   };
+  console.log(contacts);
   console.log(plans);
   return (
     <div className="mx-5 mt-3">
@@ -423,13 +450,100 @@ function AddWorkSpace() {
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleSaveWorkSpace}>
           <div className="container">
+            <div className="row pt-4 d-flex w-50 justify-content-between align-items-center">
+              <h4 className="property_form_h4">Other Contact Details</h4>
+              <IoIosAddCircle
+                onClick={createContact}
+                className="icon"
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            {contacts?.map((row, id) => (
+              <div className="row pt-3" key={row.id}>
+                <div className="col-md-3">
+                  <div
+                    className="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInput"
+                      placeholder="User*"
+                      name="user"
+                      value={row.user}
+                      onChange={(e) => handleInputContactChange(e, row.id)}
+                    />
+                    <label htmlFor="floatingInput">Name</label>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div
+                    className="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInputSlug"
+                      placeholder="Email*"
+                      name="email"
+                      value={row.email}
+                      onChange={(e) => handleInputContactChange(e, row.id)}
+                    />
+                    <label htmlFor="floatingInputSlug">Email</label>
+                  </div>
+                </div>
+                <div className="col-md-3">
+                  <div
+                    className="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInputSlug"
+                      placeholder="Phone"
+                      name="phone"
+                      value={row.phone}
+                      onChange={(e) => handleInputContactChange(e, row.id)}
+                    />
+                    <label htmlFor="floatingInputSlug">Phone</label>
+                  </div>
+                </div>
+                <div className="col-md-3 d-flex justify-content-between align-items-center">
+                  <div
+                    className="form-floating border_field"
+                    style={{ marginTop: "6px" }}
+                  >
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="floatingInputSlug"
+                      placeholder="Designation"
+                      name="designation"
+                      value={row.designation}
+                      onChange={(e) => handleInputContactChange(e, row.id)}
+                    />
+                    <label htmlFor="floatingInputSlug">Designation</label>
+                  </div>
+                  <div className="d-flex align-items-center">
+                    <AiFillDelete
+                      className="icon"
+                      style={{ cursor: "pointer", marginTop: "14px" }}
+                      onClick={() => removeContact(row.id)}
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
             <div className="row pt-3">
               <div className="col-md-12">
                 <h4>Coworking Details</h4>
               </div>
               <div className="col-md-4">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -441,12 +555,12 @@ function AddWorkSpace() {
                     value={coSpace.name}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Name</label>
+                  <label htmlFor="floatingInput">Name</label>
                 </div>
               </div>
               <div className="col-md-4">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -458,7 +572,7 @@ function AddWorkSpace() {
                     value={coSpace.slug}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputSlug">Slug</label>
+                  <label htmlFor="floatingInputSlug">Slug</label>
                 </div>
               </div>
               <div className="col-md-4 mb-5">
@@ -502,7 +616,7 @@ function AddWorkSpace() {
             <div className="row">
               <h4 className="property_form_h4">SEO Details</h4>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -512,11 +626,11 @@ function AddWorkSpace() {
                     value={coSpace.description}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputDescription">Description</label>
+                  <label htmlFor="floatingInputDescription">Description</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -526,13 +640,13 @@ function AddWorkSpace() {
                     value={coSpace.robots}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputRobots">Robots</label>
+                  <label htmlFor="floatingInputRobots">Robots</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -542,11 +656,11 @@ function AddWorkSpace() {
                     value={coSpace.title}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Title</label>
+                  <label htmlFor="floatingInput">Title</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -556,13 +670,13 @@ function AddWorkSpace() {
                     value={coSpace.keywords}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Keywords</label>
+                  <label htmlFor="floatingInput">Keywords</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -572,11 +686,11 @@ function AddWorkSpace() {
                     value={coSpace.twitterTitle}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputTwitter">Twitter Title</label>
+                  <label htmlFor="floatingInputTwitter">Twitter Title</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -586,13 +700,13 @@ function AddWorkSpace() {
                     value={coSpace.graphTitle}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputOgTitle">Open Graph Title</label>
+                  <label htmlFor="floatingInputOgTitle">Open Graph Title</label>
                 </div>
               </div>
             </div>
             <div className="row mb-5">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -602,11 +716,13 @@ function AddWorkSpace() {
                     value={coSpace.twitterDescription}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputTwitDesc">Twitter Description</label>
+                  <label htmlFor="floatingInputTwitDesc">
+                    Twitter Description
+                  </label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -616,7 +732,7 @@ function AddWorkSpace() {
                     value={coSpace.graphDescription}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputOgDesc">
+                  <label htmlFor="floatingInputOgDesc">
                     Open Graph Description
                   </label>
                 </div>
@@ -625,7 +741,7 @@ function AddWorkSpace() {
             <div className="row">
               <h4 className="property_form_h4">Location</h4>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -635,7 +751,7 @@ function AddWorkSpace() {
                     value={coSpace.address}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputAddress">Address*</label>
+                  <label htmlFor="floatingInputAddress">Address*</label>
                 </div>
               </div>
             </div>
@@ -758,7 +874,7 @@ function AddWorkSpace() {
             </div>
             <div className="row mb-5">
               <div className="col-md-3">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -768,11 +884,11 @@ function AddWorkSpace() {
                     value={coSpace.lattitude}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputLatti">Lattitude</label>
+                  <label htmlFor="floatingInputLatti">Lattitude</label>
                 </div>
               </div>
               <div className="col-md-3">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -782,11 +898,11 @@ function AddWorkSpace() {
                     value={coSpace.longitude}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputLongi">Longitude</label>
+                  <label htmlFor="floatingInputLongi">Longitude</label>
                 </div>
               </div>
               <div className="col-md-3">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -796,7 +912,7 @@ function AddWorkSpace() {
                     value={coSpace.postalCode}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputPostal">Postal Code</label>
+                  <label htmlFor="floatingInputPostal">Postal Code</label>
                 </div>
               </div>
             </div>
@@ -826,7 +942,7 @@ function AddWorkSpace() {
             <div className="row mb-5">
               <h4 className="property_form_h4">Images</h4>
               <div className="container">
-                <label class="file">
+                <label className="file">
                   <input
                     type="file"
                     id="file-input"
@@ -925,7 +1041,7 @@ function AddWorkSpace() {
             </div>
             <div className="row mb-5">
               <div className="col-md-3">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -935,7 +1051,7 @@ function AddWorkSpace() {
                     value={coSpace.seats}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputSeats">No. Of Seats</label>
+                  <label htmlFor="floatingInputSeats">No. Of Seats</label>
                 </div>
               </div>
             </div>
@@ -1169,7 +1285,7 @@ function AddWorkSpace() {
                 </div>
                 <div className="col-md-3">
                   <div
-                    class="form-floating border_field"
+                    className="form-floating border_field"
                     style={{ marginTop: "6px" }}
                   >
                     <input
@@ -1178,11 +1294,11 @@ function AddWorkSpace() {
                       id="floatingInputPrice"
                       placeholder="Price*"
                       name="price"
-                      value={coSpace.price}
+                      value={row.price}
                       onChange={(e) => handleInputPlanChange(e, row.id)}
                       required
                     />
-                    <label for="floatingInputPrice">Price*</label>
+                    <label htmlFor="floatingInputPrice">Price*</label>
                   </div>
                 </div>
                 <div className="col-md-3 d-flex align-items-center">
