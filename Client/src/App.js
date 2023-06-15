@@ -114,7 +114,7 @@ function App() {
                 element={isLogin ? <EditBrand /> : <Navigate to="/" />}
               />
               <Route
-                path="/editworkspace/:id"
+                path="/coworking-space/edit-workspace/:id"
                 element={isLogin ? <EditWorkSpace /> : <Navigate to="/" />}
               />
             </Routes>
