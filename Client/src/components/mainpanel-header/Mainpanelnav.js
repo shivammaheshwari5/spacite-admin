@@ -30,18 +30,18 @@ function Mainpanelnav() {
         <p style={{ fontSize: "21px", textTransform: "capitalize" }}>
           {title.replace("-", " ")}
         </p>
-        <div class="dropdown">
+        <div className="dropdown">
           <button
-            class="dropdown-toggle"
+            className="dropdown-toggle"
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
             <FaUserCircle className="mainpanel-icon" />
           </button>
-          <ul class="dropdown-menu p-0">
+          <ul className="dropdown-menu p-0">
             <li>
-              <a class="dropdown-item" href="#" onClick={logoutHandle}>
+              <a className="dropdown-item" href="#" onClick={logoutHandle}>
                 Logout
               </a>
             </li>

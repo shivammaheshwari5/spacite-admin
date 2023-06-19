@@ -47,11 +47,9 @@ export const getCountry = async (setCountry) => {
   }
 };
 
-export const getBrandsData = async (setLoading, setBrands) => {
+export const getBrandsData = async (setBrands) => {
   try {
-    setLoading(true);
     const { data } = await axios.get("/api/brand/brands", config);
-    setLoading(false);
     setBrands(data);
   } catch (error) {
     console.log(error);
@@ -120,5 +118,37 @@ export const getWorkSpaceData = async (setLoading, setWorkSpaces) => {
     setWorkSpaces(data);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const changeWorkSpaceStatus = async (
+  id,
+  action,
+  setUpdateTable,
+  toast
+) => {
+  try {
+    const { data } = await axios.put(
+      `/api/workSpace/workSpaces/changeStatus/${id}`,
+      { status: action },
+      config
+    );
+    setUpdateTable((prev) => !prev);
+    toast({
+      title: "Update Successfully!",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+    });
+  } catch (error) {
+    toast({
+      title: "Error Occured!",
+      description: "Failed to Saved the Space",
+      status: "error",
+      duration: 5000,
+      isClosable: true,
+      position: "bottom-left",
+    });
   }
 };

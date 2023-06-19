@@ -96,7 +96,7 @@ function Seo() {
   }
 
   var nextPage = () => {
-    const lastPage = Math.ceil(searchedSeos.length / selectItemNum);
+    const lastPage = Math.ceil(seos.length / selectItemNum);
     if (curPage < lastPage) {
       setCurPage((prev) => prev + 1);
     }

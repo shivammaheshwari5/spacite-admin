@@ -27,12 +27,12 @@ function Sidebar() {
         </div>
         <div className="nav-menu-wrapper">
           <ul className="nav">
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink to="/listing-space">
                 <HiOutlineBuildingOffice2 className="icon" />
                 Listing Space
               </NavLink>
-            </li>
+            </li> */}
             <li className="nav-item">
               <NavLink to="/coworking-space">
                 <HiOutlineBuildingOffice className="icon" />
@@ -57,7 +57,6 @@ function Sidebar() {
                 Country
               </NavLink>
             </li>
-            <br />
             <li className="nav-item">
               <NavLink to="/state">
                 <BiMapPin className="icon" />
