@@ -126,14 +126,19 @@ const Brands = () => {
         <div className="table-box">
           <div className="table-top-box">Brands Table</div>
           <TableContainer marginTop="60px" variant="striped" color="teal">
-            <div className="row">
+            <div className="row mb-5">
               <div className="col-md-3">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search by name"
-                />
+                <div className="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputSlug"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search by name"
+                  />
+                  <label htmlFor="floatingInputSlug">Search by name</label>
+                </div>
               </div>
             </div>
             <Table variant="simple">
@@ -141,7 +146,6 @@ const Brands = () => {
                 <Tr>
                   <Th>Name</Th>
                   <Th>Description</Th>
-                  {/* <Th>Order</Th> */}
                   <Th>Edit</Th>
                   <Th>Delete</Th>
                 </Tr>
@@ -159,7 +163,6 @@ const Brands = () => {
                       />
                     </Td>
                   </Tr>
-
                 ) : showAll ? (
                   brands
                     .slice(
@@ -174,7 +177,6 @@ const Brands = () => {
                             ? brand.description.substring(0, 200) + "..."
                             : brand.description}
                         </Td>
-                        {/* <Td>{brand.order}</Td> */}
                         <Td>
                           <Link to={`/editbrand/${brand._id}`}>
                             <AiFillEdit
@@ -185,21 +187,6 @@ const Brands = () => {
                         <Td>
                           <Delete
                             handleFunction={() => handleDeleteBrands(brand._id)}
-
-                ) : (
-                  brands?.map((brand) => (
-                    <Tr key={brand._id} id={brand._id}>
-                      <Td>{brand.name}</Td>
-                      <Td className="tableDescription">
-                        {brand.description.length > 200
-                          ? brand.description.substring(0, 200) + "..."
-                          : brand.description}
-                      </Td>
-                      {/* <Td>{brand.order}</Td> */}
-                      <Td>
-                        <Link to={`/brands/edit-brand/${brand._id}`}>
-                          <AiFillEdit
-                            style={{ fontSize: "22px", cursor: "pointer" }}
                           />
                         </Td>
                       </Tr>
@@ -218,7 +205,6 @@ const Brands = () => {
                             ? brand.description.substring(0, 200) + "..."
                             : brand.description}
                         </Td>
-                        {/* <Td>{brand.order}</Td> */}
                         <Td>
                           <Link to={`/editbrand/${brand._id}`}>
                             <AiFillEdit

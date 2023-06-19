@@ -142,14 +142,22 @@ function ResPropertyType() {
               <ModalHeader>Add New State</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <input
-                  name="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  type="text"
-                  placeholder="Name"
-                  className="property-input"
-                />
+                <div
+                  className="form-floating border_field"
+                  style={{ marginTop: "6px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    name="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Name*"
+                    required
+                  />
+                  <label htmlFor="floatingInput">Name*</label>
+                </div>
               </ModalBody>
               <ModalFooter>
                 <Button colorScheme="blue" mr={3} onClick={onClose}>

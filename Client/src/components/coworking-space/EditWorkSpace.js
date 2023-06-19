@@ -10,6 +10,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import { AiFillDelete } from "react-icons/ai";
 import { postConfig, config } from "../../services/Services";
+import Loader from "../loader/Loader";
 import {
   Table,
   Thead,
@@ -467,7 +468,6 @@ const EditWorkSpace = () => {
       <Mainpanelnav />
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleEditWorkSpace}>
-
           <div className="container pt-4">
             <div className="row pt-4 d-flex w-50 justify-content-between align-items-center">
               <h4 className="property_form_h4">Other Contact Details</h4>

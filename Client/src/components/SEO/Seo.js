@@ -118,14 +118,19 @@ function Seo() {
       <div className="table-box">
         <div className="table-top-box">SEO Table</div>
         <TableContainer marginTop="60px" variant="striped" color="teal">
-          <div className="row">
+          <div className="row mb-5">
             <div className="col-md-3">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search by Path"
-              />
+              <div className="form-floating border_field">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="floatingInputSlug"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search by path"
+                />
+                <label htmlFor="floatingInputSlug">Search by path</label>
+              </div>
             </div>
           </div>
           <Table variant="simple">

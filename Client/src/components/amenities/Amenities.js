@@ -210,13 +210,18 @@ function Amenities() {
           <div className="table-top-box">Amenities Table</div>
           <TableContainer marginTop="60px" variant="striped" color="teal">
             <div className="row">
-              <div className="col-md-3">
-                <input
-                  type="text"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search by Name"
-                />
+              <div className="col-md-3 mb-5">
+                <div className="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputSlug"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search by name"
+                  />
+                  <label htmlFor="floatingInputSlug">Search by name</label>
+                </div>
               </div>
             </div>
             <Table variant="simple">

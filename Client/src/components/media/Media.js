@@ -217,15 +217,22 @@ function Media() {
               <ModalHeader>Upload New Image</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Name*"
-                  name="name"
-                  className="property-input"
-                  required
-                />
+                <div
+                  className="form-floating border_field"
+                  style={{ marginTop: "6px", marginBottom: "10px" }}
+                >
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInput"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Name*"
+                    name="name"
+                    required
+                  />
+                  <label htmlFor="floatingInput">Name*</label>
+                </div>
                 <ImageUpload
                   images={images}
                   setImages={setImages}

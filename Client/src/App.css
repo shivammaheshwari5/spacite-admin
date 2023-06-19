@@ -58,6 +58,9 @@ select {
 tbody {
   font-size: 15px;
 }
+.chakra-table__container {
+  overflow-x: hidden !important;
+}
 .saveproperty-btn {
   background-color: #a55bea;
   color: white;

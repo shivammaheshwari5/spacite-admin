@@ -444,99 +444,283 @@ function AddWorkSpace() {
   };
   console.log(contacts);
   console.log(plans);
+  console.log(country);
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleSaveWorkSpace}>
           <div className="container">
-            <div className="row pt-4 d-flex w-50 justify-content-between align-items-center">
-              <h4 className="property_form_h4">Other Contact Details</h4>
-              <IoIosAddCircle
-                onClick={createContact}
-                className="icon"
-                style={{ cursor: "pointer" }}
-              />
+            <div className="row pt-4">
+              <div className="col-md-3 d-flex justify-content-between">
+                <h4 className="property_form_h4">Contact Details</h4>
+                <IoIosAddCircle
+                  onClick={createContact}
+                  className="icon"
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
             </div>
-            {contacts?.map((row, id) => (
-              <div className="row pt-3" key={row.id}>
-                <div className="col-md-3">
-                  <div
-                    className="form-floating border_field"
-                    style={{ marginTop: "6px" }}
-                  >
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="floatingInput"
-                      placeholder="User*"
-                      name="user"
-                      value={row.user}
-                      onChange={(e) => handleInputContactChange(e, row.id)}
-                    />
-                    <label htmlFor="floatingInput">Name</label>
+            <div className="mb-5">
+              {contacts?.map((row, id) => (
+                <div className="row pt-3" key={row.id}>
+                  <div className="col-md-3">
+                    <div
+                      className="form-floating border_field"
+                      style={{ marginTop: "6px" }}
+                    >
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="floatingInput"
+                        placeholder="User*"
+                        name="user"
+                        value={row.user}
+                        onChange={(e) => handleInputContactChange(e, row.id)}
+                      />
+                      <label htmlFor="floatingInput">Name</label>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div
+                      className="form-floating border_field"
+                      style={{ marginTop: "6px" }}
+                    >
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="floatingInputSlug"
+                        placeholder="Email*"
+                        name="email"
+                        value={row.email}
+                        onChange={(e) => handleInputContactChange(e, row.id)}
+                      />
+                      <label htmlFor="floatingInputSlug">Email</label>
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div
+                      className="form-floating border_field"
+                      style={{ marginTop: "6px" }}
+                    >
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="floatingInputSlug"
+                        placeholder="Phone"
+                        name="phone"
+                        value={row.phone}
+                        onChange={(e) => handleInputContactChange(e, row.id)}
+                      />
+                      <label htmlFor="floatingInputSlug">Phone</label>
+                    </div>
+                  </div>
+                  <div className="col-md-3 d-flex justify-content-between align-items-center">
+                    <div
+                      className="form-floating border_field"
+                      style={{ marginTop: "6px" }}
+                    >
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="floatingInputSlug"
+                        placeholder="Designation"
+                        name="designation"
+                        value={row.designation}
+                        onChange={(e) => handleInputContactChange(e, row.id)}
+                      />
+                      <label htmlFor="floatingInputSlug">Designation</label>
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <AiFillDelete
+                        className="icon"
+                        style={{ cursor: "pointer", marginTop: "14px" }}
+                        onClick={() => removeContact(row.id)}
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="col-md-3">
-                  <div
-                    className="form-floating border_field"
-                    style={{ marginTop: "6px" }}
-                  >
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="floatingInputSlug"
-                      placeholder="Email*"
-                      name="email"
-                      value={row.email}
-                      onChange={(e) => handleInputContactChange(e, row.id)}
-                    />
-                    <label htmlFor="floatingInputSlug">Email</label>
-                  </div>
-                </div>
-                <div className="col-md-3">
-                  <div
-                    className="form-floating border_field"
-                    style={{ marginTop: "6px" }}
-                  >
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="floatingInputSlug"
-                      placeholder="Phone"
-                      name="phone"
-                      value={row.phone}
-                      onChange={(e) => handleInputContactChange(e, row.id)}
-                    />
-                    <label htmlFor="floatingInputSlug">Phone</label>
-                  </div>
-                </div>
-                <div className="col-md-3 d-flex justify-content-between align-items-center">
-                  <div
-                    className="form-floating border_field"
-                    style={{ marginTop: "6px" }}
-                  >
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="floatingInputSlug"
-                      placeholder="Designation"
-                      name="designation"
-                      value={row.designation}
-                      onChange={(e) => handleInputContactChange(e, row.id)}
-                    />
-                    <label htmlFor="floatingInputSlug">Designation</label>
-                  </div>
-                  <div className="d-flex align-items-center">
-                    <AiFillDelete
-                      className="icon"
-                      style={{ cursor: "pointer", marginTop: "14px" }}
-                      onClick={() => removeContact(row.id)}
-                    />
-                  </div>
+              ))}
+            </div>
+            <div className="row">
+              <h4 className="property_form_h4">Location</h4>
+              <div className="col-md-6">
+                <div className="form-floating border_field">
+                  <textarea
+                    type="text"
+                    className="form-control"
+                    id="floatingInputAddress"
+                    placeholder="Address*"
+                    name="address"
+                    value={coSpace.address}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="floatingInputAddress">Address*</label>
                 </div>
               </div>
-            ))}
+            </div>
+            <div className="row">
+              <div className="col-md-3">
+                <div
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
+                >
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={coSpace.country}
+                    onChange={onChangeHandler}
+                    name="country"
+                    onClick={handleFetchStates}
+                    required
+                  >
+                    <option>Select a country*</option>
+                    {country?.map((countryElem) => (
+                      <option
+                        id={countryElem._id}
+                        key={countryElem._id}
+                        value={countryElem.name}
+                      >
+                        {countryElem.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
+                >
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={coSpace.state}
+                    name="state"
+                    onChange={onChangeHandler}
+                    onClick={handleFetchCity}
+                    required
+                  >
+                    <option>Select a state*</option>
+                    {states?.map((stateElem) => (
+                      <option
+                        id={stateElem._id}
+                        key={stateElem._id}
+                        value={stateElem.name}
+                      >
+                        {stateElem.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
+                >
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={coSpace.city}
+                    onChange={onChangeHandler}
+                    onClick={handleFetchMicrolocation}
+                    name="city"
+                    required
+                  >
+                    <option>Select a city*</option>
+                    {cities?.map((cityElem) => (
+                      <option
+                        id={cityElem._id}
+                        key={cityElem._id}
+                        value={cityElem.name}
+                      >
+                        {cityElem.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div
+                  style={{
+                    borderBottom: "1px solid #cccccc",
+                    margin: "20px 0",
+                  }}
+                >
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    name="microLocation"
+                    value={coSpace.microLocation}
+                    onChange={onChangeHandler}
+                    required
+                  >
+                    <option>Select a microlocation*</option>
+                    {microlocations?.map((microLocation) => (
+                      <option
+                        id={microLocation._id}
+                        key={microLocation._id}
+                        value={microLocation.name}
+                      >
+                        {microLocation.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="row mb-5">
+              <div className="col-md-3">
+                <div className="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputLatti"
+                    placeholder="Lattitude"
+                    name="lattitude"
+                    value={coSpace.lattitude}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="floatingInputLatti">Lattitude</label>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputLongi"
+                    placeholder="Longitude"
+                    name="longitude"
+                    value={coSpace.longitude}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="floatingInputLongi">Longitude</label>
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="form-floating border_field">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="floatingInputPostal"
+                    placeholder="Postal Code"
+                    name="postalCode"
+                    value={coSpace.postalCode}
+                    onChange={handleInputChange}
+                  />
+                  <label htmlFor="floatingInputPostal">Postal Code</label>
+                </div>
+              </div>
+            </div>
+
             <div className="row pt-3">
               <div className="col-md-12">
                 <h4>Coworking Details</h4>
@@ -738,184 +922,7 @@ function AddWorkSpace() {
                 </div>
               </div>
             </div>
-            <div className="row">
-              <h4 className="property_form_h4">Location</h4>
-              <div className="col-md-6">
-                <div className="form-floating border_field">
-                  <textarea
-                    type="text"
-                    className="form-control"
-                    id="floatingInputAddress"
-                    placeholder="Address*"
-                    name="address"
-                    value={coSpace.address}
-                    onChange={handleInputChange}
-                  />
-                  <label htmlFor="floatingInputAddress">Address*</label>
-                </div>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-3">
-                <div
-                  style={{
-                    borderBottom: "1px solid #cccccc",
-                    margin: "20px 0",
-                  }}
-                >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={coSpace.country}
-                    onChange={onChangeHandler}
-                    name="country"
-                    onClick={handleFetchStates}
-                    required
-                  >
-                    <option>Select a country*</option>
-                    {country?.map((countryElem) => (
-                      <option
-                        id={countryElem._id}
-                        key={countryElem._id}
-                        value={countryElem.name}
-                      >
-                        {countryElem.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div
-                  style={{
-                    borderBottom: "1px solid #cccccc",
-                    margin: "20px 0",
-                  }}
-                >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={coSpace.state}
-                    name="state"
-                    onChange={onChangeHandler}
-                    onClick={handleFetchCity}
-                    required
-                  >
-                    <option>Select a state*</option>
-                    {states?.map((stateElem) => (
-                      <option
-                        id={stateElem._id}
-                        key={stateElem._id}
-                        value={stateElem.name}
-                      >
-                        {stateElem.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div
-                  style={{
-                    borderBottom: "1px solid #cccccc",
-                    margin: "20px 0",
-                  }}
-                >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={coSpace.city}
-                    onChange={onChangeHandler}
-                    onClick={handleFetchMicrolocation}
-                    name="city"
-                    required
-                  >
-                    <option>Select a city*</option>
-                    {cities?.map((cityElem) => (
-                      <option
-                        id={cityElem._id}
-                        key={cityElem._id}
-                        value={cityElem.name}
-                      >
-                        {cityElem.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div
-                  style={{
-                    borderBottom: "1px solid #cccccc",
-                    margin: "20px 0",
-                  }}
-                >
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    name="microLocation"
-                    value={coSpace.microLocation}
-                    onChange={onChangeHandler}
-                    required
-                  >
-                    <option>Select a microlocation*</option>
-                    {microlocations?.map((microLocation) => (
-                      <option
-                        id={microLocation._id}
-                        key={microLocation._id}
-                        value={microLocation.name}
-                      >
-                        {microLocation.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="row mb-5">
-              <div className="col-md-3">
-                <div className="form-floating border_field">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInputLatti"
-                    placeholder="Lattitude"
-                    name="lattitude"
-                    value={coSpace.lattitude}
-                    onChange={handleInputChange}
-                  />
-                  <label htmlFor="floatingInputLatti">Lattitude</label>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="form-floating border_field">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInputLongi"
-                    placeholder="Longitude"
-                    name="longitude"
-                    value={coSpace.longitude}
-                    onChange={handleInputChange}
-                  />
-                  <label htmlFor="floatingInputLongi">Longitude</label>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="form-floating border_field">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInputPostal"
-                    placeholder="Postal Code"
-                    name="postalCode"
-                    value={coSpace.postalCode}
-                    onChange={handleInputChange}
-                  />
-                  <label htmlFor="floatingInputPostal">Postal Code</label>
-                </div>
-              </div>
-            </div>
+
             <div className="row mb-5">
               <h4 className="property_form_h4">Amenities</h4>
               <div className="form-check" style={{ marginLeft: "9px" }}>
