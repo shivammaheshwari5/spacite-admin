@@ -10,6 +10,7 @@ import { IoIosAddCircle } from "react-icons/io";
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 import { AiFillDelete } from "react-icons/ai";
 import { postConfig, config } from "../../services/Services";
+import Loader from "../loader/Loader";
 import {
   Table,
   Thead,
