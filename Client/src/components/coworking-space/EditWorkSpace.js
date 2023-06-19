@@ -19,6 +19,7 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
+import Loader from "../loader/Loader";
 import {
   uploadFile,
   getCityByState,
@@ -385,7 +386,7 @@ const EditWorkSpace = () => {
     await getCountry(setCountry);
   };
   const handleFetchBrands = async () => {
-    await getBrandsData(setLoading, setBrands);
+    await getBrandsData(setBrands);
   };
   const handleFetchAmenity = async () => {
     await getAmenities(setAllAmenities);
@@ -467,15 +468,16 @@ const EditWorkSpace = () => {
       <Mainpanelnav />
       <div className="container form-box">
         <form style={{ textAlign: "left" }} onSubmit={handleEditWorkSpace}>
-
           <div className="container pt-4">
-            <div className="row pt-4 d-flex w-50 justify-content-between align-items-center">
-              <h4 className="property_form_h4">Other Contact Details</h4>
-              <IoIosAddCircle
-                onClick={createContact}
-                className="icon"
-                style={{ cursor: "pointer" }}
-              />
+            <div className="row pt-4">
+              <div className="col-md-3 d-flex justify-content-between align-items-center">
+                <h4 className="property_form_h4">Contact Details</h4>
+                <IoIosAddCircle
+                  onClick={createContact}
+                  className="icon"
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
             </div>
             {allContact?.map((row, id) => (
               <div className="row pt-3" key={row.id}>
@@ -560,7 +562,7 @@ const EditWorkSpace = () => {
               <h4 className="property_form_h4">Coworking Details</h4>
               <div className="col-md-4">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -573,12 +575,12 @@ const EditWorkSpace = () => {
                     onChange={handleInputChange}
                     required
                   />
-                  <label for="floatingInput">Name*</label>
+                  <label htmlFor="floatingInput">Name*</label>
                 </div>
               </div>
               <div className="col-md-4">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -591,7 +593,7 @@ const EditWorkSpace = () => {
                     onChange={handleInputChange}
                     required
                   />
-                  <label for="floatingInput">Slug*</label>
+                  <label htmlFor="floatingInput">Slug*</label>
                 </div>
               </div>
               <div className="col-md-4">
@@ -636,7 +638,7 @@ const EditWorkSpace = () => {
               <h4 className="property_form_h4">SEO Details</h4>
               <div className="col-md-6">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <textarea
@@ -650,12 +652,12 @@ const EditWorkSpace = () => {
                       handleInputChangeObject(event, "seo", "robots")
                     }
                   />
-                  <label for="floatingInput">Robots</label>
+                  <label htmlFor="floatingInput">Robots</label>
                 </div>
               </div>
               <div className="col-md-6">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <textarea
@@ -669,12 +671,12 @@ const EditWorkSpace = () => {
                       handleInputChangeObject(event, "seo", "description")
                     }
                   />
-                  <label for="floatingInput">Description</label>
+                  <label htmlFor="floatingInput">Description</label>
                 </div>
               </div>
               <div className="col-md-6">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -688,12 +690,12 @@ const EditWorkSpace = () => {
                       handleInputChangeObject(event, "seo", "title")
                     }
                   />
-                  <label for="floatingInput">Title</label>
+                  <label htmlFor="floatingInput">Title</label>
                 </div>
               </div>
               <div className="col-md-6">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -707,14 +709,14 @@ const EditWorkSpace = () => {
                       handleInputChangeObject(event, "seo", "keywords")
                     }
                   />
-                  <label for="floatingInput">Keywords</label>
+                  <label htmlFor="floatingInput">Keywords</label>
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col-md-6">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -726,12 +728,12 @@ const EditWorkSpace = () => {
                     value={seo.twitter.title}
                     onChange={handleInputChange2}
                   />
-                  <label for="floatingInput">Twitter Title</label>
+                  <label htmlFor="floatingInput">Twitter Title</label>
                 </div>
               </div>
               <div className="col-md-6">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -743,14 +745,14 @@ const EditWorkSpace = () => {
                     value={seo.open_graph.title}
                     onChange={handleInputChange2}
                   />
-                  <label for="floatingInput">Open Garph Title</label>
+                  <label htmlFor="floatingInput">Open Garph Title</label>
                 </div>
               </div>
             </div>
             <div className="row mb-5">
               <div className="col-md-6">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <textarea
@@ -762,12 +764,12 @@ const EditWorkSpace = () => {
                     value={seo.twitter.description}
                     onChange={handleInputChange2}
                   />
-                  <label for="floatingInput">Twitter Description</label>
+                  <label htmlFor="floatingInput">Twitter Description</label>
                 </div>
               </div>
               <div className="col-md-6">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <textarea
@@ -779,7 +781,7 @@ const EditWorkSpace = () => {
                     value={seo.open_graph.description}
                     onChange={handleInputChange2}
                   />
-                  <label for="floatingInput">Open Graph Description</label>
+                  <label htmlFor="floatingInput">Open Graph Description</label>
                 </div>
               </div>
             </div>
@@ -918,7 +920,7 @@ const EditWorkSpace = () => {
               </div>
               <div className="col-md-4">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -932,12 +934,12 @@ const EditWorkSpace = () => {
                       handleInputChangeObject(event, "location", "latitude")
                     }
                   />
-                  <label for="floatingInput">Lattitude</label>
+                  <label htmlFor="floatingInput">Lattitude</label>
                 </div>
               </div>
               <div className="col-md-4">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -951,14 +953,14 @@ const EditWorkSpace = () => {
                       handleInputChangeObject(event, "location", "longitude")
                     }
                   />
-                  <label for="floatingInput">Longitude</label>
+                  <label htmlFor="floatingInput">Longitude</label>
                 </div>
               </div>
             </div>
             <div className="row mb-5">
               <div className="col-md-4">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -970,12 +972,12 @@ const EditWorkSpace = () => {
                     value={location.postalCode}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Postal Code</label>
+                  <label htmlFor="floatingInput">Postal Code</label>
                 </div>
               </div>
               <div className="col-md-12">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <textarea
@@ -990,7 +992,7 @@ const EditWorkSpace = () => {
                     }
                     required
                   />
-                  <label for="floatingInput">Address*</label>
+                  <label htmlFor="floatingInput">Address*</label>
                 </div>
               </div>
             </div>
@@ -1115,7 +1117,7 @@ const EditWorkSpace = () => {
             <div className="row mb-5">
               <div className="col-md-3">
                 <div
-                  class="form-floating border_field"
+                  className="form-floating border_field"
                   style={{ marginTop: "6px" }}
                 >
                   <input
@@ -1128,7 +1130,7 @@ const EditWorkSpace = () => {
                     onChange={handleInputChange}
                     required
                   />
-                  <label for="floatingInput">No. of seats*</label>
+                  <label htmlFor="floatingInput">No. of seats*</label>
                 </div>
               </div>
             </div>
@@ -1367,7 +1369,7 @@ const EditWorkSpace = () => {
                 </div>
                 <div className="col-md-3">
                   <div
-                    class="form-floating border_field"
+                    className="form-floating border_field"
                     style={{ marginTop: "6px" }}
                   >
                     <input
@@ -1380,7 +1382,7 @@ const EditWorkSpace = () => {
                       onChange={(e) => handleInputPlanChange(e, row.id)}
                       required
                     />
-                    <label for="floatingInput">Price*</label>
+                    <label htmlFor="floatingInput">Price*</label>
                   </div>
                 </div>
                 <div className="col-md-3 d-flex align-items-center">

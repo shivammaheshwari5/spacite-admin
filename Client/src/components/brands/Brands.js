@@ -102,7 +102,7 @@ const Brands = () => {
   }
 
   var nextPage = () => {
-    const lastPage = Math.ceil(searchedBrands.length / selectItemNum);
+    const lastPage = Math.ceil(brands.length / selectItemNum);
     if (curPage < lastPage) {
       setCurPage((prev) => prev + 1);
     }
@@ -159,7 +159,6 @@ const Brands = () => {
                       />
                     </Td>
                   </Tr>
-
                 ) : showAll ? (
                   brands
                     .slice(
@@ -176,7 +175,7 @@ const Brands = () => {
                         </Td>
                         {/* <Td>{brand.order}</Td> */}
                         <Td>
-                          <Link to={`/editbrand/${brand._id}`}>
+                          <Link to={`/brands/edit-brand/${brand._id}`}>
                             <AiFillEdit
                               style={{ fontSize: "22px", cursor: "pointer" }}
                             />
@@ -185,21 +184,6 @@ const Brands = () => {
                         <Td>
                           <Delete
                             handleFunction={() => handleDeleteBrands(brand._id)}
-
-                ) : (
-                  brands?.map((brand) => (
-                    <Tr key={brand._id} id={brand._id}>
-                      <Td>{brand.name}</Td>
-                      <Td className="tableDescription">
-                        {brand.description.length > 200
-                          ? brand.description.substring(0, 200) + "..."
-                          : brand.description}
-                      </Td>
-                      {/* <Td>{brand.order}</Td> */}
-                      <Td>
-                        <Link to={`/brands/edit-brand/${brand._id}`}>
-                          <AiFillEdit
-                            style={{ fontSize: "22px", cursor: "pointer" }}
                           />
                         </Td>
                       </Tr>
@@ -220,7 +204,7 @@ const Brands = () => {
                         </Td>
                         {/* <Td>{brand.order}</Td> */}
                         <Td>
-                          <Link to={`/editbrand/${brand._id}`}>
+                          <Link to={`/brands/edit-brand/${brand._id}`}>
                             <AiFillEdit
                               style={{ fontSize: "22px", cursor: "pointer" }}
                             />
@@ -254,15 +238,21 @@ const Brands = () => {
                   value={selectItemNum}
                   onChange={itemsPerPageHandler}
                 >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={15}>15</option>
-                  <option value={20}>20</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
                 </select>
               </div>
               <div style={{ width: "110px" }}>
-                {firstIndex + 1} - {searchedBrands?.length + firstIndex} of{" "}
-                {brands?.length}
+                {firstIndex + 1} -{" "}
+                {showAll
+                  ? brands.slice(
+                      (curPage - 1) * selectItemNum,
+                      curPage * selectItemNum
+                    ).length + firstIndex
+                  : searchedBrands?.length}{" "}
+                of {brands?.length}
               </div>
 
               <div className="page-item">

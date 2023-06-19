@@ -21,6 +21,7 @@ import EditSeo from "./components/SEO/EditSeo";
 import Addbrand from "./components/brands/Addbrand";
 import EditBrand from "./components/brands/EditBrand";
 import EditWorkSpace from "./components/coworking-space/EditWorkSpace";
+import ImageUpload from "./ImageUpload";
 
 function App() {
   let { isLogin } = GpState();
@@ -108,6 +109,10 @@ function App() {
               <Route
                 path="/coworking-space/edit-workspace/:id"
                 element={isLogin ? <EditWorkSpace /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/image"
+                element={isLogin ? <ImageUpload /> : <Navigate to="/" />}
               />
             </Routes>
           </div>
