@@ -112,7 +112,7 @@ function AddSeoForm() {
           <div className="container">
             <div className="row">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -123,11 +123,11 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.heading}
                   />
-                  <label for="floatingInput">Heading*</label>
+                  <label htmlFor="floatingInput">Heading*</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -138,13 +138,13 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.title}
                   />
-                  <label for="floatingInput">Title*</label>
+                  <label htmlFor="floatingInput">Title*</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -154,11 +154,11 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.keywords}
                   />
-                  <label for="floatingInput">Keywords*</label>
+                  <label htmlFor="floatingInput">Keywords*</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -169,13 +169,13 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.path}
                   />
-                  <label for="floatingInput">Path*</label>
+                  <label htmlFor="floatingInput">Path*</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -186,11 +186,11 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.description}
                   />
-                  <label for="floatingInput">Description*</label>
+                  <label htmlFor="floatingInput">Description*</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -201,13 +201,13 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.robots}
                   />
-                  <label for="floatingInput">Robots*</label>
+                  <label htmlFor="floatingInput">Robots*</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -217,11 +217,11 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.twitterTitle}
                   />
-                  <label for="floatingInput">Twitter title</label>
+                  <label htmlFor="floatingInput">Twitter title</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -231,13 +231,13 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.graphTitle}
                   />
-                  <label for="floatingInput">Open graph title</label>
+                  <label htmlFor="floatingInput">Open graph title</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -247,11 +247,11 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.twitterDescription}
                   />
-                  <label for="floatingInput">Twitter description</label>
+                  <label htmlFor="floatingInput">Twitter description</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -261,13 +261,13 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.graphDescription}
                   />
-                  <label for="floatingInput">Open graph description</label>
+                  <label htmlFor="floatingInput">Open graph description</label>
                 </div>
               </div>
             </div>
             <div className="row">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -278,13 +278,13 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.script}
                   />
-                  <label for="floatingInput">Script tag*</label>
+                  <label htmlFor="floatingInput">Script tag*</label>
                 </div>
               </div>
             </div>
             <div className="row mt-2 mb-5">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -294,7 +294,7 @@ function AddSeoForm() {
                     onChange={handleInputChange}
                     value={seo.footerTitle}
                   />
-                  <label for="floatingInput">Footer title</label>
+                  <label htmlFor="floatingInput">Footer title</label>
                 </div>
               </div>
             </div>

@@ -147,7 +147,7 @@ function Amenities() {
   }
 
   var nextPage = () => {
-    const lastPage = Math.ceil(searchedAmenities.length / selectItemNum);
+    const lastPage = Math.ceil(amenities.length / selectItemNum);
     if (curPage < lastPage) {
       setCurPage((prev) => prev + 1);
     }

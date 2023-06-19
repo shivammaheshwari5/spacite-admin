@@ -15,7 +15,6 @@ import Loader from "../loader/Loader";
 
 import Mainpanelnav from "../mainpanel-header/Mainpanelnav";
 
-
 const initialValue = {
   name: "",
   description: "",
@@ -220,7 +219,7 @@ const EditBrand = () => {
             <div className="row pt-4">
               <h4 className="property_form_h4">Brand Details</h4>
               <div className="col-md-3">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -231,7 +230,7 @@ const EditBrand = () => {
                     onChange={handleInputChange}
                     required
                   />
-                  <label for="floatingInput">Name*</label>
+                  <label htmlFor="floatingInput">Name*</label>
                 </div>
               </div>
               <div className="col-md-3">
@@ -265,7 +264,7 @@ const EditBrand = () => {
             </div>
             <div className="row mb-5">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -275,14 +274,14 @@ const EditBrand = () => {
                     value={description}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Description</label>
+                  <label htmlFor="floatingInput">Description</label>
                 </div>
               </div>
             </div>
             <div className="row">
               <h4 className="property_form_h4">SEO Details</h4>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -294,11 +293,11 @@ const EditBrand = () => {
                       handleInputChangeObject(event, "seo", "description")
                     }
                   />
-                  <label for="floatingInput">Description</label>
+                  <label htmlFor="floatingInput">Description</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -310,13 +309,13 @@ const EditBrand = () => {
                       handleInputChangeObject(event, "seo", "robots")
                     }
                   />
-                  <label for="floatingInputRobots">Robots</label>
+                  <label htmlFor="floatingInputRobots">Robots</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -328,11 +327,11 @@ const EditBrand = () => {
                       handleInputChangeObject(event, "seo", "title")
                     }
                   />
-                  <label for="floatingInput">Title</label>
+                  <label htmlFor="floatingInput">Title</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -344,13 +343,13 @@ const EditBrand = () => {
                       handleInputChangeObject(event, "seo", "keywords")
                     }
                   />
-                  <label for="floatingInput">Keywords</label>
+                  <label htmlFor="floatingInput">Keywords</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -360,11 +359,11 @@ const EditBrand = () => {
                     value={seo.twitter.title}
                     onChange={handleInputChange2}
                   />
-                  <label for="floatingInputTwitter">Twitter Title</label>
+                  <label htmlFor="floatingInputTwitter">Twitter Title</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -374,13 +373,13 @@ const EditBrand = () => {
                     value={seo.open_graph.title}
                     onChange={handleInputChange2}
                   />
-                  <label for="floatingInputOgTitle">Open Graph Title</label>
+                  <label htmlFor="floatingInputOgTitle">Open Graph Title</label>
                 </div>
               </div>
             </div>
             <div className="row mb-5">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -390,11 +389,13 @@ const EditBrand = () => {
                     value={seo.twitter.description}
                     onChange={handleInputChange2}
                   />
-                  <label for="floatingInputTwitDesc">Twitter Description</label>
+                  <label htmlFor="floatingInputTwitDesc">
+                    Twitter Description
+                  </label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -404,7 +405,7 @@ const EditBrand = () => {
                     value={seo.open_graph.description}
                     onChange={handleInputChange2}
                   />
-                  <label for="floatingInputOgDesc">
+                  <label htmlFor="floatingInputOgDesc">
                     Open Graph Description
                   </label>
                 </div>
@@ -413,7 +414,7 @@ const EditBrand = () => {
             <div className="row">
               <h4 className="property_form_h4">Footer Details</h4>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -425,7 +426,7 @@ const EditBrand = () => {
                       handleInputChangeObject(event, "seo", "footer_title")
                     }
                   />
-                  <label for="floatingInputTwitter">Footer Title</label>
+                  <label htmlFor="floatingInputTwitter">Footer Title</label>
                 </div>
               </div>
             </div>

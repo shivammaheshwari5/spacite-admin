@@ -99,7 +99,7 @@ function AddWorkSpace() {
 
   const [open, setOpen] = useState({
     isOpen: true,
-    isOpenSat: false,
+    isOpenSat: true,
     isOpenSun: false,
   });
   const options = [
@@ -149,6 +149,27 @@ function AddWorkSpace() {
 
   const removePlan = (id) => {
     setPlans((prevRows) => prevRows.filter((row) => row.id !== id));
+  };
+
+  useEffect(() => {
+    defautcreateContacts();
+  }, [coSpace]);
+
+  const defautcreateContacts = () => {
+    const defaultRowCount = 1;
+    const newRows = [];
+    for (let i = 0; i < defaultRowCount; i++) {
+      const newRow = {
+        id: i + 1,
+        user: "",
+        email: "",
+        phone: "",
+        designation: "",
+      };
+      newRows.push(newRow);
+    }
+
+    setContacts(newRows);
   };
   const createContact = () => {
     const newRow = {
@@ -211,27 +232,27 @@ function AddWorkSpace() {
     });
   };
   const handleFetchCity = async () => {
-    await getCityByState(stateId, setLoading, setCities);
+    await getCityByState(stateId, setCities);
   };
   const handleFetchStates = async () => {
-    await getStateByCountry(countryId, setLoading, setStates);
+    await getStateByCountry(countryId, setStates);
   };
   const handleFetchMicrolocation = async () => {
-    await getMicrolocationByCity(cityId, setLoading, setMicrolocations);
+    await getMicrolocationByCity(cityId, setMicrolocations);
   };
 
   const handleFetchCountry = async () => {
-    await getCountry(setLoading, setCountry);
+    await getCountry(setCountry);
   };
 
   const handleFetchBrands = async () => {
-    await getBrandsData(setLoading, setBrands);
+    await getBrandsData(setBrands);
   };
   const handleFetchAmenity = async () => {
-    await getAmenities(setLoading, setAmenities);
+    await getAmenities(setAmenities);
   };
   const handleFetchCategory = async () => {
-    await getCategory(setLoading, setCategories);
+    await getCategory(setCategories);
   };
   const onChangeHandler = (e) => {
     const index = e.target.selectedIndex;
@@ -442,9 +463,6 @@ function AddWorkSpace() {
       [day]: isChecked,
     }));
   };
-  console.log(contacts);
-  console.log(plans);
-  console.log(country);
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
@@ -452,7 +470,8 @@ function AddWorkSpace() {
         <form style={{ textAlign: "left" }} onSubmit={handleSaveWorkSpace}>
           <div className="container">
             <div className="row pt-4">
-              <div className="col-md-3 d-flex justify-content-between">
+
+              <div className="col-md-3 d-flex justify-content-between align-items-center">
                 <h4 className="property_form_h4">Contact Details</h4>
                 <IoIosAddCircle
                   onClick={createContact}

@@ -102,7 +102,7 @@ const Brands = () => {
   }
 
   var nextPage = () => {
-    const lastPage = Math.ceil(searchedBrands.length / selectItemNum);
+    const lastPage = Math.ceil(brands.length / selectItemNum);
     if (curPage < lastPage) {
       setCurPage((prev) => prev + 1);
     }
@@ -178,7 +178,7 @@ const Brands = () => {
                             : brand.description}
                         </Td>
                         <Td>
-                          <Link to={`/editbrand/${brand._id}`}>
+                          <Link to={`/brands/edit-brand/${brand._id}`}>
                             <AiFillEdit
                               style={{ fontSize: "22px", cursor: "pointer" }}
                             />
@@ -206,7 +206,7 @@ const Brands = () => {
                             : brand.description}
                         </Td>
                         <Td>
-                          <Link to={`/editbrand/${brand._id}`}>
+                          <Link to={`/brands/edit-brand/${brand._id}`}>
                             <AiFillEdit
                               style={{ fontSize: "22px", cursor: "pointer" }}
                             />
@@ -240,15 +240,21 @@ const Brands = () => {
                   value={selectItemNum}
                   onChange={itemsPerPageHandler}
                 >
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={15}>15</option>
-                  <option value={20}>20</option>
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
                 </select>
               </div>
               <div style={{ width: "110px" }}>
-                {firstIndex + 1} - {searchedBrands?.length + firstIndex} of{" "}
-                {brands?.length}
+                {firstIndex + 1} -{" "}
+                {showAll
+                  ? brands.slice(
+                      (curPage - 1) * selectItemNum,
+                      curPage * selectItemNum
+                    ).length + firstIndex
+                  : searchedBrands?.length}{" "}
+                of {brands?.length}
               </div>
 
               <div className="page-item">

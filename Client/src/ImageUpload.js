@@ -1,20 +1,8 @@
 import React, { useState, Fragment, useEffect } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
 import { AiFillDelete } from "react-icons/ai";
 import { FaUpload } from "react-icons/fa";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
-  Spinner,
-  useToast,
-} from "@chakra-ui/react";
 
 const ImageUpload = ({
   images,
@@ -77,15 +65,10 @@ const ImageUpload = ({
           onDragOver={handleDragOver}
         >
           <div id="drop-region" className="drop-region text-center">
-
-      
-
-           
             <div
               className="d-flex align-items-flex-end"
               style={{ height: "25px" }}
             >
-
               <label
                 htmlFor="file-upload"
                 className="file-upload-label d-inline-block p-0"
@@ -156,3 +139,63 @@ const ImageUpload = ({
 };
 
 export default ImageUpload;
+
+// import "@pqina/pintura/pintura.css";
+// import { useRef, useState } from "react";
+// import { PinturaEditorModal } from "@pqina/react-pintura";
+// import { getEditorDefaults } from "@pqina/pintura";
+
+// const editorDefaults = getEditorDefaults();
+
+// function ImageUpload() {
+//   const [editorEnabled, setEditorEnabled] = useState(false);
+
+//   const [editorSrc, setEditorSrc] = useState(undefined);
+
+//   const fileInputRef = useRef(null);
+
+//   const handleInputChange = () => {
+//     // Exit if no files selected
+//     if (!fileInputRef.current.files.length) return;
+
+//     // Edit the selected file
+//     setEditorEnabled(true);
+//     setEditorSrc(fileInputRef.current.files[0]);
+//   };
+
+//   const handleEditorHide = () => setEditorEnabled(false);
+
+//   const handleEditorProcess = (imageState) => {
+//     // Create a files list
+//     const dataTransfer = new DataTransfer();
+//     dataTransfer.items.add(imageState.dest);
+
+//     // Assign new files
+//     fileInputRef.current.files = dataTransfer.files;
+//     console.log(fileInputRef.current.files);
+//   };
+
+//   return (
+//     <div className="App">
+//       <input
+//         ref={fileInputRef}
+//         type="file"
+//         multi
+//         accept="image/*"
+//         onChange={handleInputChange}
+//       />
+
+//       {editorEnabled && (
+//         <PinturaEditorModal
+//           {...editorDefaults}
+//           src={editorSrc}
+//           imageCropAspectRatio={1}
+//           onHide={handleEditorHide}
+//           onProcess={handleEditorProcess}
+//         />
+//       )}
+//     </div>
+//   );
+// }
+
+// export default ImageUpload;

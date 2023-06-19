@@ -4,6 +4,7 @@ import Addpropertybtn from "../add-new-btn/Addpropertybtn";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { BiSkipNext, BiSkipPrevious } from "react-icons/bi";
 import { AiOutlineEye } from "react-icons/ai";
+import { changeWorkSpaceStatus } from "./WorkSpaceService";
 import {
   Table,
   Thead,
@@ -21,6 +22,8 @@ import Delete from "../delete/Delete";
 import { AiFillEdit } from "react-icons/ai";
 import { config } from "../../services/Services";
 import { getWorkSpaceData } from "./WorkSpaceService";
+import Desable from "../delete/Desable";
+import Approve from "../delete/Approve";
 function CoworkingSpace() {
   const [loading, setLoading] = useState(false);
   const [workSpaces, setWorkSpaces] = useState([]);
@@ -30,9 +33,10 @@ function CoworkingSpace() {
   const [microLocationSearchTerm, setMicroLocationSearchTerm] = useState("");
   const [searchedWorkSpaces, setSearchedWorkSpaces] = useState([]);
   const [showAll, setShowAll] = useState(true);
+  const [searchOption, setSearchOption] = useState("");
 
   const toast = useToast();
-  const handleFetchBrands = async () => {
+  const handleFetchWorkSpace = async () => {
     await getWorkSpaceData(setLoading, setWorkSpaces);
   };
 
@@ -41,7 +45,7 @@ function CoworkingSpace() {
       const cityName = workSpace.location.city?.name || "city";
       const microLocationName =
         workSpace.location.micro_location?.name || "microlocation";
-
+      const statusName = workSpace.status;
       const matchName =
         workSpace.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         searchTerm.toLowerCase().includes(workSpace.name.toLowerCase());
@@ -57,8 +61,11 @@ function CoworkingSpace() {
         microLocationSearchTerm
           .toLowerCase()
           .includes(microLocationName.toLowerCase());
-
-      return matchName && matchCity && matchMicroLocation;
+      const matchStatus =
+        statusName.includes(searchOption) || searchOption === "All"
+          ? workSpace
+          : "";
+      return matchName && matchCity && matchMicroLocation && matchStatus;
     });
 
     setSearchedWorkSpaces(filteredWorkSpaces);
@@ -66,17 +73,21 @@ function CoworkingSpace() {
   };
 
   useEffect(() => {
-    handleFetchBrands();
-  }, [updateTable]);
-
-  useEffect(() => {
+    handleFetchWorkSpace();
     handleSearch();
     setShowAll(
       searchTerm === "" &&
         citySearchTerm === "" &&
-        microLocationSearchTerm === ""
+        microLocationSearchTerm === "" &&
+        searchOption === ""
     );
-  }, [updateTable, searchTerm, citySearchTerm, microLocationSearchTerm]);
+  }, [
+    updateTable,
+    searchTerm,
+    citySearchTerm,
+    microLocationSearchTerm,
+    searchOption,
+  ]);
   const handleDeleteWorkSpaces = async (id) => {
     try {
       const { data } = await axios.delete(
@@ -103,7 +114,13 @@ function CoworkingSpace() {
     }
   };
 
-  const [selectItemNum, setSelectItemNum] = useState(10);
+  const handleApprove = (id) => {
+    changeWorkSpaceStatus(id, "approve", setUpdateTable, toast);
+  };
+  const handleReject = (id) => {
+    changeWorkSpaceStatus(id, "reject", setUpdateTable, toast);
+  };
+  const [selectItemNum, setSelectItemNum] = useState(5);
   const itemsPerPageHandler = (e) => {
     setSelectItemNum(e.target.value);
   };
@@ -121,10 +138,7 @@ function CoworkingSpace() {
   }
 
   var nextPage = () => {
-    // if (curPage !== lastIndex) {
-    //   setCurPage(curPage + 1);
-    // }
-    const lastPage = Math.ceil(searchedWorkSpaces.length / selectItemNum);
+    const lastPage = Math.ceil(workSpaces.length / selectItemNum);
     if (curPage < lastPage) {
       setCurPage((prev) => prev + 1);
     }
@@ -137,7 +151,7 @@ function CoworkingSpace() {
   const getLastPage = () => {
     setCurPage(nPage);
   };
-
+  console.log(searchOption);
   return (
     <div className="mx-5 mt-3">
       <Mainpanelnav />
@@ -145,12 +159,11 @@ function CoworkingSpace() {
         <Addpropertybtn />
       </Link>
       <div className="table-box">
-        <div className="table-top-box">Country Table</div>
+        <div className="table-top-box">Coworking Table</div>
         <TableContainer style={{ overflowX: "hidden" }}>
           <div className="row my-5">
-
             <div className="col-md-3">
-              <div class="form-floating border_field">
+              <div className="form-floating border_field">
                 <input
                   type="text"
                   className="form-control"
@@ -159,11 +172,11 @@ function CoworkingSpace() {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <label for="floatingInput">Search by name</label>
+                <label htmlFor="floatingInput">Search by name</label>
               </div>
             </div>
             <div className="col-md-3">
-              <div class="form-floating border_field">
+              <div className="form-floating border_field">
                 <input
                   type="text"
                   className="form-control"
@@ -172,11 +185,11 @@ function CoworkingSpace() {
                   value={citySearchTerm}
                   onChange={(e) => setCitySearchTerm(e.target.value)}
                 />
-                <label for="floatingInput">Search by city</label>
+                <label htmlFor="floatingInput">Search by city</label>
               </div>
             </div>
             <div className="col-md-3">
-              <div class="form-floating border_field">
+              <div className="form-floating border_field">
                 <input
                   type="text"
                   className="form-control"
@@ -185,7 +198,25 @@ function CoworkingSpace() {
                   value={microLocationSearchTerm}
                   onChange={(e) => setMicroLocationSearchTerm(e.target.value)}
                 />
-                <label for="floatingInput">Search by microlocation</label>
+                <label htmlFor="floatingInput">Search by microlocation</label>
+              </div>
+            </div>
+
+            <div className="col-md-3">
+              <div className="form-floating">
+                <select
+                  className="form-select"
+                  id="floatingSelectGrid"
+                  aria-label="Floating label select example"
+                  value={searchOption}
+                  onChange={(e) => setSearchOption(e.target.value)}
+                >
+                  <option value="All">All</option>
+                  <option value="pending">pending</option>
+                  <option value="reject">reject</option>
+                  <option value="approve">approve</option>
+                </select>
+                <label htmlFor="floatingSelectGrid">Search By Status</label>
               </div>
             </div>
           </div>
@@ -230,21 +261,40 @@ function CoworkingSpace() {
                       </Td>
 
                       <Td>{workSpace.createdAt.split("T")[0]}</Td>
-                      <Td>{workSpace.status}</Td>
+                      <Td>{workSpace.status.toUpperCase()}</Td>
                       <Td>
                         <Link
                           to={`/coworking-space/edit-workspace/${workSpace._id}`}
                         >
-                          <AiFillEdit style={{ marginLeft: "0.5rem" }} />
+                          <AiFillEdit
+                            style={{ marginLeft: "0.5rem", fontSize: "20px" }}
+                          />
                         </Link>
                       </Td>
                       <Td>
-                        <AiOutlineEye style={{ margin: "auto" }} />
+                        <AiOutlineEye
+                          style={{
+                            margin: "auto",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                          }}
+                        />
                       </Td>
                       <Td>
-                        <Delete
-                          onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
-                        />
+                        <div className="d-flex justify-content-between align-items-center">
+                          <Approve
+                            handleFunction={() => handleApprove(workSpace._id)}
+                          />
+                          <Desable
+                            handleFunction={() => handleReject(workSpace._id)}
+                          />
+
+                          <Delete
+                            handleFunction={() =>
+                              handleDeleteWorkSpaces(workSpace._id)
+                            }
+                          />
+                        </div>
                       </Td>
                     </Tr>
                   ))
@@ -266,21 +316,40 @@ function CoworkingSpace() {
                       </Td>
 
                       <Td>{workSpace.createdAt.split("T")[0]}</Td>
-                      <Td>{workSpace.status}</Td>
+                      <Td>{workSpace.status.toUpperCase()}</Td>
                       <Td>
                         <Link
                           to={`/coworking-space/edit-workspace/${workSpace._id}`}
                         >
-                          <AiFillEdit style={{ marginLeft: "0.5rem" }} />
+                          <AiFillEdit
+                            style={{ marginLeft: "0.5rem", fontSize: "20px" }}
+                          />
                         </Link>
                       </Td>
                       <Td>
-                        <AiOutlineEye style={{ margin: "auto" }} />
+                        <AiOutlineEye
+                          style={{
+                            margin: "auto",
+                            fontSize: "20px",
+                            cursor: "pointer",
+                          }}
+                        />
                       </Td>
                       <Td>
-                        <Delete
-                          onDelete={() => handleDeleteWorkSpaces(workSpace._id)}
-                        />
+                        <div className="d-flex justify-content-between align-items-center">
+                          <Approve
+                            handleFunction={() => handleApprove(workSpace._id)}
+                          />
+                          <Desable
+                            handleFunction={() => handleReject(workSpace._id)}
+                          />
+
+                          <Delete
+                            handleFunction={() =>
+                              handleDeleteWorkSpaces(workSpace._id)
+                            }
+                          />
+                        </div>
                       </Td>
                     </Tr>
                   ))
@@ -305,15 +374,21 @@ function CoworkingSpace() {
                 value={selectItemNum}
                 onChange={itemsPerPageHandler}
               >
-                <option value={10}>10</option>
-                <option value={25}>25</option>
-                <option value={50}>50</option>
-                <option value={100}>100</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
               </select>
             </div>
             <div style={{ width: "110px" }}>
-              {firstIndex + 1} - {searchedWorkSpaces?.length + firstIndex} of{" "}
-              {workSpaces?.length}
+              {firstIndex + 1} -{" "}
+              {showAll
+                ? workSpaces.slice(
+                    (curPage - 1) * selectItemNum,
+                    curPage * selectItemNum
+                  ).length + firstIndex
+                : searchedWorkSpaces?.length}{" "}
+              of {workSpaces?.length}
             </div>
 
             <div className="page-item">

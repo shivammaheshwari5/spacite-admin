@@ -183,7 +183,7 @@ function Addbrand() {
             <div className="row pt-4">
               <h4 className="property_form_h4">Brand Details</h4>
               <div className="col-md-3">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -194,7 +194,7 @@ function Addbrand() {
                     onChange={handleInputChange}
                     required
                   />
-                  <label for="floatingInput">Name*</label>
+                  <label htmlFor="floatingInput">Name*</label>
                 </div>
               </div>
               <div className="col-md-3">
@@ -227,7 +227,7 @@ function Addbrand() {
             </div>
             <div className="row mb-5">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -237,14 +237,14 @@ function Addbrand() {
                     value={brand.description}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Description</label>
+                  <label htmlFor="floatingInput">Description</label>
                 </div>
               </div>
             </div>
             <div className="row">
               <h4 className="property_form_h4">SEO Details</h4>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -254,11 +254,11 @@ function Addbrand() {
                     value={brand.descriptionSeo}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Description</label>
+                  <label htmlFor="floatingInput">Description</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -268,13 +268,13 @@ function Addbrand() {
                     value={brand.robots}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputRobots">Robots</label>
+                  <label htmlFor="floatingInputRobots">Robots</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -284,11 +284,11 @@ function Addbrand() {
                     value={brand.title}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Title</label>
+                  <label htmlFor="floatingInput">Title</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -298,13 +298,13 @@ function Addbrand() {
                     value={brand.keywords}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInput">Keywords</label>
+                  <label htmlFor="floatingInput">Keywords</label>
                 </div>
               </div>
             </div>
             <div className="row my-2">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -314,11 +314,11 @@ function Addbrand() {
                     value={brand.twitterTitle}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputTwitter">Twitter Title</label>
+                  <label htmlFor="floatingInputTwitter">Twitter Title</label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -328,13 +328,13 @@ function Addbrand() {
                     value={brand.graphTitle}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputOgTitle">Open Graph Title</label>
+                  <label htmlFor="floatingInputOgTitle">Open Graph Title</label>
                 </div>
               </div>
             </div>
             <div className="row mb-5">
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -344,11 +344,13 @@ function Addbrand() {
                     value={brand.twitterDescription}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputTwitDesc">Twitter Description</label>
+                  <label htmlFor="floatingInputTwitDesc">
+                    Twitter Description
+                  </label>
                 </div>
               </div>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <textarea
                     type="text"
                     className="form-control"
@@ -358,7 +360,7 @@ function Addbrand() {
                     value={brand.graphDescription}
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputOgDesc">
+                  <label htmlFor="floatingInputOgDesc">
                     Open Graph Description
                   </label>
                 </div>
@@ -367,7 +369,7 @@ function Addbrand() {
             <div className="row">
               <h4 className="property_form_h4">Footer Details</h4>
               <div className="col-md-6">
-                <div class="form-floating border_field">
+                <div className="form-floating border_field">
                   <input
                     type="text"
                     className="form-control"
@@ -377,7 +379,7 @@ function Addbrand() {
                     name="footerTitle"
                     onChange={handleInputChange}
                   />
-                  <label for="floatingInputTwitter">Footer Title</label>
+                  <label htmlFor="floatingInputTwitter">Footer Title</label>
                 </div>
               </div>
             </div>
