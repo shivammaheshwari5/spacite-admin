@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router
-  .get("/amenities", protect, getAmenities)
+  .get("/amenities", getAmenities)
   .post("/amenities", protect, postAmenities)
   .delete("/delete/:amenityId", protect, deleteAmenities);
 
